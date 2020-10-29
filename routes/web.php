@@ -1,5 +1,6 @@
 <?php
-
+use Illuminate\Support\Facades\Route;
+use TCG\Voyager\Facades\Voyager;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -11,6 +12,12 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+#### FRONTEND
+## Home page web
+Route::get("/", 'Home\HomeController@home_page');
+
+
+
+#### BACKEND
+## Home page admin
+Route::get('/admin/dashboard', 'Admin\AdminController@dashboard');
