@@ -54,8 +54,8 @@ use Illuminate\Support\Facades\Session;
                         <li>
                             <a href="javaScript:void();"><i class="zmdi zmdi-dot-circle-alt"></i> Công Ty <i class="fa fa-angle-left pull-right"></i></a>
                             <ul class="sidebar-submenu">
-                                <li><a href="{{URL::to('/admin/information-company')}}"><i class="zmdi zmdi-dot-circle-alt"></i> Thông Tin Công Ty</a></li>
-                                <li><a href="{{URL::to('/admin/list-area')}}"><i class="zmdi zmdi-dot-circle-alt"></i> Vùng</a></li>
+                                <li><a href="{{URL::to('/admin/list-companies')}}"><i class="zmdi zmdi-dot-circle-alt"></i> Thông Tin Công Ty</a></li>
+                                <li><a href="{{URL::to('/admin/list-areas')}}"><i class="zmdi zmdi-dot-circle-alt"></i> Vùng</a></li>
                                 <li><a href="{{URL::to('/admin/list-branch')}}"><i class="zmdi zmdi-dot-circle-alt"></i> Chi Nhánh</a></li>
                             </ul>
                         </li>
@@ -64,6 +64,7 @@ use Illuminate\Support\Facades\Session;
                             <ul class="sidebar-submenu">
                                 <li><a href="javaScript:void();"><i class="zmdi zmdi-dot-circle-alt"></i> Dự Án</a></li>
                                 <li><a href="javaScript:void();"><i class="zmdi zmdi-dot-circle-alt"></i> Phòng Ban</a></li>
+                                <li><a href="{{URL::to('/admin/list-education-levels')}}"><i class="zmdi zmdi-dot-circle-alt"></i> Trình Độ</a></li>
                                 <li><a href="javaScript:void();"><i class="zmdi zmdi-dot-circle-alt"></i> Chức Danh</a></li>
                             </ul>
                         </li>
@@ -378,15 +379,19 @@ use Illuminate\Support\Facades\Session;
                                         <div class="media-body">
                                             <h6 class="mt-2 user-title">
                                                 <?php
-                                                $name = Session::get('ten_truy_cap');
+                                                $name = Session::get('tenTruyCap');
                                                 if ($name) {
                                                     echo $name;
                                                 }
                                                 ?>
                                             </h6>
                                             <p class="user-subtitle">
-                                                mccoy@example.com
-
+                                            <?php
+                                                $email = Session::get('maCongTy');
+                                                if ($email) {
+                                                    echo $email;
+                                                }
+                                                ?>
                                             </p>
                                         </div>
                                     </div>

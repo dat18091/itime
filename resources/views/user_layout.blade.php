@@ -85,6 +85,7 @@
                             <!-- <li><a href="./about-us.html">About Us</a></li> -->
                             <li><a href="{{URL::to('/login')}}">Đăng Nhập</a></li>
                             <li><a href="{{URL::to('/services')}}">Dịch Vụ</a></li>
+                            <li><a href="{{URL::to('/register')}}">Đăng Ký</a></li>
                             <!-- <li><a href="./team.html">Our Team</a></li> -->
                             <li><a href="#">Thông Tin</a>
                                 <ul class="dropdown">

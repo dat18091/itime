@@ -1,7 +1,7 @@
 @extends('admin_layout')
 @section('admin_content')
 @section('admin_title')
-<title>IZITIME - Danh sách các công ty đăng ký</title>
+<title>IZITIME - Danh sách vùng</title>
 @stop
 @section('css')
 <!--Data Tables -->
@@ -12,12 +12,12 @@
     <!-- Breadcrumb-->
     <div class="row pt-2 pb-2">
         <div class="col-sm-9">
-            <h4 class="page-title">DANH SÁCH CÔNG TY</h4>
+            <h4 class="page-title">DANH SÁCH VÙNG</h4>
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="javaScript:void();">DANH MỤC QUẢN LÝ</a></li>
+                <li class="breadcrumb-item"><a href="javaScript:void();">CÀI ĐẶT HỆ THỐNG</a></li>
                 <li class="breadcrumb-item"><a href="javaScript:void();">Công Ty</a></li>
                 <li class="breadcrumb-item"><a href="javaScript:void();">Công Ty</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Thông Tin Công Ty</li>
+                <li class="breadcrumb-item active" aria-current="page">Vùng</li>
             </ol>
         </div>
         <div class="col-sm-3">
@@ -41,41 +41,54 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="card">
-                <div class="card-header"><i class="fa fa-table"></i> DANH SÁCH CÔNG TY ĐĂNG KÝ</div>
+                <div class="card-header"><i class="fa fa-table"></i> DANH SÁCH VÙNG</div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table id="example" class="table table-bordered">                            
+                        <table id="example" class="table table-bordered">
                             <thead>
                                 <tr>
-                                    <th>Tên công ty</th>
-                                    <th>Tên truy cập</th>
-                                    <th>Số điện thoại</th>
-                                    <th>Email</th>
+                                    <th>Tên vùng</th>
+                                    <th>Ghi chú</th>
+                                    <th>Trạng thái</th>
                                     <th>Thao tác</th>
+                                    <th><a href="{{URL::to('/admin/add-areas')}}" class="btn btn-success">Tạo mới</a></th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($companies as $key => $company)
+                                @foreach($list_area as $key => $area)
                                 <tr>
-                                    <td>{{$company->ten_cong_ty}}</td>
-                                    <td>{{$company->ten_truy_cap}}</td>
-                                    <td>{{$company->so_dien_thoai_cong_ty}}</td>
-                                    <td>{{$company->email_cong_ty}}</td>
+                                    <td>{{ $area->ten_vung }}</td>
+                                    <td>{{ $area->ghi_chu_vung }}</td>
+                                    <td>
+                                        <?php
+                                        if ($area->trang_thai_vung == 0) {
+                                        ?>
+                                            <a href="{{URL::to('/admin/hide-areas/'.$area->id)}}"><span class="fa-styling fa fa-thumbs-up"></span></a>
+                                        <?php
+                                        } else {
+                                        ?>
+                                            <a href="{{URL::to('/admin/show-areas/'.$area->id)}}"><span class="fa-styling fa fa-thumbs-down"></span></a>
+                                        <?php
+                                        }
+                                        ?>
+                                    </td>
                                     <td>
                                         <div class="btn-group group-round m-1">
-                                            <a type="button" href="" class="btn btn-success waves-effect waves-light">Sửa</a>
-                                            <a type="button" href="" class="btn btn-danger waves-effect waves-light">Xem</a>
+                                            <a type="button" href="{{URL::to('/admin/edit-areas/'.$area->id)}}" class="btn btn-success waves-effect waves-light">Sửa</a>
+                                            <a type="button" href="{{URL::to('/admin/delete-areas/'.$area->id)}}" onclick="return confirm('Bạn có chắc chắn muốn xóa vùng này?')" class="btn btn-danger waves-effect waves-light">Xóa</a>
                                         </div>
                                     </td>
+                                    <td></td>
                                 </tr>
                                 @endforeach
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <th>Tên lớp học</th>
-                                    <th>Sĩ số</th>
+                                    <th>Tên vùng</th>
                                     <th>Ghi chú</th>
+                                    <th>Trạng thái</th>
                                     <th>Thao tác</th>
+                                    <th></th>
                                 </tr>
                             </tfoot>
                         </table>
