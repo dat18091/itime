@@ -8,14 +8,28 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Carbon\Carbon;
-session_start();
+
 
 class AreaController extends Controller
 {
     /**
      * 
      */
+    public function AuthLogin() {
+        $login_id = Session::get('maCongTy');
+        $roles = Session::get('phanQuyen');
+        if($login_id && $roles == 1) {
+            return Redirect::to('/admin/dashboard');
+        } else {
+            return Redirect::to('/')->send();
+        }
+    }
+
+    /**
+     * 
+     */
     public function list_areas() {
+        $this->AuthLogin();
         $danhSachVung = DB::table('areas')->get();
         return view('admin.areas.list-areas')->with('list_area', $danhSachVung);
     }
@@ -26,6 +40,7 @@ class AreaController extends Controller
      * created at : 31/10/2020
      */
     public function add_areas() {
+        $this->AuthLogin();
         return view('admin.areas.add-areas');
     }
 
@@ -35,6 +50,7 @@ class AreaController extends Controller
      * created at : 31/10/2020
      */
     public function save_areas(Request $request) {
+        $this->AuthLogin();
         $data = array();
         $tenVung = $request->ten_vung;
         $tuKhoaVung = $request->tu_khoa_vung;
@@ -67,6 +83,7 @@ class AreaController extends Controller
      * created at : 31/10/2020
      */
     public function hide_areas($id) {
+        $this->AuthLogin();
         DB::table('areas')->where('id', $id)->update(['trang_thai_vung' => 1]);
         Session::put('message', 'Ẩn vùng thành công.');
         return Redirect::to('/admin/list-areas');
@@ -78,6 +95,7 @@ class AreaController extends Controller
      * created at : 31/10/2020
      */
     public function show_areas($id) {
+        $this->AuthLogin();
         DB::table('areas')->where('id', $id)->update(['trang_thai_vung' => 0]);
         Session::put('message', 'Hiển thị vùng thành công.');
         return Redirect::to('/admin/list-areas');
@@ -89,6 +107,7 @@ class AreaController extends Controller
      * created at : 31/10/2020
      */
     public function edit_areas($id) {
+        $this->AuthLogin();
         $capNhatVung = DB::table('areas')->where('id', $id)->get();
         return view('admin.areas.edit-areas')->with('areas', $capNhatVung);
     }
@@ -99,6 +118,7 @@ class AreaController extends Controller
      * created at : 31/10/2020
      */
     public function update_areas(Request $request, $id) {
+        $this->AuthLogin();
         $data = array();
         $tenVung = $request->ten_vung;
         $tuKhoaVung = $request->tu_khoa_vung;
@@ -126,6 +146,7 @@ class AreaController extends Controller
      * 
      */
     public function delete_areas($id) {
+        $this->AuthLogin();
         DB::table('areas')->where('id', $id)->delete();
         return Redirect::to('/admin/list-areas');
     }

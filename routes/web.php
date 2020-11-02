@@ -89,8 +89,8 @@ Route::post("/admin/update-employees", "Employees\EmployeeController@update_empl
 Route::get("/admin/delete-employees", "Employees\EmployeeController@delete_employees");
 
 ## Positions
-Route::get("/admin/add-positions", "Positions\PositionController@add_position");
-Route::post("/admin/save-positions", "Positions\PositionController@save_position");
+Route::get("/admin/add-positions", "Positions\PositionController@add_positions");
+Route::post("/admin/save-positions", "Positions\PositionController@save_positions");
 
 Route::get("/admin/list-positions", "Positions\PositionController@list_positions");
 
@@ -124,3 +124,8 @@ Route::get("/admin/list-companies", "Companies\CompanyController@list_companies"
 Route::group(['prefix' => 'admin'], function () {
     Voyager::routes();
 });
+
+
+// Auth::routes();
+
+// Route::get('/home', 'HomeController@index')->name('home');

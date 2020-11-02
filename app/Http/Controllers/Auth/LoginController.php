@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Carbon\Carbon;
+
 session_start();
 
 class LoginController extends Controller
@@ -52,7 +53,8 @@ class LoginController extends Controller
      * created by : DateNQ
      * created at : 30/10/2020
      */
-    public function login() {
+    public function login()
+    {
         return view('auth.login');
     }
 
@@ -61,30 +63,35 @@ class LoginController extends Controller
      * created by : DateNQ
      * created at : 30/10/2020
      */
-    public function sign_in(Request $request) {
+    public function sign_in(Request $request)
+    {
         $tenTruyCap = $request->ten_truy_cap;
         $matKhau = md5($request->mat_khau);
         // $maCongTy = $request->ma_cong_ty;
-        if($tenTruyCap == "" || $matKhau == "") {
+        if ($tenTruyCap == "" || $matKhau == "") {
             Session::put("message", "Các trường không được để trống.");
             return Redirect::to('/login');
-        } else if(strlen($tenTruyCap) > 100 || strlen($matKhau) > 100) {
+        } else if (strlen($tenTruyCap) > 100 || strlen($matKhau) > 100) {
             Session::put("message", "Bạn đã nhập quá ký tự cho phép.");
             return Redirect::to('/login');
-        } else if(strlen($tenTruyCap) < 5 || strlen($matKhau) < 5) {
+        } else if (strlen($tenTruyCap) < 5 || strlen($matKhau) < 5) {
             Session::put("message", "Bạn nhập không đủ ký tự.");
             return Redirect::to('/login');
-        } else if(strpos($matKhau, "OR") === 0 || strpos($matKhau, "or") === 0 || strpos($matKhau, "1=1") === 0 || 
-            strpos($matKhau, ";") === 0 || strpos($matKhau, "--") === 0) {
+        } else if (
+            strpos($matKhau, "OR") === 0 || strpos($matKhau, "or") === 0 || strpos($matKhau, "1=1") === 0 ||
+            strpos($matKhau, ";") === 0 || strpos($matKhau, "--") === 0
+        ) {
             # === dùng để so sánh giá trị giữa các biến và hằng đúng theo giá trị và kiểu dữ liệu của nó
             Session::put("message", "Mật khẩu của bạn chứa ký tự nguy hiểm.");
             return Redirect::to('/login');
         } else {
             $result = DB::table('companies')->where('ten_truy_cap', $tenTruyCap)
-                    ->where('mat_khau', $matKhau)->first();
-            if($result) {
+                ->where('mat_khau', $matKhau)->first();
+            if ($result) {
                 Session::put("tenTruyCap", $tenTruyCap);
-                // Session::put('maCongTy', $maCongTy);
+                Session::put('maCongTy', $result->id);
+                Session::put('phanQuyen', $result->roles_id);
+                Session::put('email', $result->email_cong_ty);
                 Session::put('message', 'Đăng nhập thành công.');
                 return Redirect::to("/admin/dashboard");
             } else {
@@ -94,8 +101,13 @@ class LoginController extends Controller
         }
     }
 
-    public function logout() {
+    public function logout()
+    {
+        $this->AuthLogin();
         Session::put("tenTruyCap", null);
+        Session::put('maCongTy', null);
+        Session::put('phanQuyen', null);
+        Session::put('email', null);
         return Redirect::to('/');
     }
 }

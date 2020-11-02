@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Carbon\Carbon;
-session_start();
+
 
 class RegisterController extends Controller
 {

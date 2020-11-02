@@ -8,16 +8,30 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Carbon\Carbon;
-session_start();
+
 
 class EducationLevelController extends Controller
 {
+    /**
+     * 
+     */
+    public function AuthLogin() {
+        $login_id = Session::get('maCongTy');
+        $roles = Session::get('phanQuyen');
+        if($login_id && $roles == 1) {
+            return Redirect::to('/admin/dashboard');
+        } else {
+            return Redirect::to('/')->send();
+        }
+    }
+
     /**
      * This function show add education level page by GET method
      * created by : DatNQ
      * created at : 31/10/2020
      */
     public function add_education_levels() {
+        $this->AuthLogin();
         return view('admin.educationlevels.add-education-levels');
     }
 
@@ -27,6 +41,7 @@ class EducationLevelController extends Controller
      * created at : 31/10/2020
      */
     public function save_education_levels(Request $request) {
+        $this->AuthLogin();
         $data = array();
         $tenTrinhDo = $request->ten_trinh_do;
         $tuKhoaTrinhDo = $request->tu_khoa_trinh_do;
@@ -59,6 +74,7 @@ class EducationLevelController extends Controller
      * created at : 31/10/2020
      */
     public function list_education_levels() {
+        $this->AuthLogin();
         $danhSachTrinhDo = DB::table('educationlevels')->orderBy('id', 'asc')->get();
         return view('admin.educationlevels.list-education-levels')->with('educationlevels', $danhSachTrinhDo);
     }
@@ -69,6 +85,7 @@ class EducationLevelController extends Controller
      * created at : 31/10/2020
      */
     public function hide_education_levels($id) {
+        $this->AuthLogin();
         DB::table('educationlevels')->where('id', $id)->update(['trang_thai_trinh_do' => 1]);
         Session::put('message', 'Ẩn trình độ thành công.');
         return Redirect::to('/admin/list-education-levels');
@@ -80,6 +97,7 @@ class EducationLevelController extends Controller
      * created at : 31/10/2020
      */
     public function show_education_levels($id) {
+        $this->AuthLogin();
         DB::table('educationlevels')->where('id', $id)->update(['trang_thai_trinh_do' => 0]);
         Session::put('message', 'Hiển thị trình độ thành công.');
         return Redirect::to('/admin/list-education-levels');
@@ -91,6 +109,7 @@ class EducationLevelController extends Controller
      * created at : 31/10/2020
      */
     public function edit_education_levels($id) {
+        $this->AuthLogin();
         $chinhSuaTrinhDo = DB::table('educationlevels')->where('id', $id)->get();
         return view('admin.educationlevels.edit-education-levels')->with('educationlevels', $chinhSuaTrinhDo);
     }
@@ -101,6 +120,7 @@ class EducationLevelController extends Controller
      * created at : 31/10/2020
      */
     public function update_education_levels(Request $request , $id) {
+        $this->AuthLogin();
         $data = array();
         $tenTrinhDo = $request->ten_trinh_do;
         $tuKhoaTrinhDo = $request->tu_khoa_trinh_do;
@@ -131,6 +151,7 @@ class EducationLevelController extends Controller
      * created at : 31/10/2020
      */
     public function delete_education_levels($id) {
+        $this->AuthLogin();
         DB::table('educationlevels')->where('id', $id)->delete();
         return Redirect::to('/admin/list-education-levels');
     }

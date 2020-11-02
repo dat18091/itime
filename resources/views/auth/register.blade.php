@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <?php
-
 use Illuminate\Support\Facades\Session;
 ?>
 
@@ -167,11 +166,9 @@ use Illuminate\Support\Facades\Session;
             autoclose: true,
             todayHighlight: true
         });
-
         $('#inline-datepicker').datepicker({
             todayHighlight: true
         });
-
         $('#dateragne-picker .input-daterange').datepicker({});
     </script>
     <!--Multi Select Js-->
@@ -182,16 +179,12 @@ use Illuminate\Support\Facades\Session;
     <script>
         $(document).ready(function() {
             $('.single-select').select2();
-
             $('.multiple-select').select2();
-
             //multiselect start
-
             $('#my_multi_select1').multiSelect();
             $('#my_multi_select2').multiSelect({
                 selectableOptgroup: true
             });
-
             $('#my_multi_select3').multiSelect({
                 selectableHeader: "<input type='text' class='form-control search-input' autocomplete='off' placeholder='search...'>",
                 selectionHeader: "<input type='text' class='form-control search-input' autocomplete='off' placeholder='search...'>",
@@ -201,7 +194,6 @@ use Illuminate\Support\Facades\Session;
                         $selectionSearch = that.$selectionUl.prev(),
                         selectableSearchString = '#' + that.$container.attr('id') + ' .ms-elem-selectable:not(.ms-selected)',
                         selectionSearchString = '#' + that.$container.attr('id') + ' .ms-elem-selection.ms-selected';
-
                     that.qs1 = $selectableSearch.quicksearch(selectableSearchString)
                         .on('keydown', function(e) {
                             if (e.which === 40) {
@@ -209,7 +201,6 @@ use Illuminate\Support\Facades\Session;
                                 return false;
                             }
                         });
-
                     that.qs2 = $selectionSearch.quicksearch(selectionSearchString)
                         .on('keydown', function(e) {
                             if (e.which == 40) {
@@ -227,15 +218,12 @@ use Illuminate\Support\Facades\Session;
                     this.qs2.cache();
                 }
             });
-
             $('.custom-header').multiSelect({
                 selectableHeader: "<div class='custom-header'>Selectable items</div>",
                 selectionHeader: "<div class='custom-header'>Selection items</div>",
                 selectableFooter: "<div class='custom-header'>Selectable footer</div>",
                 selectionFooter: "<div class='custom-header'>Selection footer</div>"
             });
-
-
         });
     </script>
     <!--notification js -->

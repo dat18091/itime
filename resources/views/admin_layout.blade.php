@@ -65,7 +65,7 @@ use Illuminate\Support\Facades\Session;
                                 <li><a href="javaScript:void();"><i class="zmdi zmdi-dot-circle-alt"></i> Dự Án</a></li>
                                 <li><a href="javaScript:void();"><i class="zmdi zmdi-dot-circle-alt"></i> Phòng Ban</a></li>
                                 <li><a href="{{URL::to('/admin/list-education-levels')}}"><i class="zmdi zmdi-dot-circle-alt"></i> Trình Độ</a></li>
-                                <li><a href="javaScript:void();"><i class="zmdi zmdi-dot-circle-alt"></i> Chức Danh</a></li>
+                                <li><a href="{{URL::to('/admin/list-positions')}}"><i class="zmdi zmdi-dot-circle-alt"></i> Chức Danh</a></li>
                             </ul>
                         </li>
                     </ul>
@@ -387,7 +387,7 @@ use Illuminate\Support\Facades\Session;
                                             </h6>
                                             <p class="user-subtitle">
                                             <?php
-                                                $email = Session::get('maCongTy');
+                                                $email = Session::get('email');
                                                 if ($email) {
                                                     echo $email;
                                                 }
