@@ -64,11 +64,15 @@ use Illuminate\Support\Facades\Session;
                             <tbody>
                                 @foreach($positions as $key => $position)
                                 <tr>
-                                    <!-- <td>{{ $position->id }}</td> -->
                                     <td>{{ $position->ten_chuc_danh }}</td>
-                                    <td>{{ $position->ten_trinh_do}}</td>
+                                    <td>
+                                        @foreach($trinhDo as $key => $level)
+                                        @if($position->ma_trinh_do == $level->id)
+                                        {{$level->ten_trinh_do}}
+                                        @endif
+                                        @endforeach
+                                    </td>
                                     <td>{{ $position->kinh_nghiem }}</td>
-                                    <!-- <td>{{ $position->ghi_chu_chuc_danh }}</td> -->
                                     <td>
                                         <?php
                                         if ($position->trang_thai_chuc_danh == 0) {

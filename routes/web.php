@@ -73,6 +73,18 @@ Route::post("/admin/update-branches/{id}", "Branches\BranchController@update_bra
 Route::get("/admin/delete-branches/{id}", "Branches\BranchController@delete_branches");
 
 ## Departments
+Route::get("/admin/add-departments", "Departments\DepartmentController@add_departments");
+Route::post("/admin/save-departments", "Departments\DepartmentController@save_departments");
+
+Route::get("/admin/list-departments", "Departments\DepartmentController@list_departments");
+
+Route::get("/admin/hide-departments/{id}", "Departments\DepartmentController@hide_departments");
+Route::get("/admin/show-departments/{id}", "Departments\DepartmentController@show_departments");
+
+Route::get("/admin/edit-departments/{id}", "Departments\DepartmentController@edit_departments");
+Route::post("/admin/update-departments/{id}", "Departments\DepartmentController@update_departments");
+
+Route::get("/admin/delete-departments/{id}", "Departments\DepartmentController@delete_departments");
 
 ## Employees
 Route::get("/admin/add-employees", "Employees\EmployeeController@add_employees");
@@ -117,9 +129,10 @@ Route::post("/admin/update-education-levels/{id}", "EducationLevels\EducationLev
 Route::get("/admin/delete-education-levels/{id}", "EducationLevels\EducationLevelController@delete_education_levels");
 
 ## Companies
-Route::get("/admin/information-company", "Companies\CompanyController@information_company");
+Route::get("/admin/edit-profile/{id}", "Companies\CompanyController@edit_profile");
 
 Route::get("/admin/list-companies", "Companies\CompanyController@list_companies");
+
 
 Route::group(['prefix' => 'admin'], function () {
     Voyager::routes();

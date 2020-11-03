@@ -373,7 +373,13 @@ use Illuminate\Support\Facades\Session;
                         </a>
                         <ul class="dropdown-menu dropdown-menu-right">
                             <li class="dropdown-item user-details">
-                                <a href="javaScript:void();">
+                                <?php
+                                $id = Session::get('maCongTy');
+                                // if ($id) {
+                                //     echo $name;
+                                // }
+                                ?>
+                                <a href="{{URL::to('/admin/edit-profile/'.$id)}}">
                                     <div class="media">
                                         <div class="avatar"><img class="align-self-start mr-3" src="{{asset('public/backend/assets/images/avatars/avatar-13.png')}}" alt="user avatar"></div>
                                         <div class="media-body">
@@ -386,7 +392,7 @@ use Illuminate\Support\Facades\Session;
                                                 ?>
                                             </h6>
                                             <p class="user-subtitle">
-                                            <?php
+                                                <?php
                                                 $email = Session::get('email');
                                                 if ($email) {
                                                     echo $email;

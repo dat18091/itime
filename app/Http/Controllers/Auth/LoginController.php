@@ -49,6 +49,19 @@ class LoginController extends Controller
     }
 
     /**
+     * 
+     */
+    public function AuthLogin() {
+        $login_id = Session::get('maCongTy');
+        $roles = Session::get('phanQuyen');
+        if($login_id && $roles == 1) {
+            return Redirect::to('/admin/dashboard');
+        } else {
+            return Redirect::to('/')->send();
+        }
+    }
+
+    /**
      * This function to redirect login page
      * created by : DateNQ
      * created at : 30/10/2020

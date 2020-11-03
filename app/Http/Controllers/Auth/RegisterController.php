@@ -82,8 +82,8 @@ class RegisterController extends Controller
      * created at : 30/10/2020
      */
     public function register() { 
-        $quanHuyen = DB::table('district')->get();
-        $tinhThanh = DB::table('province')->get();
+        $quanHuyen = DB::table('districts')->get();
+        $tinhThanh = DB::table('provinces')->get();
         return view("auth.register")->with("quanhuyen", $quanHuyen)->with("tinhthanh", $tinhThanh);
         #with(key, value)
     } 

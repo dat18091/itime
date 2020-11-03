@@ -34,4 +34,13 @@ class CompanyController extends Controller
         $companies = DB::table('companies')->get();
         return view("admin.companies.list_company")->with("companies", $companies);
     }
+
+    /**
+     * When point at this URL path then show list of companies
+     * created by : DatNQ
+     * created at : 30/10/2020
+     */
+    public function edit_profile($id) {
+        $this->AuthLogin();
+    }
 }

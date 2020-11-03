@@ -83,9 +83,9 @@ class PositionController extends Controller
     public function list_positions() {
         $this->AuthLogin();
         $danhSach = DB::table('positions')
-        ->join('educationlevels', 'educationlevels.id' , '=', 'positions.id')
-        ->orderby('positions.id', 'asc')->get(); 
-        return view('admin.positions.list-positions')->with('positions', $danhSach);
+        ->join('educationlevels', 'educationlevels.id' , '=', 'positions.id')->get();
+        $trinhDo = DB::table('educationlevels')->get();
+        return view('admin.positions.list-positions')->with('positions', $danhSach)->with('trinhDo', $trinhDo);
     }
 
     /**
@@ -115,9 +115,11 @@ class PositionController extends Controller
     /**
      * 
      */
-    public function edit_positions() {
+    public function edit_positions($id) {
         $this->AuthLogin();
-        return view('admin.positions.edit-positions');
+        $trinhDo = DB::table('educationlevels')->get();
+        $chinhSua = DB::table('positions')->where('positions.id', $id)->get(); 
+        return view('admin.positions.edit-positions')->with('trinhDo', $trinhDo)->with('chucDanh',$chinhSua);
     }
 
     /**
@@ -125,7 +127,34 @@ class PositionController extends Controller
      */
     public function update_positions(Request $request, $id) {
         $this->AuthLogin();
-
+        $data = array();
+        $tenChucDanh = $request->ten_chuc_danh;
+        $tuKhoaChucDanh = $request->tu_khoa_chuc_danh;
+        $kinhNghiem = $request->kinh_nghiem;
+        $trinhDo = $request->ma_trinh_do;
+        $thuTuHienThi = $request->thu_tu_hien_thi;
+        $trangThaiChucDanh = $request->trang_thai_chuc_danh;
+        $ghiChuChucDanh = $request->ghi_chu_chuc_danh;
+        if($tenChucDanh == "" ||$tuKhoaChucDanh =="" || $kinhNghiem =="" || $trinhDo == "") {
+            Session::put("message", "Các trường không được để trống.");
+            return Redirect::to("/admin/edit-positions/".$id);
+        } else if(strlen($tenChucDanh) > 100) {
+            Session::put("message", "Bạn đã nhập quá ký tự cho phép.");
+            return Redirect::to('/admin/edit-positions/'.$id);
+        } else if(strlen($tenChucDanh) < 5) {
+            Session::put("message", "Bạn nhập không đủ ký tự.");
+            return Redirect::to('/admin/edit-positions/'.$id);
+        } else {
+            $data['ten_chuc_danh'] = $tenChucDanh;
+            $data['tu_khoa_chuc_danh'] = $tuKhoaChucDanh;
+            $data['kinh_nghiem'] = $kinhNghiem;
+            $data['ma_trinh_do'] = $trinhDo;
+            $data['thu_tu_hien_thi_cd'] = $thuTuHienThi;
+            $data['ghi_chu_chuc_danh'] = $ghiChuChucDanh;
+            $data['updated_at'] = Carbon::now();
+            DB::table('positions')->where('id', $id)->update($data);
+            return Redirect::to('/admin/list-positions');
+        }
     }
 
     /**

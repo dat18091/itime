@@ -1,7 +1,7 @@
 @extends('admin_layout')
 @section('admin_content')
 @section('admin_title')
-<title>IZITIME - Thêm chức danh</title>
+<title>IZITIME - Chỉnh sửa chức danh</title>
 @stop
 @section('css')
 <!-- Vector CSS -->
@@ -25,13 +25,13 @@ use Illuminate\Support\Facades\Session;
     <!-- Breadcrumb-->
     <div class="row pt-2 pb-2">
         <div class="col-sm-9">
-            <h4 class="page-title">THÊM CHỨC DANH</h4>
+            <h4 class="page-title">CHỈNH SỬA CHỨC DANH</h4>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="javaScript:void();">CÀI ĐẶT HỆ THỐNG</a></li>
                 <li class="breadcrumb-item"><a href="javaScript:void();">Công Ty</a></li>
                 <li class="breadcrumb-item"><a href="javaScript:void();">Thông Tin</a></li>
                 <li class="breadcrumb-item"><a href="javaScript:void();">Danh Sách Chức Danh</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Thêm Chức Danh</li>
+                <li class="breadcrumb-item active" aria-current="page">Chỉnh Sửa Chức Danh</li>
             </ol>
         </div>
         <div class="col-sm-3">
@@ -57,21 +57,22 @@ use Illuminate\Support\Facades\Session;
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-body">
-                    <form id="signupForm" method="post" action="{{URL::to('/admin/save-positions')}}">
+                    @foreach($chucDanh as $key => $position)
+                    <form id="signupForm" method="post" action="{{URL::to('/admin/update-positions/'.$position->id)}}">
                         {{csrf_field()}}
                         <h4 class="form-header text-uppercase">
                             <i class="fa fa-envelope-o"></i>
-                            Thêm Chức Danh
+                            Chỉnh Sửa Chức Danh
                         </h4>
 
                         <div class="form-group row">
                             <label for="input-14" class="col-sm-2 col-form-label">Tên chức danh <span class="focus">*</span></label>
                             <div class="col-sm-4">
-                                <input type="text" class="form-control" id="ten_chuc_danh" name="ten_chuc_danh" onkeyup="changeToKeyword();">
+                                <input type="text" class="form-control" value="{{$position->ten_chuc_danh}}" id="ten_chuc_danh" name="ten_chuc_danh" onkeyup="changeToKeyword();">
                             </div>
                             <label for="input-15" class="col-sm-2 col-form-label">Từ khóa <span class="focus">*</span></label>
                             <div class="col-sm-4">
-                                <input type="text" readonly class="form-control" id="tu_khoa_chuc_danh" name="tu_khoa_chuc_danh">
+                                <input type="text" readonly class="form-control" value="{{$position->tu_khoa_chuc_danh}}" id="tu_khoa_chuc_danh" name="tu_khoa_chuc_danh">
                             </div>
                         </div>
                         <script type="text/javascript">
@@ -113,13 +114,17 @@ use Illuminate\Support\Facades\Session;
                         <div class="form-group row">
                             <label for="input-14" class="col-sm-2 col-form-label">Kinh nghiệm <span class="focus">*</span></label>
                             <div class="col-sm-4">
-                                <input class="form-control" type="number" min="0" max="50" value="0" name="kinh_nghiem" id="example-number-input">
+                                <input class="form-control" type="number" min="0" max="50" value="{{$position->kinh_nghiem}}" name="kinh_nghiem" id="example-number-input">
                             </div>
                             <label for="input-15" class="col-sm-2 col-form-label">Trình độ <span class="focus">*</span></label>
                             <div class="col-sm-4">
                                 <select name="ma_trinh_do" class="form-control single-select">
                                     @foreach($trinhDo as $key => $level)
-                                    <option value="{{$level->id}}">{{$level->ten_trinh_do}}</option>
+                                        @if($level->id == $position->ma_trinh_do)
+                                            <option selected value="{{$level->id}}">{{$level->ten_trinh_do}}</option>
+                                        @else
+                                            <option value="{{$level->id}}">{{$level->ten_trinh_do}}</option>
+                                        @endif
                                     @endforeach
                                 </select>
                             </div>
@@ -128,20 +133,14 @@ use Illuminate\Support\Facades\Session;
                         <div class="form-group row">
                         <label for="input-14" class="col-sm-2 col-form-label">Thứ tự hiển thị </label>
                             <div class="col-sm-4">
-                                <input class="form-control" type="number" min="0" max="50" value="0" name="thu_tu_hien_thi" id="example-number-input">
+                                <input class="form-control" type="number" min="0" max="50" value="{{$position->thu_tu_hien_thi_cd}}" name="thu_tu_hien_thi" id="example-number-input">
                             </div>
-                            <label for="input-15" class="col-sm-2 col-form-label">Trạng thái <span class="focus">*</span></label>
-                            <div class="col-sm-4">
-                                <select name="trang_thai_chuc_danh" class="form-control" id="basic-select">
-                                    <option value="1">Ẩn</option>
-                                    <option value="0">Hiển thị</option>
-                                </select>
-                            </div>
+                            
                         </div>
                         <div class="form-group row">
                             <label for="input-17" class="col-sm-2 col-form-label">Ghi chú</label>
                             <div class="col-sm-10">
-                                <textarea class="form-control" rows="4" id="input-17" name="ghi_chu_chuc_danh"></textarea>
+                                <textarea class="form-control" rows="4" id="input-17" name="ghi_chu_chuc_danh">{{$position->ghi_chu_chuc_danh}}</textarea>
                             </div>
                         </div>
                         <?php
@@ -153,9 +152,10 @@ use Illuminate\Support\Facades\Session;
                         ?>
                         <div class="form-footer">
                             <button type="submit" name="danh_sach_sinh_vien" class="btn btn-danger"><i class="fa fa-times"></i> Hủy bỏ</button>
-                            <button name="them_sinh_vien" class="btn btn-primary" type="submit"><i class="fa fa-add"></i> Thêm chức danh</button>
+                            <button name="them_sinh_vien" class="btn btn-primary" type="submit"><i class="fa fa-add"></i> Chỉnh sửa chức danh</button>
                         </div>
                     </form>
+                    @endforeach
                 </div>
             </div>
         </div>

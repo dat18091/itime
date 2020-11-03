@@ -51,7 +51,6 @@
                                     <th>Tên truy cập</th>
                                     <th>Số điện thoại</th>
                                     <th>Email</th>
-                                    <!-- <th>Thao tác</th> -->
                                 </tr>
                             </thead>
                             <tbody>
@@ -72,10 +71,10 @@
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <th>Tên lớp học</th>
-                                    <th>Sĩ số</th>
-                                    <th>Ghi chú</th>
-                                    <!-- <th>Thao tác</th> -->
+                                    <th>Tên công ty</th>
+                                    <th>Tên truy cập</th>
+                                    <th>Số điện thoại</th>
+                                    <th>Email</th>
                                 </tr>
                             </tfoot>
                         </table>
