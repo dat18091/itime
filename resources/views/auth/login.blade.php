@@ -1,8 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <?php
+
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Session;
 ?>
+
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -12,6 +15,8 @@ use Illuminate\Support\Facades\Session;
     <title>IZITIME | Trang đăng nhập vào quản lý</title>
     <!--favicon-->
     <link rel="icon" href="{{asset('public/backend/assets/images/favicon.ico')}}" type="image/x-icon">
+    <!-- notifications css -->
+    <link rel="stylesheet" href="{{asset('public/backend/assets/plugins/notifications/css/lobibox.min.css')}}" />
     <!-- Bootstrap core CSS-->
     <link href="{{asset('public/backend/assets/css/bootstrap.min.css')}}" rel="stylesheet" />
     <!-- animate CSS-->
@@ -20,14 +25,11 @@ use Illuminate\Support\Facades\Session;
     <link href="{{asset('public/backend/assets/css/icons.css')}}" rel="stylesheet" type="text/css" />
     <!-- Custom Style-->
     <link href="{{asset('public/backend/assets/css/app-style.css')}}" rel="stylesheet" />
-    <!-- notifications css -->
-    <link rel="stylesheet" href="{{asset('public/backend/assets/plugins/notifications/css/lobibox.min.css')}}" />
 
+    <link rel="stylesheet" type="text/css" href="{{asset('node_modules/sweetalert/dist/sweetalert.css')}}">
 </head>
 
 <body>
-
-
     <!-- Start wrapper-->
     <div id="wrapper">
 
@@ -50,7 +52,9 @@ use Illuminate\Support\Facades\Session;
                             </div> -->
                             <div class="card-title text-uppercase text-center py-3">Đăng Nhập</div>
                             <form action="{{URL::to('/sign-in')}}" method="post">
-                            {{csrf_field()}}
+                                {{csrf_field()}}
+                                @csrf
+                                <meta name="csrf-token" content="{{ csrf_token() }}">
                                 <div class="form-group">
                                     <div class="position-relative has-icon-left">
                                         <label for="exampleInputUsername" class="sr-only">Tên truy cập</label>
@@ -80,13 +84,7 @@ use Illuminate\Support\Facades\Session;
                                         <a href="authentication-reset-password2.html">Đổi mật khẩu</a>
                                     </div>
                                 </div>
-                                <?php
-                                $message = Session::get('message');
-                                if ($message) {
-                                    echo '<span class="alert">' . $message . '</span>';
-                                    Session::put('message', null);
-                                }
-                                ?>
+
                                 <button type="submit" class="btn btn-primary btn-block waves-effect waves-light">ĐĂNG NHẬP</button>
                                 <div class="text-center pt-3">
                                     <p>or Sign in with</p>
@@ -104,6 +102,34 @@ use Illuminate\Support\Facades\Session;
                                     <p class="text-dark">Ban chưa có tài khoản? <a href="{{URL::to('/register')}}"> Đăng ký</a></p>
                                 </div>
                             </form>
+                            <?php
+                            $message = Session::get('message');
+                            if (strpos($message, "thành công")) {
+                                echo '<script>
+                                        setTimeout(function() {
+                                            swal({
+                                                title: "Thông báo",
+                                                text: "Thành công",
+                                                type: "success",
+                                                showConfirmButton: true
+                                            },);
+                                        }, 1000);
+                                    </script>';
+                                Session::put('message', null);
+                            } else if (strpos($message, "không đúng")) {
+                                echo '<script>
+                                    setTimeout(function() {
+                                        swal({
+                                            title: "Thông báo",
+                                            text: "Tên truy cập hoặc mật khẩu không đúng.",
+                                            type: "error",
+                                            showConfirmButton: true
+                                        },);
+                                    }, 1000);
+                                    </script>';
+                                Session::put('message', null);
+                            }
+                            ?>
                         </div>
                     </div>
                 </div>
@@ -132,6 +158,10 @@ use Illuminate\Support\Facades\Session;
     <script src="{{asset('public/backend/assets/plugins/notifications/js/lobibox.min.js')}}"></script>
     <script src="{{asset('public/backend/assets/plugins/notifications/js/notifications.min.js')}}"></script>
     <script src="{{asset('public/backend/assets/plugins/notifications/js/notification-custom-script.js')}}"></script>
+
+    <!--Sweet Alerts -->
+    <script src="{{asset('node_modules/sweetalert/dist/sweetalert.min.js')}}"></script>
+
 </body>
 
 </html>

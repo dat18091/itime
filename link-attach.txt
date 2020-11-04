@@ -1,1 +1,3 @@
 https://bom.to/wh2DgqF // link đường dẫn file vendor
+
+https://www.npmjs.com/package/sweetalert/v/1.1.3 // link tải package

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <?php
+
 use Illuminate\Support\Facades\Session;
 ?>
 
@@ -36,13 +37,14 @@ use Illuminate\Support\Facades\Session;
     <link href="{{asset('public/backend/assets/plugins/bootstrap-touchspin/css/jquery.bootstrap-touchspin.css')}}" rel="stylesheet" type="text/css">
     <!-- notifications css -->
     <link rel="stylesheet" href="{{asset('public/backend/assets/plugins/notifications/css/lobibox.min.css')}}" />
+    <link rel="stylesheet" type="text/css" href="{{asset('node_modules/sweetalert/dist/sweetalert.css')}}">
 </head>
 
 <body>
 
     <!-- Start wrapper-->
     <div id="wrapper">
-
+      
         <div class="card card-authentication1 mx-auto my-4">
             <div class="card-body">
                 <div class="card-content p-2">
@@ -74,7 +76,7 @@ use Illuminate\Support\Facades\Session;
                             <div class="col-sm-4">
                                 <input type="text" class="form-control" id="email_cong_ty" name="email_cong_ty">
                             </div>
-                           
+
                             <label for="input-15" class="col-sm-2 col-form-label">Số điện thoại <span class="focus">*</span></label>
                             <div class="col-sm-4">
                                 <input type="text" class="form-control" id="input-15" name="so_dien_thoai_cong_ty">
@@ -121,13 +123,7 @@ use Illuminate\Support\Facades\Session;
                                 <label for="user-checkbox">Tôi đồng ý tất cả các điều khoản và hợp đồng từ IZITIME</label>
                             </div>
                         </div>
-                        <?php
-                        $message = Session::get('message');
-                        if ($message) {
-                            echo '<span class="alert">' . $message . '</span>';
-                            Session::put('message', null);
-                        }
-                        ?>
+
                         <button type="submit" name="login" class="btn btn-primary btn-block waves-effect waves-light">Đăng Ký</button>
                 </div>
             </div>
@@ -140,7 +136,70 @@ use Illuminate\Support\Facades\Session;
         <a href="javaScript:void();" class="back-to-top"><i class="fa fa-angle-double-up"></i> </a>
         <!--End Back To Top Button-->
 
-
+        <?php
+        $message = Session::get('message');
+        if (strpos($message, "thành công")) {
+            echo '<script>
+                setTimeout(function() {
+                swal({
+                    title: "Thông báo",
+                    text: "Đăng ký thành công",
+                    type: "success",
+                    showConfirmButton: true
+                    },);
+                }, 1000);
+            </script>';
+            Session::put('message', null);
+        } else if (strpos($message, "trống")) {
+            echo '<script>
+            setTimeout(function() {
+                swal({
+                    title: "Thông báo",
+                    text: "Các trường không được để trống.",
+                    type: "error",
+                    showConfirmButton: true
+                },);
+            }, 1000);
+            </script>';
+            Session::put('message', null);
+        } else if (strpos($message, "quá ký tự")) {
+            echo '<script>
+            setTimeout(function() {
+                swal({
+                    title: "Thông báo",
+                    text: "Bạn đã nhập quá ký tự cho phép.",
+                    type: "error",
+                    showConfirmButton: true
+                },);
+            }, 1000);
+            </script>';
+            Session::put('message', null);
+        } else if (strpos($message, "không đủ ký tự")) {
+            echo '<script>
+            setTimeout(function() {
+                swal({
+                    title: "Thông báo",
+                    text: "Bạn đã nhập không đủ ký tự.",
+                    type: "error",
+                    showConfirmButton: true
+                },);
+            }, 1000);
+            </script>';
+            Session::put('message', null);
+        } else if (strpos($message, "không hợp lệ")) {
+            echo '<script>
+            setTimeout(function() {
+                swal({
+                    title: "Thông báo",
+                    text: "Bạn cần kiểm tra lại mật khẩu, website, email và số điện thoại.",
+                    type: "error",
+                    showConfirmButton: true
+                },);
+            }, 1000);
+            </script>';
+            Session::put('message', null);
+        }
+        ?>
 
     </div>
     <!--wrapper-->
@@ -230,6 +289,8 @@ use Illuminate\Support\Facades\Session;
     <script src="{{asset('public/backend/assets/plugins/notifications/js/lobibox.min.js')}}"></script>
     <script src="{{asset('public/backend/assets/plugins/notifications/js/notifications.min.js')}}"></script>
     <script src="{{asset('public/backend/assets/plugins/notifications/js/notification-custom-script.js')}}"></script>
+    <!--Sweet Alerts -->
+    <script src="{{asset('node_modules/sweetalert/dist/sweetalert.min.js')}}"></script>
 </body>
 
 </html>

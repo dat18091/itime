@@ -11,16 +11,4 @@ use Carbon\Carbon;
 
 class CostController extends Controller
 {
-    /**
-     * 
-     */
-    public function AuthLogin() {
-        $login_id = Session::get('maCongTy');
-        $roles = Session::get('phanQuyen');
-        if($login_id && $roles == 1) {
-            return Redirect::to('/admin/dashboard');
-        } else {
-            return Redirect::to('/')->send();
-        }
-    }
 }

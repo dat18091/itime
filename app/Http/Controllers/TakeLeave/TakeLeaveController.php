@@ -12,7 +12,9 @@ use Carbon\Carbon;
 class TakeLeaveController extends Controller
 {
     /**
-     * 
+     * This function to check accesses from outside
+     * created by : DatNQ
+     * created at : 02/11/2020
      */
     public function AuthLogin() {
         $login_id = Session::get('maCongTy');

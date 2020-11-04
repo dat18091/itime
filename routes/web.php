@@ -1,4 +1,5 @@
 <?php
+
 use Illuminate\Support\Facades\Route;
 use TCG\Voyager\Facades\Voyager;
 /*
@@ -63,6 +64,8 @@ Route::get("/admin/delete-areas/{id}", "Areas\AreaController@delete_areas");
 ## Branches
 Route::get("/admin/add-branches", "Branches\BranchController@add_branches");
 Route::post("/admin/save-branches", "Branches\BranchController@save_branches");
+
+Route::get("/admin/list-branches", "Branches\BranchController@list_branches");
 
 Route::get("/admin/hide-branches/{id}", "Branches\BranchController@hide_branches");
 Route::get("/admin/show-branches/{id}", "Branches\BranchController@show_branches");

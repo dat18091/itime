@@ -111,10 +111,11 @@ class RegisterController extends Controller
         #dieu kien validate
         if($tenCongTy == "" || $tenTruyCap == "" || $matKhau == "" || $emailCongTy == "" ||
             $soDienThoaiCongTy == "" || $quanHuyen == "" || $tinhThanh == "" || $ngayThanhLap == "") {
-            Session::put("message", "Các trường không được để rỗng.");
+            Session::put("message", "Các trường không được để trống.");
             return Redirect::to('/register');
         } else if(strlen($tenCongTy) > 100 || strlen($tenTruyCap) > 100 || strlen($matKhau) > 100 || 
                 strlen($emailCongTy) > 100 || strlen($soDienThoaiCongTy) > 100 || strlen($loaiHinhDoanhNghiep) > 100) {
+            Session::put("tencongty", $tenCongTy);
             Session::put("message", "Bạn đã nhập quá ký tự cho phép.");
             return Redirect::to('/register');
         } else if(strlen($tenCongTy) < 5 || strlen($tenTruyCap) < 5 || strlen($matKhau) < 5 || 
@@ -124,7 +125,7 @@ class RegisterController extends Controller
         } else if(strpos($matKhau, "OR") === 0 || strpos($matKhau, "or") === 0 || strpos($matKhau, "1=1") === 0 || 
             strpos($matKhau, ";") === 0 || strpos($matKhau, "--") === 0) {
             # === dùng để so sánh giá trị giữa các biến và hằng đúng theo giá trị và kiểu dữ liệu của nó
-            Session::put("message", "Mật khẩu của bạn chứa ký tự nguy hiểm.");
+            Session::put("message", "Mật khẩu của bạn không hợp lệ.");
             return Redirect::to('/register');
         } else if (!filter_var($emailCongTy, FILTER_VALIDATE_EMAIL)) {
             Session::put("message", "Email của bạn không hợp lệ.");

@@ -82,20 +82,20 @@ class LoginController extends Controller
         $matKhau = md5($request->mat_khau);
         // $maCongTy = $request->ma_cong_ty;
         if ($tenTruyCap == "" || $matKhau == "") {
-            Session::put("message", "Các trường không được để trống.");
+            Session::push("messageerror", "Tên truy cập hoặc mật khẩu không đúng.");
             return Redirect::to('/login');
         } else if (strlen($tenTruyCap) > 100 || strlen($matKhau) > 100) {
-            Session::put("message", "Bạn đã nhập quá ký tự cho phép.");
+            Session::push("messageerror", "Tên truy cập hoặc mật khẩu không đúng.");
             return Redirect::to('/login');
         } else if (strlen($tenTruyCap) < 5 || strlen($matKhau) < 5) {
-            Session::put("message", "Bạn nhập không đủ ký tự.");
+            Session::push("messageerror", "Tên truy cập hoặc mật khẩu không đúng.");
             return Redirect::to('/login');
         } else if (
             strpos($matKhau, "OR") === 0 || strpos($matKhau, "or") === 0 || strpos($matKhau, "1=1") === 0 ||
             strpos($matKhau, ";") === 0 || strpos($matKhau, "--") === 0
         ) {
             # === dùng để so sánh giá trị giữa các biến và hằng đúng theo giá trị và kiểu dữ liệu của nó
-            Session::put("message", "Mật khẩu của bạn chứa ký tự nguy hiểm.");
+            Session::push("messageerror", "Tên truy cập hoặc mật khẩu không đúng.");
             return Redirect::to('/login');
         } else {
             $result = DB::table('companies')->where('ten_truy_cap', $tenTruyCap)
@@ -105,10 +105,10 @@ class LoginController extends Controller
                 Session::put('maCongTy', $result->id);
                 Session::put('phanQuyen', $result->roles_id);
                 Session::put('email', $result->email_cong_ty);
-                Session::put('message', 'Đăng nhập thành công.');
+                Session::push('message', 'Đăng nhập thành công.');
                 return Redirect::to("/admin/dashboard");
             } else {
-                Session::put('message', 'Tên truy cập hoặc mật khẩu không đúng.');
+                // Session::push('messageerror', 'Tên truy cập hoặc mật khẩu không đúng.');
                 return Redirect::to("/login");
             }
         }
@@ -121,6 +121,7 @@ class LoginController extends Controller
         Session::put('maCongTy', null);
         Session::put('phanQuyen', null);
         Session::put('email', null);
+        Session::put('message', null);
         return Redirect::to('/');
     }
 }

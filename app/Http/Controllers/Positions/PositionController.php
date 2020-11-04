@@ -13,7 +13,9 @@ use Carbon\Carbon;
 class PositionController extends Controller
 {
     /**
-     * 
+     * This function to check accesses from outside
+     * created by : DatNQ
+     * created at : 02/11/2020
      */
     public function AuthLogin() {
         $login_id = Session::get('maCongTy');
@@ -32,7 +34,10 @@ class PositionController extends Controller
      */
     public function add_positions() {
         $this->AuthLogin();
-        $trinhDo = DB::table('educationlevels')->orderby('id', 'asc')->get();
+        $idCompany = Session::get('maCongTy');
+        $trinhDo = DB::table('educationlevels')
+        ->where('trang_thai_trinh_do', '=', '0')
+        ->where('ma_cong_ty',$idCompany)->orderby('id', 'asc')->get();
         return view('admin.positions.add-positions')->with('trinhDo', $trinhDo);
     }
 
@@ -51,6 +56,7 @@ class PositionController extends Controller
         $thuTuHienThi = $request->thu_tu_hien_thi;
         $trangThaiChucDanh = $request->trang_thai_chuc_danh;
         $ghiChuChucDanh = $request->ghi_chu_chuc_danh;
+        $maCongTy = Session::get('maCongTy');
         if($tenChucDanh == "" ||$tuKhoaChucDanh =="" || $kinhNghiem =="" || $trinhDo == "" || 
             $trangThaiChucDanh == "") {
             Session::put("message", "Các trường không được để trống.");
@@ -69,8 +75,10 @@ class PositionController extends Controller
             $data['thu_tu_hien_thi_cd'] = $thuTuHienThi;
             $data['trang_thai_chuc_danh'] = $trangThaiChucDanh;
             $data['ghi_chu_chuc_danh'] = $ghiChuChucDanh;
+            $data['ma_cong_ty'] = $maCongTy;
             $data['created_at'] = Carbon::now();
             DB::table('positions')->insert($data);
+            Session::put('message', 'Thêm chức danh thành công.');
             return Redirect::to('/admin/list-positions');
         }
     }
@@ -82,9 +90,13 @@ class PositionController extends Controller
      */
     public function list_positions() {
         $this->AuthLogin();
+        $maCongTy = Session::get('maCongTy');
         $danhSach = DB::table('positions')
-        ->join('educationlevels', 'educationlevels.id' , '=', 'positions.id')->get();
+        ->join('educationlevels', 'educationlevels.id' , '=', 'positions.id')
+        ->where('positions.ma_cong_ty', $maCongTy)
+        ->get();
         $trinhDo = DB::table('educationlevels')->get();
+        // dd($danhSach);
         return view('admin.positions.list-positions')->with('positions', $danhSach)->with('trinhDo', $trinhDo);
     }
 
@@ -117,8 +129,9 @@ class PositionController extends Controller
      */
     public function edit_positions($id) {
         $this->AuthLogin();
-        $trinhDo = DB::table('educationlevels')->get();
-        $chinhSua = DB::table('positions')->where('positions.id', $id)->get(); 
+        $maCongTy = Session::get('maCongTy');
+        $trinhDo = DB::table('educationlevels')->where('ma_cong_ty',$maCongTy)->get();
+        $chinhSua = DB::table('positions')->where('ma_cong_ty',$maCongTy)->where('positions.id', $id)->get(); 
         return view('admin.positions.edit-positions')->with('trinhDo', $trinhDo)->with('chucDanh',$chinhSua);
     }
 
@@ -133,7 +146,7 @@ class PositionController extends Controller
         $kinhNghiem = $request->kinh_nghiem;
         $trinhDo = $request->ma_trinh_do;
         $thuTuHienThi = $request->thu_tu_hien_thi;
-        $trangThaiChucDanh = $request->trang_thai_chuc_danh;
+        // $trangThaiChucDanh = $request->trang_thai_chuc_danh;
         $ghiChuChucDanh = $request->ghi_chu_chuc_danh;
         if($tenChucDanh == "" ||$tuKhoaChucDanh =="" || $kinhNghiem =="" || $trinhDo == "") {
             Session::put("message", "Các trường không được để trống.");
@@ -153,6 +166,7 @@ class PositionController extends Controller
             $data['ghi_chu_chuc_danh'] = $ghiChuChucDanh;
             $data['updated_at'] = Carbon::now();
             DB::table('positions')->where('id', $id)->update($data);
+            Session::put('message', 'Chỉnh sửa chức danh thành công.');
             return Redirect::to('/admin/list-positions');
         }
     }
@@ -163,6 +177,7 @@ class PositionController extends Controller
     public function delete_positions($id) {
         $this->AuthLogin();
         DB::table('positions')->where('id', $id)->delete();
+        Session::put('message', 'Xóa chức danh thành công.');
         return Redirect::to('/admin/list-positions');
     }
 }

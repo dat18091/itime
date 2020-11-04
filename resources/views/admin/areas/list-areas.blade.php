@@ -7,7 +7,15 @@
 <!--Data Tables -->
 <link href="{{asset('public/backend/assets/plugins/bootstrap-datatable/css/dataTables.bootstrap4.min.css')}}" rel="stylesheet" type="text/css">
 <link href="{{asset('public/backend/assets/plugins/bootstrap-datatable/css/buttons.bootstrap4.min.css')}}" rel="stylesheet" type="text/css">
+
+<!-- notifications css -->
+<link rel="stylesheet" href="{{asset('public/backend/assets/plugins/notifications/css/lobibox.min.css')}}" />
+<link rel="stylesheet" type="text/css" href="{{asset('node_modules/sweetalert/dist/sweetalert.css')}}">
 @stop
+<?php
+
+use Illuminate\Support\Facades\Session;
+?>
 <div class="container-fluid">
     <!-- Breadcrumb-->
     <div class="row pt-2 pb-2">
@@ -96,10 +104,63 @@
                 </div>
             </div>
         </div>
+        <?php
+        $message = Session::get('message');
+        if (strpos($message, "Ẩn")) {
+            echo '<script>
+                setTimeout(function() {
+                    swal({
+                        title: "Thông báo",
+                        text: "Ẩn vùng thành công",
+                        type: "success",
+                        showConfirmButton: true
+                    },);
+                }, 1000);
+            </script>';
+            Session::put('message', null);
+        } else if (strpos($message, "Hiển thị")) {
+            echo '<script>
+                setTimeout(function() {
+                    swal({
+                        title: "Thông báo",
+                        text: "Hiển thị vùng thành công",
+                        type: "success",
+                        showConfirmButton: true
+                    },);
+                }, 1000);
+            </script>';
+            Session::put('message', null);
+        }else if (strpos($message, "Thêm vùng")) {
+            echo '<script>
+                setTimeout(function() {
+                    swal({
+                        title: "Thông báo",
+                        text: "Thêm vùng thành công",
+                        type: "success",
+                        showConfirmButton: true
+                    },);
+                }, 1000);
+            </script>';
+            Session::put('message', null);
+        } else if (strpos($message, "không đúng")) {
+            echo '<script>
+            setTimeout(function() {
+                swal({
+                    title: "Thông báo",
+                    text: "Tên truy cập hoặc mật khẩu không đúng.",
+                    type: "error",
+                    showConfirmButton: true
+                },);
+            }, 1000);
+            </script>';
+            Session::put('message', null);
+        }
+        ?>
     </div><!-- End Row-->
     <!--start overlay-->
     <div class="overlay toggle-menu"></div>
     <!--end overlay-->
+
 </div>
 <!-- End container-fluid-->
 @stop
@@ -132,5 +193,10 @@
 
     });
 </script>
-
+<!--notification js -->
+<script src="{{asset('public/backend/assets/plugins/notifications/js/lobibox.min.js')}}"></script>
+<script src="{{asset('public/backend/assets/plugins/notifications/js/notifications.min.js')}}"></script>
+<script src="{{asset('public/backend/assets/plugins/notifications/js/notification-custom-script.js')}}"></script>
+<!--Sweet Alerts -->
+<script src="{{asset('node_modules/sweetalert/dist/sweetalert.min.js')}}"></script>
 @stop

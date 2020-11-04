@@ -28,6 +28,8 @@ use Illuminate\Support\Facades\Session;
     <link href="{{asset('public/backend/assets/css/app-style.css')}}" rel="stylesheet" />
     <!-- skins CSS-->
     <link href="{{asset('public/backend/assets/css/skins.css')}}" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="{{asset('node_modules/sweetalert/dist/sweetalert.css')}}">
     @yield('css')
 </head>
 
@@ -56,7 +58,7 @@ use Illuminate\Support\Facades\Session;
                             <ul class="sidebar-submenu">
                                 <li><a href="{{URL::to('/admin/list-companies')}}"><i class="zmdi zmdi-dot-circle-alt"></i> Thông Tin Công Ty</a></li>
                                 <li><a href="{{URL::to('/admin/list-areas')}}"><i class="zmdi zmdi-dot-circle-alt"></i> Vùng</a></li>
-                                <li><a href="{{URL::to('/admin/list-branch')}}"><i class="zmdi zmdi-dot-circle-alt"></i> Chi Nhánh</a></li>
+                                <li><a href="{{URL::to('/admin/list-branches')}}"><i class="zmdi zmdi-dot-circle-alt"></i> Chi Nhánh</a></li>
                             </ul>
                         </li>
                         <li>
@@ -478,6 +480,23 @@ use Illuminate\Support\Facades\Session;
         </div>
         <!--end color switcher-->
     </div>
+    <?php
+    $message = Session::get('message');
+    $failed = Session::get('failure');
+    if ($message) {
+        echo '<script>
+        setTimeout(function() {
+            swal({
+                title: "Thông báo",
+                text: "Thành công",
+                type: "success",
+                showConfirmButton: true
+            },);
+        }, 1000);
+        </script>';
+        Session::put('message', null);
+    } 
+    ?>
     <!--End wrapper-->
     <!-- Bootstrap core JavaScript-->
     <script src="{{asset('public/backend/assets/js/jquery.min.js')}}"></script>
@@ -491,6 +510,14 @@ use Illuminate\Support\Facades\Session;
 
     <!-- Custom scripts -->
     <script src="{{asset('public/backend/assets/js/app-script.js')}}"></script>
+
+    <!--notification js -->
+    <script src="{{asset('public/backend/assets/plugins/notifications/js/lobibox.min.js')}}"></script>
+    <script src="{{asset('public/backend/assets/plugins/notifications/js/notifications.min.js')}}"></script>
+    <script src="{{asset('public/backend/assets/plugins/notifications/js/notification-custom-script.js')}}"></script>
+
+    <!--Sweet Alerts -->
+    <script src="{{asset('node_modules/sweetalert/dist/sweetalert.min.js')}}"></script>
     @yield('javascript')
 </body>
 

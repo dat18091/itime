@@ -6,6 +6,9 @@
 @section('css')
 <!-- Vector CSS -->
 <link href="{{asset('public/backend/assets/plugins/vectormap/jquery-jvectormap-2.0.2.css')}}" rel="stylesheet" />
+<!-- notifications css -->
+<link rel="stylesheet" href="{{asset('public/backend/assets/plugins/notifications/css/lobibox.min.css')}}" />
+<link rel="stylesheet" type="text/css" href="{{asset('node_modules/sweetalert/dist/sweetalert.css')}}">
 @stop
 <?php
 
@@ -113,15 +116,8 @@ use Illuminate\Support\Facades\Session;
                                 <textarea class="form-control" rows="4" id="input-17" name="ghi_chu_vung"></textarea>
                             </div>
                         </div>
-                        <?php
-                        $message = Session::get('message');
-                        if ($message) {
-                            echo '<span class="alert">' . $message . '</span>';
-                            Session::put('message', null);
-                        }
-                        ?>
                         <div class="form-footer">
-                            <button type="submit" name="danh_sach_vung" class="btn btn-danger"><i class="fa fa-times"></i> Hủy Bỏ</button>
+                            <button type="button" name="danh_sach_vung" class="btn btn-danger"><i class="fa fa-times"></i> Hủy Bỏ</button>
                             <button name="add_areas" class="btn btn-primary" type="submit"><i class="fa fa-add"></i> Thêm Vùng</button>
                         </div>
                     </form>
@@ -138,5 +134,10 @@ use Illuminate\Support\Facades\Session;
 
 @endsection
 @section('javascript')
-
+<!--notification js -->
+<script src="{{asset('public/backend/assets/plugins/notifications/js/lobibox.min.js')}}"></script>
+<script src="{{asset('public/backend/assets/plugins/notifications/js/notifications.min.js')}}"></script>
+<script src="{{asset('public/backend/assets/plugins/notifications/js/notification-custom-script.js')}}"></script>
+<!--Sweet Alerts -->
+<script src="{{asset('node_modules/sweetalert/dist/sweetalert.min.js')}}"></script>
 @stop

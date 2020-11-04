@@ -13,7 +13,9 @@ use Carbon\Carbon;
 class AreaController extends Controller
 {
     /**
-     * 
+     * This function to check accesses from outside
+     * created by : DatNQ
+     * created at : 02/11/2020
      */
     public function AuthLogin() {
         $login_id = Session::get('maCongTy');
@@ -26,11 +28,14 @@ class AreaController extends Controller
     }
 
     /**
-     * 
+     * This function to show list areas with company id by GET method
+     * created by : DatNQ
+     * created at : 31/11/2020
      */
     public function list_areas() {
         $this->AuthLogin();
-        $danhSachVung = DB::table('areas')->get();
+        $idCompany = Session::get('maCongTy');
+        $danhSachVung = DB::table('areas')->where('ma_cong_ty',$idCompany)->get();
         return view('admin.areas.list-areas')->with('list_area', $danhSachVung);
     }
 
@@ -56,23 +61,25 @@ class AreaController extends Controller
         $tuKhoaVung = $request->tu_khoa_vung;
         $trangThaiVung = $request->trang_thai_vung;
         $ghiChuVung = $request->ghi_chu_vung;
+        $maCongTy = Session::get('maCongTy');
         if($tenVung == "" || $tuKhoaVung == "" || $trangThaiVung == "") {
-            Session::put("message", "Các trường không được để rỗng.");
+            Session::flash("failure", "Các trường không được để trống.");
             return Redirect::to('/admin/add-areas');
         } else if(strlen($tenVung) > 100) {
-            Session::put("message", "Bạn đã nhập quá ký tự cho phép.");
+            Session::flash("failure", "Bạn đã nhập quá ký tự cho phép.");
             return Redirect::to('/admin/add-areas');
         } else if(strlen($tenVung) < 5) {
-            Session::put("message", "Bạn nhập không đủ ký tự.");
+            Session::flash("failure", "Bạn nhập không đủ ký tự.");
             return Redirect::to('/admin/add-areas');
         } else {
             $data['ten_vung'] = $tenVung;
             $data['tu_khoa_vung'] = $tuKhoaVung;
             $data['trang_thai_vung'] = $trangThaiVung;
             $data['ghi_chu_vung'] = $ghiChuVung;
+            $data['ma_cong_ty'] = $maCongTy;
             $data['created_at'] = Carbon::now();
             DB::table('areas')->insert($data);
-            Session::put("message", "Thêm vùng thành công.");
+            Session::flash("message", "Thêm vùng thành công.");
             return Redirect::to('/admin/list-areas');
         }
     }
@@ -124,13 +131,13 @@ class AreaController extends Controller
         $tuKhoaVung = $request->tu_khoa_vung;
         $ghiChuVung = $request->ghi_chu_vung;
         if($tenVung == "" || $tuKhoaVung == "") {
-            Session::put("message", "Các trường không được để rỗng.");
+            Session::push("failure", "Các trường không được để rỗng.");
             return Redirect::to('/admin/edit-areas/'.$id);
         } else if(strlen($tenVung) > 100) {
-            Session::put("message", "Bạn đã nhập quá ký tự cho phép.");
+            Session::push("failure", "Bạn đã nhập quá ký tự cho phép.");
             return Redirect::to('/admin/edit-areas/'.$id);
         } else if(strlen($tenVung) < 5) {
-            Session::put("message", "Bạn nhập không đủ ký tự.");
+            Session::push("failure", "Bạn nhập không đủ ký tự.");
             return Redirect::to('/admin/edit-areas/'.$id);
         } else {
             $data['ten_vung'] = $tenVung;
@@ -138,16 +145,20 @@ class AreaController extends Controller
             $data['ghi_chu_vung'] = $ghiChuVung;
             $data['updated_at'] = Carbon::now();
             DB::table('areas')->where('id', $id)->update($data);
+            Session::put('message', 'Thêm vùng thành công.');
             return Redirect::to('/admin/list-areas');
         }
     }
 
     /**
-     * 
+     * This function is used to delete data of area by GET method
+     * created by : DatNQ
+     * created at : 31/10/2020
      */
     public function delete_areas($id) {
         $this->AuthLogin();
         DB::table('areas')->where('id', $id)->delete();
+        Session::put('message', 'Xóa vùng thành công.');
         return Redirect::to('/admin/list-areas');
     }
 }

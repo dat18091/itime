@@ -13,7 +13,9 @@ use Carbon\Carbon;
 class EducationLevelController extends Controller
 {
     /**
-     * 
+     * This function to check accesses from outside
+     * created by : DatNQ
+     * created at : 02/11/2020
      */
     public function AuthLogin() {
         $login_id = Session::get('maCongTy');
@@ -47,6 +49,7 @@ class EducationLevelController extends Controller
         $tuKhoaTrinhDo = $request->tu_khoa_trinh_do;
         $trangThaiTrinhDo = $request->trang_thai_trinh_do;
         $ghiChuTrinhDo = $request->ghi_chu_trinh_do;
+        $maCongTy = Session::get('maCongTy');
         if($tenTrinhDo == "" || $tuKhoaTrinhDo == "" || $trangThaiTrinhDo == "") {
             Session::put("message", "Các trường không được để rỗng.");
             return Redirect::to('/admin/add-education-levels');
@@ -61,6 +64,7 @@ class EducationLevelController extends Controller
             $data['tu_khoa_trinh_do'] = $tuKhoaTrinhDo;
             $data['trang_thai_trinh_do'] = $trangThaiTrinhDo;
             $data['ghi_chu_trinh_do'] = $ghiChuTrinhDo;
+            $data['ma_cong_ty'] = $maCongTy;
             $data['created_at'] = Carbon::now();
             DB::table('educationlevels')->insert($data);
             Session::put('message', 'Thêm trình độ thành công.');
@@ -75,7 +79,8 @@ class EducationLevelController extends Controller
      */
     public function list_education_levels() {
         $this->AuthLogin();
-        $danhSachTrinhDo = DB::table('educationlevels')->orderBy('id', 'asc')->get();
+        $maCongTy = Session::get('maCongTy');
+        $danhSachTrinhDo = DB::table('educationlevels')->where('ma_cong_ty', $maCongTy)->orderBy('id', 'asc')->get();
         return view('admin.educationlevels.list-education-levels')->with('educationlevels', $danhSachTrinhDo);
     }
 
@@ -153,6 +158,7 @@ class EducationLevelController extends Controller
     public function delete_education_levels($id) {
         $this->AuthLogin();
         DB::table('educationlevels')->where('id', $id)->delete();
+        Session::put('message', 'Xóa trình độ thành công.');
         return Redirect::to('/admin/list-education-levels');
     }
 }
