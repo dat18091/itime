@@ -75,6 +75,11 @@ Route::post("/admin/update-branches/{id}", "Branches\BranchController@update_bra
 
 Route::get("/admin/delete-branches/{id}", "Branches\BranchController@delete_branches");
 
+## Companies
+Route::get("/admin/edit-profile/{id}", "Companies\CompanyController@edit_profile");
+
+Route::get("/admin/list-companies", "Companies\CompanyController@list_companies");
+
 ## Departments
 Route::get("/admin/add-departments", "Departments\DepartmentController@add_departments");
 Route::post("/admin/save-departments", "Departments\DepartmentController@save_departments");
@@ -89,33 +94,6 @@ Route::post("/admin/update-departments/{id}", "Departments\DepartmentController@
 
 Route::get("/admin/delete-departments/{id}", "Departments\DepartmentController@delete_departments");
 
-## Employees
-Route::get("/admin/add-employees", "Employees\EmployeeController@add_employees");
-Route::post("/admin/save-employees", "Employees\EmployeeController@save_employees");
-
-Route::get("/admin/list-employees", "Employees\EmployeeController@list_employees");
-
-Route::get("/admin/hide-employees", "Employees\EmployeeController@hide_employees");
-Route::get("/admin/show-employees", "Employees\EmployeeController@show_employees");
-
-Route::get("/admin/edit-employees", "Employees\EmployeeController@edit_employees");
-Route::post("/admin/update-employees", "Employees\EmployeeController@update_employees");
-
-Route::get("/admin/delete-employees", "Employees\EmployeeController@delete_employees");
-
-## Positions
-Route::get("/admin/add-positions", "Positions\PositionController@add_positions");
-Route::post("/admin/save-positions", "Positions\PositionController@save_positions");
-
-Route::get("/admin/list-positions", "Positions\PositionController@list_positions");
-
-Route::get("/admin/hide-positions/{id}", "Positions\PositionController@hide_positions");
-Route::get("/admin/show-positions/{id}", "Positions\PositionController@show_positions");
-
-Route::get("/admin/edit-positions/{id}", "Positions\PositionController@edit_positions");
-Route::post("/admin/update-positions/{id}", "Positions\PositionController@update_positions");
-
-Route::get("/admin/delete-positions/{id}", "Positions\PositionController@delete_positions");
 
 ## Education Levels
 Route::get("/admin/add-education-levels", "EducationLevels\EducationLevelController@add_education_levels");
@@ -131,11 +109,35 @@ Route::post("/admin/update-education-levels/{id}", "EducationLevels\EducationLev
 
 Route::get("/admin/delete-education-levels/{id}", "EducationLevels\EducationLevelController@delete_education_levels");
 
-## Companies
-Route::get("/admin/edit-profile/{id}", "Companies\CompanyController@edit_profile");
 
-Route::get("/admin/list-companies", "Companies\CompanyController@list_companies");
+## Employees
+Route::get("/admin/add-employees", "Employees\EmployeeController@add_employees");
+Route::post("/admin/save-employees", "Employees\EmployeeController@save_employees");
 
+Route::get("/admin/list-employees", "Employees\EmployeeController@list_employees");
+
+Route::get("/admin/hide-employees", "Employees\EmployeeController@hide_employees");
+Route::get("/admin/show-employees", "Employees\EmployeeController@show_employees");
+
+Route::get("/admin/edit-employees", "Employees\EmployeeController@edit_employees");
+Route::post("/admin/update-employees", "Employees\EmployeeController@update_employees");
+
+Route::get("/admin/delete-employees", "Employees\EmployeeController@delete_employees");
+
+
+## Positions
+Route::get("/admin/add-positions", "Positions\PositionController@add_positions");
+Route::post("/admin/save-positions", "Positions\PositionController@save_positions");
+
+Route::get("/admin/list-positions", "Positions\PositionController@list_positions");
+
+Route::get("/admin/hide-positions/{id}", "Positions\PositionController@hide_positions");
+Route::get("/admin/show-positions/{id}", "Positions\PositionController@show_positions");
+
+Route::get("/admin/edit-positions/{id}", "Positions\PositionController@edit_positions");
+Route::post("/admin/update-positions/{id}", "Positions\PositionController@update_positions");
+
+Route::get("/admin/delete-positions/{id}", "Positions\PositionController@delete_positions");
 
 Route::group(['prefix' => 'admin'], function () {
     Voyager::routes();

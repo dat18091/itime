@@ -58,7 +58,7 @@ use Illuminate\Support\Facades\Session;
             <div class="card">
                 <div class="card-body">
                     @foreach($chiNhanh as $key => $branch)
-                    <form id="signupForm" method="post" action="{{URL::to('/admin/update-branches/'.$branch->id)}}">
+                    <form id="signupForm" method="post" action="{{URL::to('/admin/update-branches/'.$branch->ma_chi_nhanh)}}">
                         {{csrf_field()}}
                         <h4 class="form-header text-uppercase">
                             <i class="fa fa-envelope-o"></i>
@@ -125,10 +125,10 @@ use Illuminate\Support\Facades\Session;
                             <div class="col-sm-4">
                                 <select name="ma_vung" class="form-control single-select">
                                     @foreach($vung as $key => $area)
-                                        @if($area->id == $branch->ma_vung)
-                                            <option selected value="{{$area->id}}">{{$area->ten_vung}}</option>
+                                        @if($area->ma_vung == $branch->ma_vung)
+                                            <option selected value="{{$area->ma_vung}}">{{$area->ten_vung}}</option>
                                         @else 
-                                            <option value="{{$area->id}}">{{$area->ten_vung}}</option>
+                                            <option value="{{$area->ma_vung}}">{{$area->ten_vung}}</option>
                                         @endif
                                     @endforeach
                                 </select>

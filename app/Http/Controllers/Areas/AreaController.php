@@ -91,7 +91,7 @@ class AreaController extends Controller
      */
     public function hide_areas($id) {
         $this->AuthLogin();
-        DB::table('areas')->where('id', $id)->update(['trang_thai_vung' => 1]);
+        DB::table('areas')->where('ma_vung', $id)->update(['trang_thai_vung' => 1]);
         Session::put('message', 'Ẩn vùng thành công.');
         return Redirect::to('/admin/list-areas');
     }
@@ -103,7 +103,7 @@ class AreaController extends Controller
      */
     public function show_areas($id) {
         $this->AuthLogin();
-        DB::table('areas')->where('id', $id)->update(['trang_thai_vung' => 0]);
+        DB::table('areas')->where('ma_vung', $id)->update(['trang_thai_vung' => 0]);
         Session::put('message', 'Hiển thị vùng thành công.');
         return Redirect::to('/admin/list-areas');
     }
@@ -115,7 +115,7 @@ class AreaController extends Controller
      */
     public function edit_areas($id) {
         $this->AuthLogin();
-        $capNhatVung = DB::table('areas')->where('id', $id)->get();
+        $capNhatVung = DB::table('areas')->where('ma_vung', $id)->get();
         return view('admin.areas.edit-areas')->with('areas', $capNhatVung);
     }
 
@@ -144,8 +144,8 @@ class AreaController extends Controller
             $data['tu_khoa_vung'] = $tuKhoaVung;
             $data['ghi_chu_vung'] = $ghiChuVung;
             $data['updated_at'] = Carbon::now();
-            DB::table('areas')->where('id', $id)->update($data);
-            Session::put('message', 'Thêm vùng thành công.');
+            DB::table('areas')->where('ma_vung', $id)->update($data);
+            Session::put('message', 'Cập nhật vùng thành công.');
             return Redirect::to('/admin/list-areas');
         }
     }
@@ -157,7 +157,7 @@ class AreaController extends Controller
      */
     public function delete_areas($id) {
         $this->AuthLogin();
-        DB::table('areas')->where('id', $id)->delete();
+        DB::table('areas')->where('ma_vung', $id)->delete();
         Session::put('message', 'Xóa vùng thành công.');
         return Redirect::to('/admin/list-areas');
     }

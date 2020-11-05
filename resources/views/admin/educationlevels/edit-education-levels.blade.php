@@ -48,7 +48,7 @@ use Illuminate\Support\Facades\Session;
             <div class="card">
                 <div class="card-body">
                     @foreach($educationlevels as $key => $level)
-                    <form id="signupForm" method="post" action="{{URL::to('/admin/update-education-levels/'.$level->id)}}">
+                    <form id="signupForm" method="post" action="{{URL::to('/admin/update-education-levels/'.$level->ma_trinh_do)}}">
                         {{csrf_field()}}
                         <h4 class="form-header text-uppercase">
                             <i class="fa fa-envelope-o"></i>

@@ -67,11 +67,11 @@ use Illuminate\Support\Facades\Session;
                                         <?php
                                         if ($branch->trang_thai_chi_nhanh == 0) {
                                         ?>
-                                            <a href="{{URL::to('/admin/hide-branches/'.$branch->id)}}"><span class="fa-styling fa fa-thumbs-up"></span></a>
+                                            <a href="{{URL::to('/admin/hide-branches/'.$branch->ma_chi_nhanh)}}"><span class="fa-styling fa fa-thumbs-up"></span></a>
                                         <?php
                                         } else {
                                         ?>
-                                            <a href="{{URL::to('/admin/show-branches/'.$branch->id)}}"><span class="fa-styling fa fa-thumbs-down"></span></a>
+                                            <a href="{{URL::to('/admin/show-branches/'.$branch->ma_chi_nhanh)}}"><span class="fa-styling fa fa-thumbs-down"></span></a>
                                         <?php
                                         }
                                         ?>
@@ -79,15 +79,15 @@ use Illuminate\Support\Facades\Session;
                                     <td>{{substr($branch->dia_chi_chi_nhanh, 0, 15)."..."}}</td>
                                     <td>
                                         @foreach($vung as $key => $area)
-                                        @if($branch->ma_vung == $area->id)
+                                        @if($branch->ma_vung == $area->ma_vung)
                                         {{$area->ten_vung}}
                                         @endif
                                         @endforeach
                                     </td>
                                     <td>
                                         <div class="btn-group group-round m-1">
-                                            <a type="button" href="{{URL::to('/admin/edit-branches/'.$branch->id)}}" class="btn btn-success waves-effect waves-light">Sửa</a>
-                                            <a type="button" href="{{URL::to('/admin/delete-branches/'.$branch->id)}}" onclick="return confirm('Bạn có chắc chắn muốn xóa chi nhánh này?')" class="btn btn-danger waves-effect waves-light">Xóa</a>
+                                            <a type="button" href="{{URL::to('/admin/edit-branches/'.$branch->ma_chi_nhanh)}}" class="btn btn-success waves-effect waves-light">Sửa</a>
+                                            <a type="button" href="{{URL::to('/admin/delete-branches/'.$branch->ma_chi_nhanh)}}" onclick="return confirm('Bạn có chắc chắn muốn xóa chi nhánh này?')" class="btn btn-danger waves-effect waves-light">Xóa</a>
                                         </div>
                                     </td>
                                     <td></td>
@@ -113,22 +113,7 @@ use Illuminate\Support\Facades\Session;
     <!--start overlay-->
     <div class="overlay toggle-menu"></div>
     <!--end overlay-->
-     <?php
-        $message = Session::get('message');
-        if (strpos($message, "Thêm chi nhánh")) {
-            echo '<script>
-                setTimeout(function() {
-                swal({
-                    title: "Thông báo",
-                    text: "Đăng ký thành công",
-                    type: "success",
-                    showConfirmButton: true
-                    },);
-                }, 1000);
-            </script>';
-            Session::put('message', null);
-        } 
-        ?>
+    
 </div>
 <!-- End container-fluid-->
 @stop
@@ -160,6 +145,9 @@ use Illuminate\Support\Facades\Session;
             .appendTo('#example_wrapper .col-md-6:eq(0)');
 
     });
+
 </script>
+
+
 
 @stop

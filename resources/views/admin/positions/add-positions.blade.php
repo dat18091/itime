@@ -119,7 +119,7 @@ use Illuminate\Support\Facades\Session;
                             <div class="col-sm-4">
                                 <select name="ma_trinh_do" class="form-control single-select">
                                     @foreach($trinhDo as $key => $level)
-                                    <option value="{{$level->id}}">{{$level->ten_trinh_do}}</option>
+                                    <option value="{{$level->ma_trinh_do}}">{{$level->ten_trinh_do}}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -144,13 +144,6 @@ use Illuminate\Support\Facades\Session;
                                 <textarea class="form-control" rows="4" id="input-17" name="ghi_chu_chuc_danh"></textarea>
                             </div>
                         </div>
-                        <?php
-                        $message = Session::get('message');
-                        if ($message) {
-                            echo '<span class="alert">' . $message . '</span>';
-                            Session::put('message', null);
-                        }
-                        ?>
                         <div class="form-footer">
                             <button type="submit" name="danh_sach_sinh_vien" class="btn btn-danger"><i class="fa fa-times"></i> Hủy bỏ</button>
                             <button name="them_sinh_vien" class="btn btn-primary" type="submit"><i class="fa fa-add"></i> Thêm chức danh</button>

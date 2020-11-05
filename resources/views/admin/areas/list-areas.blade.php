@@ -71,19 +71,19 @@ use Illuminate\Support\Facades\Session;
                                         <?php
                                         if ($area->trang_thai_vung == 0) {
                                         ?>
-                                            <a href="{{URL::to('/admin/hide-areas/'.$area->id)}}"><span class="fa-styling fa fa-thumbs-up"></span></a>
+                                            <a href="{{URL::to('/admin/hide-areas/'.$area->ma_vung)}}"><span class="fa-styling fa fa-thumbs-up"></span></a>
                                         <?php
                                         } else {
                                         ?>
-                                            <a href="{{URL::to('/admin/show-areas/'.$area->id)}}"><span class="fa-styling fa fa-thumbs-down"></span></a>
+                                            <a href="{{URL::to('/admin/show-areas/'.$area->ma_vung)}}"><span class="fa-styling fa fa-thumbs-down"></span></a>
                                         <?php
                                         }
                                         ?>
                                     </td>
                                     <td>
                                         <div class="btn-group group-round m-1">
-                                            <a type="button" href="{{URL::to('/admin/edit-areas/'.$area->id)}}" class="btn btn-success waves-effect waves-light">Sửa</a>
-                                            <a type="button" href="{{URL::to('/admin/delete-areas/'.$area->id)}}" onclick="return confirm('Bạn có chắc chắn muốn xóa vùng này?')" class="btn btn-danger waves-effect waves-light">Xóa</a>
+                                            <a type="button" href="{{URL::to('/admin/edit-areas/'.$area->ma_vung)}}" class="btn btn-success waves-effect waves-light">Sửa</a>
+                                            <a type="button" href="{{URL::to('/admin/delete-areas/'.$area->ma_vung)}}" onclick="return confirm('Bạn có chắc chắn muốn xóa vùng này?')" class="btn btn-danger waves-effect waves-light">Xóa</a>
                                         </div>
                                     </td>
                                     <td></td>

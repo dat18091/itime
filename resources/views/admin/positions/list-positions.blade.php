@@ -67,7 +67,7 @@ use Illuminate\Support\Facades\Session;
                                     <td>{{ $position->ten_chuc_danh }}</td>
                                     <td>
                                         @foreach($trinhDo as $key => $level)
-                                        @if($position->ma_trinh_do == $level->id)
+                                        @if($position->ma_trinh_do == $level->ma_trinh_do)
                                         {{$level->ten_trinh_do}}
                                         @endif
                                         @endforeach
@@ -77,19 +77,19 @@ use Illuminate\Support\Facades\Session;
                                         <?php
                                         if ($position->trang_thai_chuc_danh == 0) {
                                         ?>
-                                            <a href="{{URL::to('/admin/hide-positions/'.$position->id)}}"><span class="fa-styling fa fa-thumbs-up"></span></a>
+                                            <a href="{{URL::to('/admin/hide-positions/'.$position->ma_chuc_danh)}}"><span class="fa-styling fa fa-thumbs-up"></span></a>
                                         <?php
                                         } else {
                                         ?>
-                                            <a href="{{URL::to('/admin/show-positions/'.$position->id)}}"><span class="fa-styling fa fa-thumbs-down"></span></a>
+                                            <a href="{{URL::to('/admin/show-positions/'.$position->ma_chuc_danh)}}"><span class="fa-styling fa fa-thumbs-down"></span></a>
                                         <?php
                                         }
                                         ?>
                                     </td>
                                     <td>
                                         <div class="btn-group group-round m-1">
-                                            <a type="button" href="{{URL::to('/admin/edit-positions/'.$position->id)}}" class="btn btn-success waves-effect waves-light">Sửa</a>
-                                            <a type="button" href="{{URL::to('/admin/delete-positions/'.$position->id)}}" onclick="return confirm('Bạn có chắc chắn muốn xóa vùng này?')" class="btn btn-danger waves-effect waves-light">Xóa</a>
+                                            <a type="button" href="{{URL::to('/admin/edit-positions/'.$position->ma_chuc_danh)}}" class="btn btn-success waves-effect waves-light">Sửa</a>
+                                            <a type="button" href="{{URL::to('/admin/delete-positions/'.$position->ma_chuc_danh)}}" onclick="return confirm('Bạn có chắc chắn muốn xóa vùng này?')" class="btn btn-danger waves-effect waves-light">Xóa</a>
                                         </div>
                                     </td>
                                     <td></td>
@@ -149,5 +149,4 @@ use Illuminate\Support\Facades\Session;
 
     });
 </script>
-
 @stop

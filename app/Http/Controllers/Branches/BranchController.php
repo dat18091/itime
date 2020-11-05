@@ -33,9 +33,11 @@ class BranchController extends Controller
      */
     public function list_branches() {
         $this->AuthLogin();
-        $maCongTy = Session::get('branches');
+        $maCongTy = Session::get('maCongTy');
+        // dd($maCongTy);
         $danhSach = DB::table('branches')
-        ->join('areas', 'areas.id' , '=', 'branches.id')->orderby('branches.created_at', 'DESC')->get();
+        ->join('areas', 'areas.ma_vung' , '=', 'branches.ma_vung')
+        ->where('branches.ma_cong_ty', $maCongTy)->get();
         $getAreas = DB::table('areas')->get();
         return view('admin.branches.list-branches')->with('chiNhanh', $danhSach)->with('vung', $getAreas);
     }
@@ -74,13 +76,13 @@ class BranchController extends Controller
         $maCongTy = Session::get('maCongTy');
         if($tenChiNhanh == "" || $trangThaiChiNhanh == "" || $diaChiChiNhanh == "" || $maVung == "" ||
             $tinhThanh == "" || $quanHuyen == "") {
-            Session::put('message', 'Các trường không được để trống.');
+            Session::push('message', 'Các trường không được để trống.');
             return Redirect::to('/admin/add-branches');
         } else if(strlen($tenChiNhanh) > 100 || strlen($diaChiChiNhanh) > 200) {
-            Session::put('message', 'Bạn đã nhập quá ký tự cho phép.');
+            Session::push('message', 'Bạn đã nhập quá ký tự cho phép.');
             return Redirect::to('/admin/add-branches');
         } else if(strlen($tenChiNhanh) < 5 || strlen($diaChiChiNhanh) < 5) {
-            Session::put('message', 'Bạn đã nhập không đủ ký tự.');
+            Session::push('message', 'Bạn đã nhập không đủ ký tự.');
             return Redirect::to('/admin/add-branches');
         } else {
             $data['ten_chi_nhanh'] = $tenChiNhanh;
@@ -95,7 +97,7 @@ class BranchController extends Controller
             $data['ma_cong_ty'] = $maCongTy;
             $data['created_at'] = Carbon::now();
             DB::table('branches')->insert($data);
-            Session::put('message', 'Thêm chi nhánh thành công.');
+            Session::push('message', 'Thêm chi nhánh thành công.');
             return Redirect::to('/admin/list-branches');
         }
     }
@@ -107,8 +109,8 @@ class BranchController extends Controller
      */
     public function hide_branches($id) {
         $this->AuthLogin();
-        DB::table('branches')->where('id', $id)->update(['trang_thai_chi_nhanh' => 1]);
-        Session::put('message', 'Ẩn chi nhánh thành công.');
+        DB::table('branches')->where('ma_chi_nhanh', $id)->update(['trang_thai_chi_nhanh' => 1]);
+        Session::push('message', 'Ẩn chi nhánh thành công.');
         return Redirect::to('/admin/list-branches');
     }
 
@@ -119,8 +121,8 @@ class BranchController extends Controller
      */
     public function show_branches($id) {
         $this->AuthLogin();
-        DB::table('branches')->where('id', $id)->update(['trang_thai_chi_nhanh' => 0]);
-        Session::put('message', 'Hiển thị chi nhánh thành công.');
+        DB::table('branches')->where('ma_chi_nhanh', $id)->update(['trang_thai_chi_nhanh' => 0]);
+        Session::push('message', 'Hiển thị chi nhánh thành công.');
         return Redirect::to('/admin/list-branches');
     }
 
@@ -135,7 +137,7 @@ class BranchController extends Controller
         $getAreas = DB::table('areas')->where('trang_thai_vung', '=', '0')->where('ma_cong_ty', $maCongTy)->get();
         $tinhThanh = DB::table('provinces')->get();
         $quanHuyen = DB::table('districts')->get();
-        $chinhSuaChiNhanh = DB::table('branches')->where('id', $id)->get();
+        $chinhSuaChiNhanh = DB::table('branches')->where('ma_chi_nhanh', $id)->get();
         return view('admin.branches.edit-branches')->with('vung', $getAreas)
         ->with('tinhThanh', $tinhThanh)->with('quanHuyen', $quanHuyen)->with('chiNhanh', $chinhSuaChiNhanh);
     }
@@ -158,13 +160,13 @@ class BranchController extends Controller
         $ghiChuChiNhanh = $request->ghi_chu_chi_nhanh;
         if($tenChiNhanh == "" || $diaChiChiNhanh == "" || $maVung == "" ||
             $tinhThanh == "" || $quanHuyen == "") {
-            Session::put('message', 'Các trường không được để trống.');
+            Session::push('message', 'Các trường không được để trống.');
             return Redirect::to('/admin/edit-branches/'.$id);
         } else if(strlen($tenChiNhanh) > 100 || strlen($diaChiChiNhanh) > 200) {
-            Session::put('message', 'Bạn đã nhập quá ký tự cho phép.');
+            Session::push('message', 'Bạn đã nhập quá ký tự cho phép.');
             return Redirect::to('/admin/edit-branches/'.$id);
         } else if(strlen($tenChiNhanh) < 5 || strlen($diaChiChiNhanh) < 5) {
-            Session::put('message', 'Bạn đã nhập không đủ ký tự.');
+            Session::push('message', 'Bạn đã nhập không đủ ký tự.');
             return Redirect::to('/admin/edit-branches/'.$id);
         } else {
             $data['ten_chi_nhanh'] = $tenChiNhanh;
@@ -176,8 +178,8 @@ class BranchController extends Controller
             $data['thu_tu_hien_thi_cn'] = $thuTuHienThi;
             $data['ghi_chu_chi_nhanh'] = $ghiChuChiNhanh;
             $data['updated_at'] = Carbon::now();
-            DB::table('branches')->where('id', $id)->update($data);
-            Session::put('message', 'Thêm chi nhánh thành công.');
+            DB::table('branches')->where('ma_chi_nhanh', $id)->update($data);
+            Session::push('message', 'Thêm chi nhánh thành công.');
             return Redirect::to('/admin/list-branches');
         }
     }
@@ -189,8 +191,8 @@ class BranchController extends Controller
      */
     public function delete_branches($id) {
         $this->AuthLogin();
-        DB::table('branches')->where('id', $id)->delete();
-        Session::put('message', 'Xóa chi nhánh thành công.');
+        DB::table('branches')->where('ma_chi_nhanh', $id)->delete();
+        Session::push('message', 'Xóa chi nhánh thành công.');
         return Redirect::to('/admin/list-branches');
     }
 }

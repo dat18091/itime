@@ -51,13 +51,13 @@ class EducationLevelController extends Controller
         $ghiChuTrinhDo = $request->ghi_chu_trinh_do;
         $maCongTy = Session::get('maCongTy');
         if($tenTrinhDo == "" || $tuKhoaTrinhDo == "" || $trangThaiTrinhDo == "") {
-            Session::put("message", "Các trường không được để rỗng.");
+            Session::push("failure", "Các trường không được để rỗng.");
             return Redirect::to('/admin/add-education-levels');
         } else if(strlen($tenTrinhDo) > 100) {
-            Session::put("message", "Bạn đã nhập quá ký tự cho phép.");
+            Session::push("failure", "Bạn đã nhập quá ký tự cho phép.");
             return Redirect::to('/admin/add-education-levels');
         } else if(strlen($tenTrinhDo) < 5) {
-            Session::put("message", "Bạn nhập không đủ ký tự.");
+            Session::push("failure", "Bạn nhập không đủ ký tự.");
             return Redirect::to('/admin/add-education-levels');
         } else {
             $data['ten_trinh_do'] = $tenTrinhDo;
@@ -67,7 +67,7 @@ class EducationLevelController extends Controller
             $data['ma_cong_ty'] = $maCongTy;
             $data['created_at'] = Carbon::now();
             DB::table('educationlevels')->insert($data);
-            Session::put('message', 'Thêm trình độ thành công.');
+            Session::push('message', 'Thêm trình độ thành công.');
             return Redirect::to('/admin/list-education-levels');
         }
     }
@@ -80,7 +80,7 @@ class EducationLevelController extends Controller
     public function list_education_levels() {
         $this->AuthLogin();
         $maCongTy = Session::get('maCongTy');
-        $danhSachTrinhDo = DB::table('educationlevels')->where('ma_cong_ty', $maCongTy)->orderBy('id', 'asc')->get();
+        $danhSachTrinhDo = DB::table('educationlevels')->where('ma_cong_ty', $maCongTy)->orderby('ma_trinh_do', 'asc')->get();
         return view('admin.educationlevels.list-education-levels')->with('educationlevels', $danhSachTrinhDo);
     }
 
@@ -91,8 +91,8 @@ class EducationLevelController extends Controller
      */
     public function hide_education_levels($id) {
         $this->AuthLogin();
-        DB::table('educationlevels')->where('id', $id)->update(['trang_thai_trinh_do' => 1]);
-        Session::put('message', 'Ẩn trình độ thành công.');
+        DB::table('educationlevels')->where('ma_trinh_do', $id)->update(['trang_thai_trinh_do' => 1]);
+        Session::push('message', 'Ẩn trình độ thành công.');
         return Redirect::to('/admin/list-education-levels');
     }
 
@@ -103,8 +103,8 @@ class EducationLevelController extends Controller
      */
     public function show_education_levels($id) {
         $this->AuthLogin();
-        DB::table('educationlevels')->where('id', $id)->update(['trang_thai_trinh_do' => 0]);
-        Session::put('message', 'Hiển thị trình độ thành công.');
+        DB::table('educationlevels')->where('ma_trinh_do', $id)->update(['trang_thai_trinh_do' => 0]);
+        Session::push('message', 'Hiển thị trình độ thành công.');
         return Redirect::to('/admin/list-education-levels');
     }
 
@@ -115,7 +115,7 @@ class EducationLevelController extends Controller
      */
     public function edit_education_levels($id) {
         $this->AuthLogin();
-        $chinhSuaTrinhDo = DB::table('educationlevels')->where('id', $id)->get();
+        $chinhSuaTrinhDo = DB::table('educationlevels')->where('ma_trinh_do', $id)->get();
         return view('admin.educationlevels.edit-education-levels')->with('educationlevels', $chinhSuaTrinhDo);
     }
 
@@ -131,21 +131,21 @@ class EducationLevelController extends Controller
         $tuKhoaTrinhDo = $request->tu_khoa_trinh_do;
         $ghiChuTrinhDo = $request->ghi_chu_trinh_do;
         if($tenTrinhDo == "" || $tuKhoaTrinhDo == "") {
-            Session::put("message", "Các trường không được để rỗng.");
+            Session::push("failure", "Các trường không được để rỗng.");
             return Redirect::to('/admin/add-education-levels');
         } else if(strlen($tenTrinhDo) > 100) {
-            Session::put("message", "Bạn đã nhập quá ký tự cho phép.");
+            Session::push("failure", "Bạn đã nhập quá ký tự cho phép.");
             return Redirect::to('/admin/add-education-levels');
         } else if(strlen($tenTrinhDo) < 5) {
-            Session::put("message", "Bạn nhập không đủ ký tự.");
+            Session::push("failure", "Bạn nhập không đủ ký tự.");
             return Redirect::to('/admin/add-education-levels');
         } else {
             $data['ten_trinh_do'] = $tenTrinhDo;
             $data['tu_khoa_trinh_do'] = $tuKhoaTrinhDo;
             $data['ghi_chu_trinh_do'] = $ghiChuTrinhDo;
             $data['updated_at'] = Carbon::now();
-            DB::table('educationlevels')->where('id', $id)->update($data);
-            Session::put('message', 'Chỉnh sửa trình độ thành công.');
+            DB::table('educationlevels')->where('ma_trinh_do', $id)->update($data);
+            Session::push('message', 'Chỉnh sửa trình độ thành công.');
             return Redirect::to('/admin/list-education-levels');
         }
     }
@@ -157,8 +157,8 @@ class EducationLevelController extends Controller
      */
     public function delete_education_levels($id) {
         $this->AuthLogin();
-        DB::table('educationlevels')->where('id', $id)->delete();
-        Session::put('message', 'Xóa trình độ thành công.');
+        DB::table('educationlevels')->where('ma_trinh_do', $id)->delete();
+        Session::push('message', 'Xóa trình độ thành công.');
         return Redirect::to('/admin/list-education-levels');
     }
 }

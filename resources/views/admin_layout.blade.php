@@ -65,7 +65,7 @@ use Illuminate\Support\Facades\Session;
                             <a href="javaScript:void();"><i class="zmdi zmdi-dot-circle-alt"></i> Thông Tin <i class="fa fa-angle-left pull-right"></i></a>
                             <ul class="sidebar-submenu">
                                 <li><a href="javaScript:void();"><i class="zmdi zmdi-dot-circle-alt"></i> Dự Án</a></li>
-                                <li><a href="javaScript:void();"><i class="zmdi zmdi-dot-circle-alt"></i> Phòng Ban</a></li>
+                                <li><a href="{{URL::to('/admin/list-departments')}}"><i class="zmdi zmdi-dot-circle-alt"></i> Phòng Ban</a></li>
                                 <li><a href="{{URL::to('/admin/list-education-levels')}}"><i class="zmdi zmdi-dot-circle-alt"></i> Trình Độ</a></li>
                                 <li><a href="{{URL::to('/admin/list-positions')}}"><i class="zmdi zmdi-dot-circle-alt"></i> Chức Danh</a></li>
                             </ul>
@@ -483,6 +483,7 @@ use Illuminate\Support\Facades\Session;
     <?php
     $message = Session::get('message');
     $failed = Session::get('failure');
+    $error = Session::get('messageerr');
     if ($message) {
         echo '<script>
         setTimeout(function() {
@@ -495,7 +496,31 @@ use Illuminate\Support\Facades\Session;
         }, 1000);
         </script>';
         Session::put('message', null);
-    } 
+    } else if($failed) {
+        echo '<script>
+        setTimeout(function() {
+            swal({
+                title: "Thông báo",
+                text: "Lỗi trong quá trình nhập",
+                type: "error",
+                showConfirmButton: true
+            },);
+        }, 1000);
+        </script>';
+        Session::put('message', null);
+    } else if($error) {
+        echo '<script>
+        setTimeout(function() {
+            swal({
+                title: "Thông báo",
+                text: "Lỗi trong quá trình nhập",
+                type: "error",
+                showConfirmButton: true
+            },);
+        }, 1000);
+        </script>';
+        Session::put('message', null);
+    }
     ?>
     <!--End wrapper-->
     <!-- Bootstrap core JavaScript-->
