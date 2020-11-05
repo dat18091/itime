@@ -89,6 +89,9 @@ Route::get("/admin/list-departments", "Departments\DepartmentController@list_dep
 Route::get("/admin/hide-departments/{id}", "Departments\DepartmentController@hide_departments");
 Route::get("/admin/show-departments/{id}", "Departments\DepartmentController@show_departments");
 
+Route::get("/admin/second-departments/{id}", "Departments\DepartmentController@second_departments");
+Route::get("/admin/first-departments/{id}", "Departments\DepartmentController@first_departments");
+
 Route::get("/admin/edit-departments/{id}", "Departments\DepartmentController@edit_departments");
 Route::post("/admin/update-departments/{id}", "Departments\DepartmentController@update_departments");
 

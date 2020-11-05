@@ -105,6 +105,26 @@ class DepartmentController extends Controller
     /**
      * 
      */
+    public function second_departments($id) {
+        $this->AuthLogin();
+        DB::table('departments')->where('ma_phong_ban', $id)->update(['phong_ban_dung_dau' => 1]);
+        Session::push('message', 'Tắt hiển thị phòng ban đứng đầu thành công');
+        return Redirect::to('/admin/list-departments');
+    }
+
+    /**
+     * 
+     */
+    public function first_departments($id) {
+        $this->AuthLogin();
+        DB::table('departments')->where('ma_phong_ban', $id)->update(['phong_ban_dung_dau' => 0]);
+        Session::push('message', 'Hiển thị phòng ban đứng đầu thành công');
+        return Redirect::to('/admin/list-departments');
+    }
+
+    /**
+     * 
+     */
     public function edit_departments($id) {
         $this->AuthLogin();
         $chinhSua = DB::table('departments')->where('ma_phong_ban', $id)->get();
