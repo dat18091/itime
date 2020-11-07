@@ -61,6 +61,8 @@ Route::post("/admin/update-areas/{id}", "Areas\AreaController@update_areas");
 
 Route::get("/admin/delete-areas/{id}", "Areas\AreaController@delete_areas");
 
+Route::get("/admin/api/list-areas", "Areas\AreaController@list_api_areas");
+
 ## Branches
 Route::get("/admin/add-branches", "Branches\BranchController@add_branches");
 Route::post("/admin/save-branches", "Branches\BranchController@save_branches");

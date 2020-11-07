@@ -136,6 +136,9 @@ class RegisterController extends Controller
         } else if(!preg_match('/^(0|\+84)(\s|\.)?((3[2-9])|(5[689])|(7[06-9])|(8[1-689])|(9[0-46-9]))(\d)(\s|\.)?(\d{3})(\s|\.)?(\d{3})$/', $soDienThoaiCongTy,  $matches ) ) {
             Session::put("message", "Số điện thoại của bạn không hợp lệ.");
             return Redirect::to('/register');
+        } else if($matKhau == $tenTruyCap) {
+            Session::push('message', "Tên đăng nhập không được trùng với tên truy cập");
+            return Redirect::to('/register');
         } else {
             $data['ten_cong_ty'] = $tenCongTy;
             $data['ten_truy_cap'] = $tenTruyCap;

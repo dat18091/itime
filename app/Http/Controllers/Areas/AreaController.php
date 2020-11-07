@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Carbon\Carbon;
-
+use App\Area;
 
 class AreaController extends Controller
 {
@@ -160,5 +160,13 @@ class AreaController extends Controller
         DB::table('areas')->where('ma_vung', $id)->delete();
         Session::put('message', 'Xóa vùng thành công.');
         return Redirect::to('/admin/list-areas');
+    }
+
+    /**
+     * 
+     */
+    public function list_api_areas() {
+        // $this->AuthLogin();
+        return Area::all();
     }
 }

@@ -68,6 +68,7 @@ use Illuminate\Support\Facades\Session;
                                 <li><a href="{{URL::to('/admin/list-departments')}}"><i class="zmdi zmdi-dot-circle-alt"></i> Phòng Ban</a></li>
                                 <li><a href="{{URL::to('/admin/list-education-levels')}}"><i class="zmdi zmdi-dot-circle-alt"></i> Trình Độ</a></li>
                                 <li><a href="{{URL::to('/admin/list-positions')}}"><i class="zmdi zmdi-dot-circle-alt"></i> Chức Danh</a></li>
+                                <li><a href="{{URL::to('/admin/list-access-groups')}}"><i class="zmdi zmdi-dot-circle-alt"></i> Nhóm Truy Cập</a></li>
                             </ul>
                         </li>
                     </ul>

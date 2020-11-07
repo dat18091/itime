@@ -27,7 +27,9 @@ class DepartmentController extends Controller
     }
 
     /**
-     * 
+     * This function is used to get all data from department database by GET method
+     * created by : DatNQ
+     * created at : 05/11/2020
      */
     public function list_departments() {
         $this->AuthLogin();
@@ -37,7 +39,9 @@ class DepartmentController extends Controller
     }
     
     /**
-     * 
+     * This function is used to get all data from department database by GET method
+     * created by : DatNQ
+     * created at : 05/11/2020
      */
     public function add_departments() {
         $this->AuthLogin();
@@ -45,7 +49,9 @@ class DepartmentController extends Controller
     }
 
     /**
-     * 
+     * This function is used to save data from department database by POST method
+     * created by : DatNQ
+     * created at : 05/11/2020
      */
     public function save_departments(Request $request) {
         $this->AuthLogin();
@@ -57,7 +63,6 @@ class DepartmentController extends Controller
         $thuTuHienThi = $request->thu_tu_hien_thi_pb;
         $phongBanDungDau = $request->phong_ban_dung_dau;
         $ghiChuPhongBan = $request->ghi_chu_phong_ban;
-        // dd($phongBanDungDau);
         if($tenPhongBan == "" || $trangThaiPhongBan == "" || $phongBanDungDau == "") {
             Session::push("failure", "Các trường không được để trống.");
             return Redirect::to('/admin/add-departments');
