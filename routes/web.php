@@ -121,13 +121,16 @@ Route::post("/admin/save-employees", "Employees\EmployeeController@save_employee
 
 Route::get("/admin/list-employees", "Employees\EmployeeController@list_employees");
 
-Route::get("/admin/hide-employees", "Employees\EmployeeController@hide_employees");
-Route::get("/admin/show-employees", "Employees\EmployeeController@show_employees");
+Route::get("/admin/hide-employees/{id}", "Employees\EmployeeController@hide_employees");
+Route::get("/admin/show-employees/{id}", "Employees\EmployeeController@show_employees");
 
-Route::get("/admin/edit-employees", "Employees\EmployeeController@edit_employees");
-Route::post("/admin/update-employees", "Employees\EmployeeController@update_employees");
+Route::get("/admin/renew-permit/{id}", "Employees\EmployeeController@renew_permit");
+Route::get("/admin/terminate-permit/{id}", "Employees\EmployeeController@terminate_permit");
 
-Route::get("/admin/delete-employees", "Employees\EmployeeController@delete_employees");
+Route::get("/admin/edit-employees/{id}", "Employees\EmployeeController@edit_employees");
+Route::post("/admin/update-employees/{id}", "Employees\EmployeeController@update_employees");
+
+Route::get("/admin/delete-employees/{id}", "Employees\EmployeeController@delete_employees");
 
 
 ## Positions

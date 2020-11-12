@@ -4911,12 +4911,12 @@ table.grid td {
     border-radius: .25rem;
     color: #4c4c4c;
     font-size: 12px;
-    text-align: center;
+    text-align: left;
     letter-spacing: 1px;
     font-weight: 600;
     text-transform: uppercase;
     margin: 3px;
-    padding: 12px 20px;
+    /* padding: 12px 20px; */
     -webkit-transition: all 0.3s ease;
     -moz-transition: all 0.3s ease;
     -o-transition: all 0.3s ease;
@@ -6541,4 +6541,8 @@ table.grid td {
 .fa-styling.fa.fa-thumbs-down {
     font-size: 25px;
     color: grey;
+}
+
+.passport {
+    display: none;
 }

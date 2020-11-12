@@ -149,7 +149,7 @@ use Illuminate\Support\Facades\Session;
                     </ul>
                 </li>
                 <li class="sidebar-header">DANH MỤC QUẢN LÝ</li>
-                <li>
+                <!-- <li>
                     <a href="javaScript:void();" class="waves-effect">
                         <i class="zmdi zmdi-view-dashboard"></i> <span>Sinh Viên</span>
                         <i class="fa fa-angle-left pull-right"></i>
@@ -184,15 +184,14 @@ use Illuminate\Support\Facades\Session;
                             </ul>
                         </li>
                     </ul>
-                </li>
+                </li> -->
                 <li>
                     <a href="javaScript:void();" class="waves-effect">
                         <i class="zmdi zmdi-format-list-bulleted"></i> <span>Nhân Viên</span>
                         <i class="fa fa-angle-left pull-right"></i>
                     </a>
                     <ul class="sidebar-submenu">
-                        <li><a href="form-inputs.html"><i class="zmdi zmdi-dot-circle-alt"></i> Thêm Nhân Viên</a></li>
-                        <li><a href="form-input-group.html"><i class="zmdi zmdi-dot-circle-alt"></i> Quản Lý Nhân Viên</a></li>
+                        <li><a href="{{URL::to('/admin/list-employees')}}"><i class="zmdi zmdi-dot-circle-alt"></i> Quản Lý Nhân Viên</a></li>
                     </ul>
                 </li>
 
@@ -481,48 +480,7 @@ use Illuminate\Support\Facades\Session;
         </div>
         <!--end color switcher-->
     </div>
-    <?php
-    $message = Session::get('message');
-    $failed = Session::get('failure');
-    $error = Session::get('messageerr');
-    if ($message) {
-        echo '<script>
-        setTimeout(function() {
-            swal({
-                title: "Thông báo",
-                text: "Thành công",
-                type: "success",
-                showConfirmButton: true
-            },);
-        }, 1000);
-        </script>';
-        Session::put('message', null);
-    } else if($failed) {
-        echo '<script>
-        setTimeout(function() {
-            swal({
-                title: "Thông báo",
-                text: "Lỗi trong quá trình nhập",
-                type: "error",
-                showConfirmButton: true
-            },);
-        }, 1000);
-        </script>';
-        Session::put('message', null);
-    } else if($error) {
-        echo '<script>
-        setTimeout(function() {
-            swal({
-                title: "Thông báo",
-                text: "Lỗi trong quá trình nhập",
-                type: "error",
-                showConfirmButton: true
-            },);
-        }, 1000);
-        </script>';
-        Session::put('message', null);
-    }
-    ?>
+    
     <!--End wrapper-->
     <!-- Bootstrap core JavaScript-->
     <script src="{{asset('public/backend/assets/js/jquery.min.js')}}"></script>

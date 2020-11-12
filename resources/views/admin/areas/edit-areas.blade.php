@@ -1,7 +1,7 @@
 @extends('admin_layout')
 @section('admin_content')
 @section('admin_title')
-<title>IZITIME - Cập nhật vùng</title>
+<title>IZITIME - Chỉnh sửa vùng</title>
 @stop
 @section('css')
 <!-- Vector CSS -->
@@ -15,13 +15,13 @@ use Illuminate\Support\Facades\Session;
     <!-- Breadcrumb-->
     <div class="row pt-2 pb-2">
         <div class="col-sm-9">
-            <h4 class="page-title">CẬP NHẬT VÙNG</h4>
+            <h4 class="page-title">CHỈNH SỬA VÙNG</h4>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="javaScript:void();">CÀI ĐẶT HỆ THỐNG</a></li>
                 <li class="breadcrumb-item"><a href="javaScript:void();">Công Ty</a></li>
                 <li class="breadcrumb-item"><a href="javaScript:void();">Công Ty</a></li>
                 <li class="breadcrumb-item"><a href="javaScript:void();">Vùng</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Cập Nhật Vùng</li>
+                <li class="breadcrumb-item active" aria-current="page">Chỉnh Sửa Vùng</li>
             </ol>
         </div>
         <div class="col-sm-3">
@@ -52,7 +52,7 @@ use Illuminate\Support\Facades\Session;
                         {{csrf_field()}}
                         <h4 class="form-header text-uppercase">
                             <i class="fa fa-envelope-o"></i>
-                            Cập Nhật Vùng
+                            Chỉnh Sửa Vùng
                         </h4>
 
                         <div class="form-group row">
@@ -108,7 +108,7 @@ use Illuminate\Support\Facades\Session;
                         </div>
                         <div class="form-footer">
                             <button type="submit" name="danh_sach_vung" class="btn btn-danger"><i class="fa fa-times"></i> Hủy Bỏ</button>
-                            <button name="add_areas" class="btn btn-primary" type="submit"><i class="fa fa-add"></i> Cập Nhật Vùng</button>
+                            <button name="add_areas" class="btn btn-primary" type="submit"><i class="fa fa-add"></i> Chỉnh Sửa Vùng</button>
                         </div>
                     </form>
                     @endforeach
@@ -120,70 +120,7 @@ use Illuminate\Support\Facades\Session;
     <!--start overlay-->
     <div class="overlay toggle-menu"></div>
     <!--end overlay-->
-    <?php
-        $message = Session::get('message');
-        if (strpos($message, "Thêm vùng")) {
-            echo '<script>
-                setTimeout(function() {
-                swal({
-                    title: "Thông báo",
-                    text: "Thêm vùng thành công",
-                    type: "success",
-                    showConfirmButton: true
-                    },);
-                }, 1000);
-            </script>';
-            Session::put('message', null);
-        } else if (strpos($message, "trống")) {
-            echo '<script>
-            setTimeout(function() {
-                swal({
-                    title: "Thông báo",
-                    text: "Các trường không được để trống.",
-                    type: "error",
-                    showConfirmButton: true
-                },);
-            }, 1000);
-            </script>';
-            Session::put('message', null);
-        } else if (strpos($message, "quá ký tự")) {
-            echo '<script>
-            setTimeout(function() {
-                swal({
-                    title: "Thông báo",
-                    text: "Bạn đã nhập quá ký tự cho phép.",
-                    type: "error",
-                    showConfirmButton: true
-                },);
-            }, 1000);
-            </script>';
-            Session::put('message', null);
-        } else if (strpos($message, "không đủ ký tự")) {
-            echo '<script>
-            setTimeout(function() {
-                swal({
-                    title: "Thông báo",
-                    text: "Bạn đã nhập không đủ ký tự.",
-                    type: "error",
-                    showConfirmButton: true
-                },);
-            }, 1000);
-            </script>';
-            Session::put('message', null);
-        } else if (strpos($message, "không hợp lệ")) {
-            echo '<script>
-            setTimeout(function() {
-                swal({
-                    title: "Thông báo",
-                    text: "Bạn cần kiểm tra lại mật khẩu, website, email và số điện thoại.",
-                    type: "error",
-                    showConfirmButton: true
-                },);
-            }, 1000);
-            </script>';
-            Session::put('message', null);
-        }
-        ?>
+
 </div>
 <!-- End container-fluid-->
 

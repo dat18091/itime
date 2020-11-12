@@ -129,70 +129,7 @@ use Illuminate\Support\Facades\Session;
     <!--start overlay-->
     <div class="overlay toggle-menu"></div>
     <!--end overlay-->
-    <?php
-        $message = Session::get('message');
-        if (strpos($message, "Thêm vùng")) {
-            echo '<script>
-                setTimeout(function() {
-                swal({
-                    title: "Thông báo",
-                    text: "Thêm vùng thành công",
-                    type: "success",
-                    showConfirmButton: true
-                    },);
-                }, 1000);
-            </script>';
-            Session::put('message', null);
-        } else if (strpos($message, "trống")) {
-            echo '<script>
-            setTimeout(function() {
-                swal({
-                    title: "Thông báo",
-                    text: "Các trường không được để trống.",
-                    type: "error",
-                    showConfirmButton: true
-                },);
-            }, 1000);
-            </script>';
-            Session::put('message', null);
-        } else if (strpos($message, "quá ký tự")) {
-            echo '<script>
-            setTimeout(function() {
-                swal({
-                    title: "Thông báo",
-                    text: "Bạn đã nhập quá ký tự cho phép.",
-                    type: "error",
-                    showConfirmButton: true
-                },);
-            }, 1000);
-            </script>';
-            Session::put('message', null);
-        } else if (strpos($message, "không đủ ký tự")) {
-            echo '<script>
-            setTimeout(function() {
-                swal({
-                    title: "Thông báo",
-                    text: "Bạn đã nhập không đủ ký tự.",
-                    type: "error",
-                    showConfirmButton: true
-                },);
-            }, 1000);
-            </script>';
-            Session::put('message', null);
-        } else if (strpos($message, "không hợp lệ")) {
-            echo '<script>
-            setTimeout(function() {
-                swal({
-                    title: "Thông báo",
-                    text: "Bạn cần kiểm tra lại mật khẩu, website, email và số điện thoại.",
-                    type: "error",
-                    showConfirmButton: true
-                },);
-            }, 1000);
-            </script>';
-            Session::put('message', null);
-        }
-        ?>
+    
 </div>
 <!-- End container-fluid-->
 

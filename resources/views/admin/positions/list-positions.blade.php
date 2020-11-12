@@ -45,20 +45,21 @@ use Illuminate\Support\Facades\Session;
     <div class="row">
         <div class="col-lg-12">
             <div class="card">
-                <div class="card-header"><i class="fa fa-table"></i> DANH SÁCH CHỨC DANH</div>
+                <div class="card-header">
+                    <div><i class="fa fa-table"></i> DANH SÁCH CHỨC DANH</div>
+                    <div><a href="{{URL::to('/admin/add-positions')}}" class="btn btn-success">Tạo mới</a></div>
+                </div>
+
                 <div class="card-body">
                     <div class="table-responsive">
                         <table id="example" class="table table-bordered">
                             <thead>
                                 <tr>
-                                    <!-- <th>Mã chức danh</th> -->
                                     <th>Tên chức danh</th>
                                     <th>Trình độ</th>
                                     <th>Kinh nghiệm</th>
-                                    <!-- <th>Ghi chú</th> -->
                                     <th>Trạng thái</th>
                                     <th>Thao tác</th>
-                                    <th><a href="{{URL::to('/admin/add-positions')}}" class="btn btn-success">Tạo mới</a></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -92,20 +93,16 @@ use Illuminate\Support\Facades\Session;
                                             <a type="button" href="{{URL::to('/admin/delete-positions/'.$position->ma_chuc_danh)}}" onclick="return confirm('Bạn có chắc chắn muốn xóa vùng này?')" class="btn btn-danger waves-effect waves-light">Xóa</a>
                                         </div>
                                     </td>
-                                    <td></td>
                                 </tr>
                                 @endforeach
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <!-- <th>Mã chức danh</th> -->
                                     <th>Tên vùng</th>
                                     <th>Trình độ</th>
                                     <th>Kinh nghiệm</th>
-                                    <!-- <th>Ghi chú</th> -->
                                     <th>Trạng thái</th>
                                     <th>Thao tác</th>
-                                    <th></th>
                                 </tr>
                             </tfoot>
                         </table>

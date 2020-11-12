@@ -49,7 +49,10 @@ use Illuminate\Support\Facades\Session;
     <div class="row">
         <div class="col-lg-12">
             <div class="card">
-                <div class="card-header"><i class="fa fa-table"></i> DANH SÁCH VÙNG</div>
+                <div class="card-header">
+                    <div><i class="fa fa-table"></i> DANH SÁCH VÙNG</div>
+                    <div><a href="{{URL::to('/admin/add-areas')}}" class="btn btn-success">Tạo mới</a></div>
+                </div>
                 <div class="card-body">
                     <div class="table-responsive">
                         <table id="example" class="table table-bordered">
@@ -59,7 +62,6 @@ use Illuminate\Support\Facades\Session;
                                     <th>Ghi chú</th>
                                     <th>Trạng thái</th>
                                     <th>Thao tác</th>
-                                    <th><a href="{{URL::to('/admin/add-areas')}}" class="btn btn-success">Tạo mới</a></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -86,7 +88,6 @@ use Illuminate\Support\Facades\Session;
                                             <a type="button" href="{{URL::to('/admin/delete-areas/'.$area->ma_vung)}}" onclick="return confirm('Bạn có chắc chắn muốn xóa vùng này?')" class="btn btn-danger waves-effect waves-light">Xóa</a>
                                         </div>
                                     </td>
-                                    <td></td>
                                 </tr>
                                 @endforeach
                             </tbody>
@@ -96,7 +97,6 @@ use Illuminate\Support\Facades\Session;
                                     <th>Ghi chú</th>
                                     <th>Trạng thái</th>
                                     <th>Thao tác</th>
-                                    <th></th>
                                 </tr>
                             </tfoot>
                         </table>
@@ -104,58 +104,7 @@ use Illuminate\Support\Facades\Session;
                 </div>
             </div>
         </div>
-        <?php
-        $message = Session::get('message');
-        if (strpos($message, "Ẩn")) {
-            echo '<script>
-                setTimeout(function() {
-                    swal({
-                        title: "Thông báo",
-                        text: "Ẩn vùng thành công",
-                        type: "success",
-                        showConfirmButton: true
-                    },);
-                }, 1000);
-            </script>';
-            Session::put('message', null);
-        } else if (strpos($message, "Hiển thị")) {
-            echo '<script>
-                setTimeout(function() {
-                    swal({
-                        title: "Thông báo",
-                        text: "Hiển thị vùng thành công",
-                        type: "success",
-                        showConfirmButton: true
-                    },);
-                }, 1000);
-            </script>';
-            Session::put('message', null);
-        }else if (strpos($message, "Thêm vùng")) {
-            echo '<script>
-                setTimeout(function() {
-                    swal({
-                        title: "Thông báo",
-                        text: "Thêm vùng thành công",
-                        type: "success",
-                        showConfirmButton: true
-                    },);
-                }, 1000);
-            </script>';
-            Session::put('message', null);
-        } else if (strpos($message, "không đúng")) {
-            echo '<script>
-            setTimeout(function() {
-                swal({
-                    title: "Thông báo",
-                    text: "Tên truy cập hoặc mật khẩu không đúng.",
-                    type: "error",
-                    showConfirmButton: true
-                },);
-            }, 1000);
-            </script>';
-            Session::put('message', null);
-        }
-        ?>
+        
     </div><!-- End Row-->
     <!--start overlay-->
     <div class="overlay toggle-menu"></div>

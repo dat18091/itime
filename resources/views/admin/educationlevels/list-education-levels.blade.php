@@ -41,7 +41,11 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="card">
-                <div class="card-header"><i class="fa fa-table"></i> DANH SÁCH TRÌNH ĐỘ</div>
+                <div class="card-header">
+                    <div><i class="fa fa-table"></i> DANH SÁCH TRÌNH ĐỘ</div>
+                    <div><a href="{{URL::to('/admin/add-education-levels')}}" class="btn btn-success">Tạo mới</a></div>
+                </div>
+
                 <div class="card-body">
                     <div class="table-responsive">
                         <table id="example" class="table table-bordered">
@@ -51,7 +55,6 @@
                                     <th>Ghi chú</th>
                                     <th>Trạng thái</th>
                                     <th>Thao tác</th>
-                                    <th><a href="{{URL::to('/admin/add-education-levels')}}" class="btn btn-success">Tạo mới</a></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -78,7 +81,6 @@
                                             <a type="button" href="{{URL::to('/admin/delete-education-levels/'.$level->ma_trinh_do)}}" onclick="return confirm('Bạn có chắc chắn muốn xóa trình độ này?')" class="btn btn-danger waves-effect waves-light">Xóa</a>
                                         </div>
                                     </td>
-                                    <td></td>
                                 </tr>
                                 @endforeach
                             </tbody>
@@ -88,7 +90,6 @@
                                     <th>Ghi chú</th>
                                     <th>Trạng thái</th>
                                     <th>Thao tác</th>
-                                    <th></th>
                                 </tr>
                             </tfoot>
                         </table>

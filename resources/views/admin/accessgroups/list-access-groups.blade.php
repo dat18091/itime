@@ -49,7 +49,10 @@ use Illuminate\Support\Facades\Session;
     <div class="row">
         <div class="col-lg-12">
             <div class="card">
-                <div class="card-header"><i class="fa fa-table"></i> DANH SÁCH NHÓM TRUY CẬP</div>
+            <div class="card-header">
+                    <div><i class="fa fa-table"></i> DANH SÁCH NHÓM TRUY CẬP</div>
+                    <div><a href="{{URL::to('/admin/add-access-groups')}}" class="btn btn-success">Tạo mới</a></div>
+                </div>
                 <div class="card-body">
                     <div class="table-responsive">
                         <table id="example" class="table table-bordered">
@@ -59,7 +62,6 @@ use Illuminate\Support\Facades\Session;
                                     <th>Ghi chú</th>
                                     <th>Trạng thái</th>
                                     <th>Thao tác</th>
-                                    <th><a href="{{URL::to('/admin/add-access-groups')}}" class="btn btn-success">Tạo mới</a></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -86,7 +88,6 @@ use Illuminate\Support\Facades\Session;
                                             <a type="button" href="{{URL::to('/admin/delete-access-groups/'.$access->ma_nhom_truy_cap)}}" onclick="return confirm('Bạn có chắc chắn muốn xóa nhóm truy cập này?')" class="btn btn-danger waves-effect waves-light">Xóa</a>
                                         </div>
                                     </td>
-                                    <td></td>
                                 </tr>
                                 @endforeach
                             </tbody>
@@ -96,7 +97,6 @@ use Illuminate\Support\Facades\Session;
                                     <th>Ghi chú</th>
                                     <th>Trạng thái</th>
                                     <th>Thao tác</th>
-                                    <th></th>
                                 </tr>
                             </tfoot>
                         </table>
