@@ -93,8 +93,9 @@ class PositionController extends Controller
         $maCongTy = Session::get('maCongTy');
         $danhSach = DB::table('positions')
         ->join('educationlevels', 'educationlevels.ma_trinh_do' , '=', 'positions.ma_trinh_do')
-        ->where('positions.ma_cong_ty', $maCongTy)
-        ->get();
+        ->where('positions.trang_thai_chuc_danh', '1')
+        ->orWhere('positions.trang_thai_chuc_danh', '0')
+        ->where('positions.ma_cong_ty', $maCongTy)->get();
         $trinhDo = DB::table('educationlevels')->get();
         return view('admin.positions.list-positions')->with('positions', $danhSach)->with('trinhDo', $trinhDo);
     }
@@ -183,6 +184,36 @@ class PositionController extends Controller
         $this->AuthLogin();
         DB::table('positions')->where('ma_chuc_danh', $id)->delete();
         Session::push('message', 'Xóa chức danh thành công.');
+        return Redirect::to('/admin/list-positions');
+    }
+
+    /**
+     * This function to get data from trash positions by GET method
+     * created by : DatNQ
+     * created at : 23/11/2020
+     */
+    public function list_positions_trash() {
+        $this->AuthLogin();
+        $maCongTy = Session::get('maCongTy');
+        $danhSach = DB::table('positions')
+        ->join('educationlevels', 'educationlevels.ma_trinh_do' , '=', 'positions.ma_trinh_do')
+        ->where('positions.trang_thai_chuc_danh', '2')
+        ->where('positions.ma_cong_ty', $maCongTy)->get();
+        $trinhDo = DB::table('educationlevels')->get();
+        return view('admin.positions.list-positions-trash')->with('positions', $danhSach)->with('trinhDo', $trinhDo);
+    }
+
+    public function trash_positions($id) {
+        $this->AuthLogin();
+        DB::table('positions')->where('positions.ma_chuc_danh', $id)->update(['trang_thai_chuc_danh' => 2]);
+        Session::push('message', 'Xóa chức danh thành công.');
+        return Redirect::to('/admin/list-positions');
+    }
+
+    public function restore_positions($id) {
+        $this->AuthLogin();
+        DB::table('positions')->where('positions.ma_chuc_danh', $id)->update(['trang_thai_chuc_danh' => 0]);
+        Session::push('message', 'Khôi phục chức danh thành công.');
         return Redirect::to('/admin/list-positions');
     }
 }

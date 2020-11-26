@@ -995,8 +995,8 @@ small {
     font-weight: 600;
     font-size: 14px;
     color: #353434;
-    display: flex !important;
-    justify-content: space-between !important;
+    /* display: flex !important;
+    justify-content: space-between !important; */
 }
 
 .card-title {
@@ -6545,4 +6545,12 @@ table.grid td {
 
 .passport {
     display: none;
+}
+
+.btn.btn-primary.custom {
+    color: #FFFFFF;
+}
+
+.space {
+    margin-right: 5px;
 }

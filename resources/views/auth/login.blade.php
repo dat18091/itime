@@ -47,14 +47,9 @@ use Illuminate\Support\Facades\Session;
                 <div class="card mb-0 ">
                     <div class="card-body">
                         <div class="card-content p-3">
-                            <!-- <div class="text-center">
-                                <img src="{{asset('public/backend/assets/images/logo-icon.png')}}" alt="logo icon">
-                            </div> -->
                             <div class="card-title text-uppercase text-center py-3">Đăng Nhập</div>
                             <form action="{{URL::to('/sign-in')}}" method="post">
-                                {{csrf_field()}}
                                 @csrf
-                                <meta name="csrf-token" content="{{ csrf_token() }}">
                                 <div class="form-group">
                                     <div class="position-relative has-icon-left">
                                         <label for="exampleInputUsername" class="sr-only">Tên truy cập</label>
@@ -102,34 +97,7 @@ use Illuminate\Support\Facades\Session;
                                     <p class="text-dark">Ban chưa có tài khoản? <a href="{{URL::to('/register')}}"> Đăng ký</a></p>
                                 </div>
                             </form>
-                            <?php
-                            $message = Session::get('message');
-                            if (strpos($message, "thành công")) {
-                                echo '<script>
-                                        setTimeout(function() {
-                                            swal({
-                                                title: "Thông báo",
-                                                text: "Thành công",
-                                                type: "success",
-                                                showConfirmButton: true
-                                            },);
-                                        }, 1000);
-                                    </script>';
-                                Session::put('message', null);
-                            } else if (strpos($message, "không đúng")) {
-                                echo '<script>
-                                    setTimeout(function() {
-                                        swal({
-                                            title: "Thông báo",
-                                            text: "Tên truy cập hoặc mật khẩu không đúng.",
-                                            type: "error",
-                                            showConfirmButton: true
-                                        },);
-                                    }, 1000);
-                                    </script>';
-                                Session::put('message', null);
-                            }
-                            ?>
+                            
                         </div>
                     </div>
                 </div>

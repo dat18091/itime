@@ -25,4 +25,19 @@ class RequirementController extends Controller
             return Redirect::to('/')->send();
         }
     }
+
+    public function list_requirements_takeleave() {
+        $this->AuthLogin();
+        return view('admin.requirements.list-requirements-takeleave');
+    }
+
+    public function list_requirements_soon() {
+        $this->AuthLogin();
+        return view('admin.requirements.list-requirements-soon');
+    }
+
+    public function list_requirements_late() {
+        $this->AuthLogin();
+        return view('admin.requirements.list-requirements-late');
+    }
 }

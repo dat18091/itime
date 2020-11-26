@@ -26,17 +26,18 @@ class EmployeeController extends Controller
         }
     }
 
+    /**
+     * This function to get list employee and show from database by GET method
+     * created by : DatNQ
+     * created at : 02/11/2020
+     */
     public function list_employees() {
         $this->AuthLogin();
         $maCongTy = Session::get('maCongTy');
         $danhSach = DB::table('employees')
-        ->join('areas', 'areas.ma_vung' , '=', 'employees.ma_vung')->where('trang_thai_vung', 0)->where('areas.ma_cong_ty', $maCongTy)
-        ->join('branches', 'branches.ma_chi_nhanh', '=', 'employees.ma_chi_nhanh')->where('trang_thai_chi_nhanh', 0)->where('branches.ma_cong_ty', $maCongTy)
-        ->join('departments', 'departments.ma_phong_ban', '=', 'employees.ma_phong_ban')->where('trang_thai_phong_ban', 0)->where('departments.ma_cong_ty', $maCongTy)
-        ->join('accessgroups', 'accessgroups.ma_nhom_truy_cap', '=', 'employees.ma_nhom_truy_cap')->where('trang_thai_nhom_truy_cap', 0)->where('accessgroups.ma_cong_ty', $maCongTy)
-        ->join('positions', 'positions.ma_chuc_danh', '=', 'employees.ma_chuc_danh')->where('trang_thai_chuc_danh', 0)->where('positions.ma_cong_ty', $maCongTy)
-        ->join('provinces', 'provinces.province_id', '=', 'employees.province_id')
-        ->join('districts', 'districts.district_id', '=', 'employees.district_id')->orderByRaw('employees.created_at', 'ASC')->get();
+        ->where('hoat_dong', '0')
+        ->orWhere('hoat_dong', '1')
+        ->where('ma_cong_ty', $maCongTy)->get();
         $vung = DB::table('areas')->get();
         $chiNhanh = DB::table('branches')->get();
         $phongBan = DB::table('departments')->get();
@@ -44,10 +45,30 @@ class EmployeeController extends Controller
         $nhomTruyCap = DB::table('accessgroups')->get();
         return view('admin.employees.list-employees')->with('nhanVien', $danhSach)->with('vung', $vung)
         ->with('chiNhanh', $chiNhanh)->with('phongBan', $phongBan)->with('chucDanh', $chucDanh)->with('nhomTruyCap', $nhomTruyCap);
+        // $this->AuthLogin();
+        // $maCongTy = Session::get('maCongTy');
+        // $danhSach = DB::table('employees')
+        // ->join('areas', 'areas.ma_vung' , '=', 'employees.ma_vung')
+        // ->join('branches', 'branches.ma_chi_nhanh', '=', 'employees.ma_chi_nhanh')
+        // ->join('departments', 'departments.ma_phong_ban', '=', 'employees.ma_phong_ban')
+        // ->join('positions', 'positions.ma_chuc_danh', '=', 'employees.ma_chuc_danh')
+        // ->join('accessgroups', 'accessgroups.ma_nhom_truy_cap', '=', 'employees.ma_nhom_truy_cap')
+        // ->where('employees.ma_cong_ty', $maCongTy)
+        // ->where('employees.hoat_dong', '0')
+        // ->orWhere('employees.hoat_dong', '1')->get();
+        // $vung = DB::table('areas')->get();
+        // $chiNhanh = DB::table('branches')->get();
+        // $phongBan = DB::table('departments')->get();
+        // $chucDanh = DB::table('positions')->get();
+        // $nhomTruyCap = DB::table('accessgroups')->get();
+        // return view('admin.employees.list-employees')->with('nhanVien', $danhSach)->with('vung', $vung)
+        // ->with('chiNhanh', $chiNhanh)->with('phongBan', $phongBan)->with('chucDanh', $chucDanh)->with('nhomTruyCap', $nhomTruyCap);
     }
 
     /**
-     * 
+     * This function to show add employee page by GET method
+     * created by : DatNQ
+     * created at : 02/11/2020
      */
     public function add_employees() {
         $this->AuthLogin();
@@ -65,7 +86,9 @@ class EmployeeController extends Controller
     }
 
     /**
-     * 
+     * This function to save data employee by POST method
+     * created by : DatNQ
+     * created at : 02/11/2020
      */
     public function save_employees(Request $request) {
         $this->AuthLogin();
@@ -104,23 +127,23 @@ class EmployeeController extends Controller
             $gioiTinhNhanVien == '' || $soCMND == '' || $ngayCapCMND == '' || $noiCapCMND == '' || $maVung == '' ||
             $maChiNhanh == '' || $maPhongBan == '' || $maNhomTruyCap == '' || $maChucDanh == '' || $hoatDong == '' ||
             $quyenTruongPhong == '' || $tinhThanh == '' || $quanHuyen == '' || $diaChiHienTai == '') {
-            Session::push('failure', 'Các trường không được để trống.');
+            Session::flash('failure', 'Các trường không được để trống.');
             return Redirect::to('/admin/add-employees');
         } else if(strlen($tenNhanVien) > 100 || strlen($soDienThoaiNhanVien) > 20 || strlen($emailNhanVien) > 100 ||
             strlen($soCMND) > 100 || strlen($soHoChieu) > 100 || strlen($chuTaiKhoanNganHang) > 100 || 
             strlen($soTaiKhoanNganHang) > 100 || strlen($tenNganHang) > 100 || strlen($chiNhanhNganHang) > 100) {
-            Session::push('failure', 'Bạn đã nhập quá ký tự cho phép.');
+            Session::flash('failure', 'Bạn đã nhập quá ký tự cho phép.');
             return Redirect::to('/admin/add-employees');
         } else if(strlen($tenNhanVien) < 5 || strlen($soDienThoaiNhanVien) < 5 || strlen($emailNhanVien) < 5 ||
             strlen($soCMND) < 5 || strlen($chuTaiKhoanNganHang) < 5 || strlen($soTaiKhoanNganHang) < 5 || 
             strlen($tenNganHang) < 5 || strlen($chiNhanhNganHang) < 5) {
-            Session::push('failure', 'Bạn nhập không đủ ký tự.');
+            Session::flash('failure', 'Bạn nhập không đủ ký tự.');
             return Redirect::to('/admin/add-employees');
         } else if(!filter_var($emailNhanVien, FILTER_VALIDATE_EMAIL)) { 
-            Session::push("failure", "Email của bạn không hợp lệ.");
+            Session::flash("failure", "Email của bạn không hợp lệ.");
             return Redirect::to('/admin/add-employees');
         } else if(!preg_match('/^(0|\+84)(\s|\.)?((3[2-9])|(5[689])|(7[06-9])|(8[1-689])|(9[0-46-9]))(\d)(\s|\.)?(\d{3})(\s|\.)?(\d{3})$/', $soDienThoaiNhanVien,  $matches ) ) {
-            Session::push("failure", "Số điện thoại của bạn không hợp lệ.");
+            Session::flash("failure", "Số điện thoại của bạn không hợp lệ.");
             return Redirect::to('/admin/add-employees');
         } else {
             $data['ten_nhan_vien'] = $tenNhanVien;//
@@ -158,18 +181,24 @@ class EmployeeController extends Controller
                 $name_image = current(explode('.', $get_name_image));
                 $new_image = $name_image.rand(0, 99).'.'.$get_image->getClientOriginalExtension();
                 $get_image->move('public/uploads/employees',$new_image);
+                // $get_image->move('https://eglobalsoft.000webhostapp.com/Uploads/', $new_image);
                 $data['hinh_anh_nhan_vien'] = $new_image;
                 DB::table('employees')->insert($data);
-                Session::push('message', 'Thêm nhân viên thành công');
+                Session::flash('message', 'Thêm nhân viên thành công');
                 return Redirect::to('/admin/list-employees');
             }
             $data['hinh_anh_nhan_vien'] = '';
             DB::table('employees')->insert($data);
-            Session::push('message', 'Thêm nhân viên thành công');
+            Session::flash('message', 'Thêm nhân viên thành công');
             return Redirect::to('/admin/list-employees');
         }
     }
 
+    /**
+     * This function to show edit employee page by GET method
+     * created by : DatNQ
+     * created at : 02/11/2020
+     */
     public function edit_employees($id) {
         $this->AuthLogin();
         $maCongTy = Session::get('maCongTy');
@@ -186,6 +215,11 @@ class EmployeeController extends Controller
         ->with('tinhThanh', $tinhThanh)->with('quanHuyen', $quanHuyen)->with('nhanVien', $nhanVien);
     }
 
+    /**
+     * This function to update data employee by POST method
+     * created by : DatNQ
+     * created at : 02/11/2020
+     */
     public function update_employees(Request $request, $id) {
         $this->AuthLogin();
         $data = array();
@@ -220,23 +254,23 @@ class EmployeeController extends Controller
             $gioiTinhNhanVien == '' || $soCMND == '' || $ngayCapCMND == '' || $noiCapCMND == '' || $maVung == '' ||
             $maChiNhanh == '' || $maPhongBan == '' || $maNhomTruyCap == '' || $maChucDanh == '' ||
             $tinhThanh == '' || $quanHuyen == '' || $diaChiHienTai == '') {
-            Session::push("message", 'Các trường không được để trống.');
+            Session::flash("message", 'Các trường không được để trống.');
             return Redirect::to('/admin/edit-employees/'.$id);
         } else if(strlen($tenNhanVien) > 100 || strlen($soDienThoaiNhanVien) > 20 || strlen($emailNhanVien) > 100 ||
             strlen($soCMND) > 100 || strlen($soHoChieu) > 100 || strlen($chuTaiKhoanNganHang) > 100 || 
             strlen($soTaiKhoanNganHang) > 100 || strlen($tenNganHang) > 100 || strlen($chiNhanhNganHang) > 100) {
-            Session::push("message", 'Bạn đã nhập quá ký tự cho phép.');
+            Session::flash("message", 'Bạn đã nhập quá ký tự cho phép.');
             return Redirect::to('/admin/edit-employees/'.$id);
         } else if(strlen($tenNhanVien) < 5 || strlen($soDienThoaiNhanVien) < 5 || strlen($emailNhanVien) < 5 ||
             strlen($soCMND) < 5 || strlen($chuTaiKhoanNganHang) < 5 || strlen($soTaiKhoanNganHang) < 5 || 
             strlen($tenNganHang) < 5 || strlen($chiNhanhNganHang) < 5) {
-            Session::push('message', 'Bạn nhập không đủ ký tự.');
+            Session::flash('message', 'Bạn nhập không đủ ký tự.');
             return Redirect::to('/admin/edit-employees/'.$id);
         } else if(!filter_var($emailNhanVien, FILTER_VALIDATE_EMAIL)) { 
-            Session::push("message", "Email của bạn không hợp lệ.");
+            Session::flash("message", "Email của bạn không hợp lệ.");
             return Redirect::to('/admin/edit-employees/'.$id);
         } else if(!preg_match('/^(0|\+84)(\s|\.)?((3[2-9])|(5[689])|(7[06-9])|(8[1-689])|(9[0-46-9]))(\d)(\s|\.)?(\d{3})(\s|\.)?(\d{3})$/', $soDienThoaiNhanVien,  $matches ) ) {
-            Session::push("message", "Số điện thoại của bạn không hợp lệ.");
+            Session::flash("message", "Số điện thoại của bạn không hợp lệ.");
             return Redirect::to('/admin/edit-employees/'.$id);
         } else {
             $data["ten_nhan_vien"] = $tenNhanVien;
@@ -271,13 +305,14 @@ class EmployeeController extends Controller
                 $name_image = current(explode('.', $get_name_image));
                 $new_image = $name_image.rand(0, 99).'.'.$get_image->getClientOriginalExtension();
                 $get_image->move('public/uploads/employees',$new_image);
+                // $get_image->move('https://eglobalsoft.000webhostapp.com/Uploads/', $new_image);
                 $data['hinh_anh_nhan_vien'] = $new_image;
                 DB::table('employees')->where('ma_nhan_vien', $id)->update($data);
-                Session::push('message', 'Chỉnh sửa nhân viên thành công');
+                Session::flash('message', 'Chỉnh sửa nhân viên thành công');
                 return Redirect::to('/admin/list-employees');
             }
             DB::table('employees')->where('ma_nhan_vien', $id)->update($data);
-            Session::push('message', 'Chỉnh sửa nhân viên thành công');
+            Session::put('message', 'Chỉnh sửa nhân viên thành công');
             return Redirect::to('/admin/list-employees');
         }
     }
@@ -314,6 +349,34 @@ class EmployeeController extends Controller
         $this->AuthLogin();
         DB::table('employees')->where('ma_nhan_vien', $id)->delete();
         Session::put('message', 'Xóa nhân viên thành công.');
+        return Redirect::to('/admin/list-employees');
+    }
+
+    public function list_employees_trash() {
+        $this->AuthLogin();
+        $maCongTy = Session::get('maCongTy');
+        $danhSach = DB::table('employees')
+        ->where('ma_cong_ty', $maCongTy)->where('hoat_dong', '2')->get();
+        $vung = DB::table('areas')->get();
+        $chiNhanh = DB::table('branches')->get();
+        $phongBan = DB::table('departments')->get();
+        $chucDanh = DB::table('positions')->get();
+        $nhomTruyCap = DB::table('accessgroups')->get();
+        return view('admin.employees.list-employees-trash')->with('nhanVien', $danhSach)->with('vung', $vung)
+        ->with('chiNhanh', $chiNhanh)->with('phongBan', $phongBan)->with('chucDanh', $chucDanh)->with('nhomTruyCap', $nhomTruyCap);
+    }
+
+    public function trash_employees($id) {
+        $this->AuthLogin();
+        DB::table('employees')->where('ma_nhan_vien', $id)->update(['hoat_dong' => 2]);
+        Session::put('message', 'Xóa nhân viên.');
+        return Redirect::to('/admin/list-employees');
+    }
+
+    public function restore_employees($id) {
+        $this->AuthLogin();
+        DB::table('employees')->where('ma_nhan_vien', $id)->update(['hoat_dong' => 0]);
+        Session::put('message', 'Xóa nhân viên.');
         return Redirect::to('/admin/list-employees');
     }
 }

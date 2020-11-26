@@ -30,13 +30,34 @@ class AreaController extends Controller
     /**
      * This function to show list areas with company id by GET method
      * created by : DatNQ
-     * created at : 31/11/2020
+     * created at : 01/11/2020
      */
     public function list_areas() {
         $this->AuthLogin();
         $idCompany = Session::get('maCongTy');
-        $danhSachVung = DB::table('areas')->where('ma_cong_ty',$idCompany)->get();
-        return view('admin.areas.list-areas')->with('list_area', $danhSachVung);
+        $danhSachVung = DB::table('areas')->where('trang_thai_vung', '1')
+        ->orWhere('trang_thai_vung', '0')
+        ->where('ma_cong_ty',$idCompany)->get();
+        $areaCountOnl = Area::where('trang_thai_vung', '2')->count();
+        return view('admin.areas.list-areas')
+        ->with('list_area', $danhSachVung)->with('areaCountOnl', $areaCountOnl);
+    }
+
+    /**
+     * This function to show list trash areas with company id by GET method
+     * created by : DatNQ
+     * created at : 20/11/2020
+     */
+    public function list_areas_trash() {
+        $this->AuthLogin();
+        $idCompany = Session::get('maCongTy');
+        $danhSachVung = DB::table('areas')->where('trang_thai_vung', '2')
+        ->where('ma_cong_ty',$idCompany)->get();
+        $areaCount = Area::where('trang_thai_vung', '2')->count("*");
+        $areaCountAllOnl = Area::where('trang_thai_vung', '0')
+        ->orWhere('trang_thai_vung', '1')->count("*");
+        return view('admin.areas.list-areas-trash')->with('list_area', $danhSachVung)
+        ->with('areaCountAllOnl', $areaCountAllOnl)->with('areaCount', $areaCount);
     }
 
     /**
@@ -109,6 +130,31 @@ class AreaController extends Controller
     }
 
     /**
+     * This function is used to move field on trash area
+     * created by : DatNQ
+     * created at : 20/11/2020
+     */
+    public function trash_areas($id) {
+        $this->AuthLogin();
+        DB::table('areas')->where('ma_vung', $id)->update(['trang_thai_vung' => 2]);
+        Session::put('message', 'Xóa vùng thành công.');
+        return Redirect::to('/admin/list-areas');
+    }
+
+    /**
+     * This function is used to restore field on trash area
+     * created by : DatNQ
+     * created at : 20/11/2020
+     */
+    public function restore_areas($id) {
+        $this->AuthLogin();
+        DB::table('areas')->where('ma_vung', $id)->update(['trang_thai_vung' => 0]);
+        Session::put('message', 'Restore vùng thành công.');
+        return Redirect::to('/admin/list-areas');
+    }
+    
+
+    /**
      * This function is used is redirect to edit area page
      * created by : DatNQ
      * created at : 31/10/2020
@@ -159,7 +205,7 @@ class AreaController extends Controller
         $this->AuthLogin();
         DB::table('areas')->where('ma_vung', $id)->delete();
         Session::put('message', 'Xóa vùng thành công.');
-        return Redirect::to('/admin/list-areas');
+        return Redirect::to('/admin/areas-trash');
     }
 
     /**

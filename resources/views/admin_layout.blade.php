@@ -95,10 +95,12 @@ use Illuminate\Support\Facades\Session;
                         <i class="fa fa-angle-left pull-right"></i>
                     </a>
                     <ul class="sidebar-submenu">
-                        <li><a href="components-range-slider.html"><i class="zmdi zmdi-dot-circle-alt"></i> Thiết Lập Nghỉ Lễ</a></li>
-                        <li><a href="components-image-carousel.html"><i class="zmdi zmdi-dot-circle-alt"></i> Loại Ngày Nghỉ</a></li>
-                        <li><a href="components-grid-layouts.html"><i class="zmdi zmdi-dot-circle-alt"></i> Thiết Lập Ngày Nghỉ</a></li>
-                        <li><a href="components-switcher-buttons.html"><i class="zmdi zmdi-dot-circle-alt"></i> Thiết Lập Nghỉ Phép</a></li>
+                        <li><a href=""><i class="zmdi zmdi-dot-circle-alt"></i> Thiết Lập Nghỉ Lễ</a></li>
+                        <li><a href="URL::to('/admin/list-take-leave-types')"><i class="zmdi zmdi-dot-circle-alt"></i> Thiết Lập Nghỉ Phép</a></li>
+                        <li><a href="URL::to('/admin/list-date-take-leave-types')"><i class="zmdi zmdi-dot-circle-alt"></i> Thiết Lập Ngày Nghỉ</a></li>
+                        <li><a href="{{URL::to('/admin/list-take-leave-reasons')}}"><i class="zmdi zmdi-dot-circle-alt"></i> Lý Do Nghỉ Phép</a></li>
+                        <li><a href="URL::to('/admin/list-be-late-reasons')"><i class="zmdi zmdi-dot-circle-alt"></i> Lý Do Đi Trễ</a></li>
+                        <li><a href="URL::to('/admin/list-leave-soon-reasons')"><i class="zmdi zmdi-dot-circle-alt"></i> Lý Do Về Sớm</a></li>
                     </ul>
                 </li>
                 <li>
@@ -130,23 +132,13 @@ use Illuminate\Support\Facades\Session;
                         <i class="fa fa-angle-left pull-right"></i>
                     </a>
                     <ul class="sidebar-submenu">
-                        <li>
-                            <a href="javaScript:void();"><i class="zmdi zmdi-dot-circle-alt"></i> Công Ty <i class="fa fa-angle-left pull-right"></i></a>
-                            <ul class="sidebar-submenu">
-                                <li><a href="javaScript:void();"><i class="zmdi zmdi-dot-circle-alt"></i> Thông Tin</a></li>
-                                <li><a href="javaScript:void();"><i class="zmdi zmdi-dot-circle-alt"></i> Vùng</a></li>
-                                <li><a href="javaScript:void();"><i class="zmdi zmdi-dot-circle-alt"></i> Chi Nhánh</a></li>
-                            </ul>
-                        </li>
-                        <li>
-                            <a href="javaScript:void();"><i class="zmdi zmdi-dot-circle-alt"></i> Thông Tin <i class="fa fa-angle-left pull-right"></i></a>
-                            <ul class="sidebar-submenu">
-                                <li><a href="javaScript:void();"><i class="zmdi zmdi-dot-circle-alt"></i> Dự Án</a></li>
-                                <li><a href="javaScript:void();"><i class="zmdi zmdi-dot-circle-alt"></i> Phòng Ban</a></li>
-                                <li><a href="javaScript:void();"><i class="zmdi zmdi-dot-circle-alt"></i> Chức Danh</a></li>
-                            </ul>
-                        </li>
-                    </ul>
+                    <li><a href="{{URL::to('/admin/list-shifts')}}"><i class="zmdi zmdi-dot-circle-alt"></i> Ca Làm Việc</a></li>
+                    <li><a href="{{URL::to('/admin/list-access-groups')}}"><i class="zmdi zmdi-dot-circle-alt"></i> Loại Ngày Nghỉ</a></li>
+                    <li><a href="{{URL::to('/admin/list-access-groups')}}"><i class="zmdi zmdi-dot-circle-alt"></i> Loại Nghỉ Phép</a></li>
+                    <li><a href="{{URL::to('/admin/list-access-groups')}}"><i class="zmdi zmdi-dot-circle-alt"></i> Lý Do Nghỉ Phép</a></li>    
+                    <li><a href="{{URL::to('/admin/list-access-groups')}}"><i class="zmdi zmdi-dot-circle-alt"></i> Lý Do Đi Trễ</a></li>
+                    <li><a href="{{URL::to('/admin/list-access-groups')}}"><i class="zmdi zmdi-dot-circle-alt"></i> Lý Do Về Sớm</a></li>
+                </ul>
                 </li>
                 <li class="sidebar-header">DANH MỤC QUẢN LÝ</li>
                 <!-- <li>
@@ -208,12 +200,13 @@ use Illuminate\Support\Facades\Session;
 
                 <li>
                     <a href="javaScript:void();" class="waves-effect">
-                        <i class="zmdi zmdi-lock"></i> <span>Yêu Cầu</span>
-                        <i class="fa fa-angle-left float-right"></i>
+                        <i class="zmdi zmdi-format-list-bulleted"></i> <span>Yêu cầu</span>
+                        <i class="fa fa-angle-left pull-right"></i>
                     </a>
                     <ul class="sidebar-submenu">
-                        <li><a href="authentication-signin.html" target="_blank"><i class="zmdi zmdi-dot-circle-alt"></i> Thông Tin Yêu Cầu</a></li>
-                        <li><a href="authentication-signup.html" target="_blank"><i class="zmdi zmdi-dot-circle-alt"></i> Danh Sách Yêu Cầu</a></li>
+                        <li><a href="{{URL::to('/admin/list-requirements-takeleave')}}"><i class="zmdi zmdi-dot-circle-alt"></i> Yêu Cầu Xin Nghỉ</a></li>
+                        <li><a href="{{URL::to('/admin/list-requirements-late')}}"><i class="zmdi zmdi-dot-circle-alt"></i> Yêu Cầu Đi Trễ</a></li>
+                        <li><a href="{{URL::to('/admin/list-requirements-soon')}}"><i class="zmdi zmdi-dot-circle-alt"></i> Yêu Cầu Về Sớm</a></li>
                     </ul>
                 </li>
 
@@ -428,13 +421,13 @@ use Illuminate\Support\Facades\Session;
         <a href="javaScript:void();" class="back-to-top"><i class="fa fa-angle-double-up"></i> </a>
         <!--End Back To Top Button-->
         <!--Start footer-->
-        <footer class="footer">
+        <!-- <footer class="footer">
             <div class="container">
                 <div class="text-center">
                     Copyright © 2020 DatNQ Admin
                 </div>
             </div>
-        </footer>
+        </footer> -->
         <!--End footer-->
         <!--start color switcher-->
         <div class="right-sidebar">

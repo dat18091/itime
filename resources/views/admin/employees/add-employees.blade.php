@@ -316,9 +316,7 @@ use Illuminate\Support\Facades\Session;
                                                     <div class="col-sm-9">
                                                         <textarea class="form-control" rows="4" id="input-17" name="ghi_chu_nhan_vien"></textarea>
                                                     </div>
-
                                                 </div>
-                                               
                                                 </div>
                                                 <div class="form-footer">
                                                     <button type="button" name="danh_sach_vung" class="btn btn-danger"><i class="fa fa-times"></i> Hủy Bỏ</button>

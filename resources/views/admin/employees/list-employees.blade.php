@@ -1,7 +1,7 @@
 @extends('admin_layout')
 @section('admin_content')
 @section('admin_title')
-<title>IZITIME - Danh sách chức danh</title>
+<title>IZITIME - Danh sách nhân viên</title>
 @stop
 @section('css')
 <?php
@@ -39,10 +39,11 @@ use Illuminate\Support\Facades\Session;
                 <div class="tab-content p-6">
                     <div class="container tab-pane active" id="nhanvien">
                         <div class="card-header">
-                            <div><i class="fa fa-table"></i> DANH SÁCH NHÂN VIÊN</div>
-                            <div><a href="{{URL::to('/admin/add-employees')}}" class="btn btn-success">Tạo mới</a></div>
+                        <div class="action-button" style="display:flex;">
+                        <div><a href="{{URL::to('/admin/add-employees')}}" class="btn btn-success space">Tạo mới</a></div>
+                        <div><a href="{{URL::to('/admin/list-employees-trash')}}" class="btn btn-primary space">Thùng rác</a></div>
+                    </div>
                         </div>
-
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table id="example" class="table table-bordered">
@@ -68,15 +69,15 @@ use Illuminate\Support\Facades\Session;
                                             <td>{{$employee->so_dien_thoai_nhan_vien}}</td>
                                             <td>
                                                 <?php
-                                                    if($employee->hinh_anh_nhan_vien == '') {
+                                                if ($employee->hinh_anh_nhan_vien == '') {
                                                 ?>
-                                                <img src="{{asset('public/backend/assets/images/avatars/avatar-1.png')}}" width="50" height="50">
-                                                <?php 
-                                                    } else {
-                                                ?>
-                                                <img src="../public/uploads/employees/{{$employee->hinh_anh_nhan_vien}}" width="50" height="50">
+                                                    <img src="{{asset('public/backend/assets/images/avatars/avatar-1.png')}}" width="50" height="50">
                                                 <?php
-                                                    }
+                                                } else {
+                                                ?>
+                                                    <img src="../public/uploads/employees/{{$employee->hinh_anh_nhan_vien}}" width="50" height="50">
+                                                <?php
+                                                }
                                                 ?>
                                             </td>
                                             <td>
@@ -143,7 +144,7 @@ use Illuminate\Support\Facades\Session;
                                             <td>
                                                 <div class="btn-group group-round m-1">
                                                     <a type="button" href="{{URL::to('/admin/edit-employees/'.$employee->ma_nhan_vien)}}" class="btn btn-success waves-effect waves-light">Sửa</a>
-                                                    <a type="button" href="{{URL::to('/admin/delete-employees/'.$employee->ma_nhan_vien)}}" onclick="return confirm('Bạn có chắc chắn muốn xóa nhân viên này?')" class="btn btn-danger waves-effect waves-light">Xóa</a>
+                                                    <a type="button" href="{{URL::to('/admin/trash-employees/'.$employee->ma_nhan_vien)}}" onclick="return confirm('Bạn có chắc chắn muốn xóa nhân viên này?')" class="btn btn-danger waves-effect waves-light">Xóa</a>
                                                 </div>
                                             </td>
                                         </tr>
@@ -208,16 +209,12 @@ use Illuminate\Support\Facades\Session;
             $(document).ready(function() {
                 //Default data table
                 $('#default-datatable').DataTable();
-
-
                 var table = $('#example').DataTable({
                     lengthChange: false,
                     buttons: ['copy', 'excel', 'pdf', 'print', 'colvis']
                 });
-
                 table.buttons().container()
                     .appendTo('#example_wrapper .col-md-6:eq(0)');
-
             });
         </script>
         @stop

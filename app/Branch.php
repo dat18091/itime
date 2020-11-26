@@ -8,6 +8,8 @@ use App\Province;
 
 class Branch extends Model
 {
+    protected $table = 'branches';
+
     public function districtId() {
         return $this->belongsTo(District::class);
     }

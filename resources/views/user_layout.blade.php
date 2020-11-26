@@ -38,12 +38,13 @@
         </div>
         <nav class="canvas-menu mobile-menu">
             <ul>
-                <li><a href="./index.html">Home</a></li>
-                <li><a href="./about-us.html">About Us</a></li>
-                <li><a href="./classes.html">Classes</a></li>
-                <li><a href="./services.html">Services</a></li>
-                <li><a href="./team.html">Our Team</a></li>
-                <li><a href="#">Pages</a>
+                <li class="active"><a href="./index.html">Trang Chủ</a></li>
+                <!-- <li><a href="./about-us.html">About Us</a></li> -->
+                <li><a href="{{URL::to('/login')}}">Đăng Nhập</a></li>
+                <li><a href="{{URL::to('/services')}}">Dịch Vụ</a></li>
+                <li><a href="{{URL::to('/register')}}">Đăng Ký</a></li>
+                <!-- <li><a href="./team.html">Our Team</a></li> -->
+                <li><a href="#">Thông Tin</a>
                     <ul class="dropdown">
                         <li><a href="./about-us.html">About us</a></li>
                         <li><a href="./class-timetable.html">Classes timetable</a></li>
@@ -54,7 +55,7 @@
                         <li><a href="./404.html">404</a></li>
                     </ul>
                 </li>
-                <li><a href="./contact.html">Contact</a></li>
+                <li><a href="./contact.html">Liên Hệ</a></li>
             </ul>
         </nav>
         <div id="mobile-menu-wrap"></div>

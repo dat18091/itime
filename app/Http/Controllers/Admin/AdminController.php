@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Carbon\Carbon;
 
+use App\Company;
+use App\Employee;
 class AdminController extends Controller
 {
     /**
@@ -33,7 +35,11 @@ class AdminController extends Controller
     */
     public function dashboard() {
         $this->AuthLogin();
-        return view('admin.dashboard');
+        $maCongTy = Session::get('maCongTy');
+        $companyCount = Company::count('*');
+        $employeeCount = Employee::where('hoat_dong', '1')->orWhere('hoat_dong', '0')
+        ->where('ma_cong_ty', $maCongTy)->count('*');
+        return view('admin.dashboard')->with('companyCount', $companyCount)->with('employeeCount', $employeeCount);
     }
     
 }
