@@ -96,11 +96,11 @@ use Illuminate\Support\Facades\Session;
                     </a>
                     <ul class="sidebar-submenu">
                         <li><a href=""><i class="zmdi zmdi-dot-circle-alt"></i> Thiết Lập Nghỉ Lễ</a></li>
-                        <li><a href="URL::to('/admin/list-take-leave-types')"><i class="zmdi zmdi-dot-circle-alt"></i> Thiết Lập Nghỉ Phép</a></li>
-                        <li><a href="URL::to('/admin/list-date-take-leave-types')"><i class="zmdi zmdi-dot-circle-alt"></i> Thiết Lập Ngày Nghỉ</a></li>
+                        <li><a href="{{URL::to('/admin/list-take-leave-types')}}"><i class="zmdi zmdi-dot-circle-alt"></i> Thiết Lập Nghỉ Phép</a></li>
+                        <li><a href="{{URL::to('/admin/list-date-take-leave-types')}}"><i class="zmdi zmdi-dot-circle-alt"></i> Thiết Lập Ngày Nghỉ</a></li>
                         <li><a href="{{URL::to('/admin/list-take-leave-reasons')}}"><i class="zmdi zmdi-dot-circle-alt"></i> Lý Do Nghỉ Phép</a></li>
-                        <li><a href="URL::to('/admin/list-be-late-reasons')"><i class="zmdi zmdi-dot-circle-alt"></i> Lý Do Đi Trễ</a></li>
-                        <li><a href="URL::to('/admin/list-leave-soon-reasons')"><i class="zmdi zmdi-dot-circle-alt"></i> Lý Do Về Sớm</a></li>
+                        <li><a href="{{URL::to('/admin/list-be-late-reasons')}}"><i class="zmdi zmdi-dot-circle-alt"></i> Lý Do Đi Trễ</a></li>
+                        <li><a href="{{URL::to('/admin/list-leave-soon-reasons')}}"><i class="zmdi zmdi-dot-circle-alt"></i> Lý Do Về Sớm</a></li>
                     </ul>
                 </li>
                 <li>
@@ -132,13 +132,13 @@ use Illuminate\Support\Facades\Session;
                         <i class="fa fa-angle-left pull-right"></i>
                     </a>
                     <ul class="sidebar-submenu">
-                    <li><a href="{{URL::to('/admin/list-shifts')}}"><i class="zmdi zmdi-dot-circle-alt"></i> Ca Làm Việc</a></li>
-                    <li><a href="{{URL::to('/admin/list-access-groups')}}"><i class="zmdi zmdi-dot-circle-alt"></i> Loại Ngày Nghỉ</a></li>
-                    <li><a href="{{URL::to('/admin/list-access-groups')}}"><i class="zmdi zmdi-dot-circle-alt"></i> Loại Nghỉ Phép</a></li>
-                    <li><a href="{{URL::to('/admin/list-access-groups')}}"><i class="zmdi zmdi-dot-circle-alt"></i> Lý Do Nghỉ Phép</a></li>    
-                    <li><a href="{{URL::to('/admin/list-access-groups')}}"><i class="zmdi zmdi-dot-circle-alt"></i> Lý Do Đi Trễ</a></li>
-                    <li><a href="{{URL::to('/admin/list-access-groups')}}"><i class="zmdi zmdi-dot-circle-alt"></i> Lý Do Về Sớm</a></li>
-                </ul>
+                        <li><a href="{{URL::to('/admin/list-shifts')}}"><i class="zmdi zmdi-dot-circle-alt"></i> Ca Làm Việc</a></li>
+                        <li><a href="{{URL::to('/admin/list-access-groups')}}"><i class="zmdi zmdi-dot-circle-alt"></i> Loại Ngày Nghỉ</a></li>
+                        <li><a href="{{URL::to('/admin/list-access-groups')}}"><i class="zmdi zmdi-dot-circle-alt"></i> Loại Nghỉ Phép</a></li>
+                        <li><a href="{{URL::to('/admin/list-access-groups')}}"><i class="zmdi zmdi-dot-circle-alt"></i> Lý Do Nghỉ Phép</a></li>
+                        <li><a href="{{URL::to('/admin/list-access-groups')}}"><i class="zmdi zmdi-dot-circle-alt"></i> Lý Do Đi Trễ</a></li>
+                        <li><a href="{{URL::to('/admin/list-access-groups')}}"><i class="zmdi zmdi-dot-circle-alt"></i> Lý Do Về Sớm</a></li>
+                    </ul>
                 </li>
                 <li class="sidebar-header">DANH MỤC QUẢN LÝ</li>
                 <!-- <li>
@@ -192,9 +192,14 @@ use Illuminate\Support\Facades\Session;
                         <i class="zmdi zmdi-lock"></i> <span>Điểm Danh</span>
                         <i class="fa fa-angle-left float-right"></i>
                     </a>
-                    <ul class="sidebar-submenu">
-                        <li><a href="authentication-signin.html" target="_blank"><i class="zmdi zmdi-dot-circle-alt"></i> Thông Tin Điểm Danh</a></li>
+                    <!-- <ul class="sidebar-submenu">
+                        <li><a href="{{URL::to('/admin/list-attendances')}}" target="_blank"><i class="zmdi zmdi-dot-circle-alt"></i> Thông Tin Điểm Danh</a></li>
+                        <li><a href="" target="_blank"><i class="zmdi zmdi-dot-circle-alt"></i> Thông Tin Điểm Danh</a></li>
                         <li><a href="authentication-signup.html" target="_blank"><i class="zmdi zmdi-dot-circle-alt"></i> Lịch Sử Điểm Danh</a></li>
+                    </ul> -->
+                    <ul class="sidebar-submenu">
+                        <li><a href="{{URL::to('/admin/list-attendances')}}"><i class="zmdi zmdi-dot-circle-alt"></i> Thông Tin Điểm Danh</a></li>
+                        <li><a href="{{URL::to('/admin/list-attendances-history')}}"><i class="zmdi zmdi-dot-circle-alt"></i> Lịch Sử Điểm Danh</a></li>
                     </ul>
                 </li>
 
@@ -473,7 +478,7 @@ use Illuminate\Support\Facades\Session;
         </div>
         <!--end color switcher-->
     </div>
-    
+
     <!--End wrapper-->
     <!-- Bootstrap core JavaScript-->
     <script src="{{asset('public/backend/assets/js/jquery.min.js')}}"></script>

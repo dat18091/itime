@@ -167,11 +167,6 @@ Route::post("/admin/update-positions/{id}", "Positions\PositionController@update
 
 Route::get("/admin/delete-positions/{id}", "Positions\PositionController@delete_positions");
 
-## Requirements
-Route::get("/admin/list-requirements-takeleave", "Requirements\RequirementController@list_requirements_takeleave");
-Route::get("/admin/list-requirements-soon", "Requirements\RequirementController@list_requirements_soon");
-Route::get("/admin/list-requirements-late", "Requirements\RequirementController@list_requirements_late");
-
 ## Shifts
 Route::get("/admin/add-shifts", "Shifts\ShiftController@add_shifts");
 Route::post("/admin/save-shifts", "Shifts\ShiftController@save_shifts");
@@ -206,80 +201,89 @@ Route::post("/admin/update-take-leave-reasons/{id}", "TakeLeaveReasons\TakeLeave
 
 Route::get("/admin/delete-take-leave-reasons/{id}", "TakeLeaveReasons\TakeLeaveReasonController@delete_take_leave_reasons");
 
-## Reason be late (Pending)
-Route::get("/admin/add-be-late-reasons", "BeLateReasons\ShiftController@add_be_late_reasons");
-Route::post("/admin/save-be-late-reasons", "BeLateReasons\ShiftController@save_be_late_reasons");
+## Reason be late
+Route::get("/admin/add-be-late-reasons", "BeLateReasons\BeLateReasonController@add_be_late_reasons");
+Route::post("/admin/save-be-late-reasons", "BeLateReasons\BeLateReasonController@save_be_late_reasons");
 
-Route::get("/admin/list-be-late-reasons", "BeLateReasons\ShiftController@list_be_late_reasons");
-Route::get("/admin/list-be-late-reasons-trash", "BeLateReasons\ShiftController@list_be_late_reasons_trash");
+Route::get("/admin/list-be-late-reasons", "BeLateReasons\BeLateReasonController@list_be_late_reasons");
+Route::get("/admin/list-be-late-reasons-trash", "BeLateReasons\BeLateReasonController@list_be_late_reasons_trash");
 
-Route::get("/admin/hide-be-late-reasons/{id}", "BeLateReasons\ShiftController@hide_be_late_reasons");
-Route::get("/admin/show-be-late-reasons/{id}", "BeLateReasons\ShiftController@show_be_late_reasons");
-Route::get("/admin/trash-be-late-reasons/{id}", "BeLateReasons\ShiftController@trash_be_late_reasons");
-Route::get("/admin/restore-be-late-reasons/{id}", "BeLateReasons\ShiftController@restore_be_late_reasons");
+Route::get("/admin/hide-be-late-reasons/{id}", "BeLateReasons\BeLateReasonController@hide_be_late_reasons");
+Route::get("/admin/show-be-late-reasons/{id}", "BeLateReasons\BeLateReasonController@show_be_late_reasons");
+Route::get("/admin/trash-be-late-reasons/{id}", "BeLateReasons\BeLateReasonController@trash_be_late_reasons");
+Route::get("/admin/restore-be-late-reasons/{id}", "BeLateReasons\BeLateReasonController@restore_be_late_reasons");
 
-Route::get("/admin/edit-be-late-reasons/{id}", "BeLateReasons\ShiftController@edit_be_late_reasons");
-Route::post("/admin/update-be-late-reasons/{id}", "BeLateReasons\ShiftController@update_be_late_reasons");
+Route::get("/admin/edit-be-late-reasons/{id}", "BeLateReasons\BeLateReasonController@edit_be_late_reasons");
+Route::post("/admin/update-be-late-reasons/{id}", "BeLateReasons\BeLateReasonController@update_be_late_reasons");
 
-Route::get("/admin/delete-be-late-reasons/{id}", "BeLateReasons\ShiftController@delete_be_late_reasons");
+Route::get("/admin/delete-be-late-reasons/{id}", "BeLateReasons\BeLateReasonController@delete_be_late_reasons");
 
-## Reason leave soon (Pending)
-Route::get("/admin/add-reason-leave-soon", "Shifts\ShiftController@add_reason_leave_soon");
-Route::post("/admin/save-reason-leave-soon", "Shifts\ShiftController@save_reason_leave_soon");
+## Reason leave soon
+Route::get("/admin/add-leave-soon-reasons", "LeaveSoonReasons\LeaveSoonReasonController@add_leave_soon_reasons");
+Route::post("/admin/save-leave-soon-reasons", "LeaveSoonReasons\LeaveSoonReasonController@save_leave_soon_reasons");
 
-Route::get("/admin/list-reason-leave-soon", "Shifts\ShiftController@list_reason_leave_soon");
-Route::get("/admin/list-reason-leave-soon-trash", "Shifts\ShiftController@list_reason_leave_soon_trash");
+Route::get("/admin/list-leave-soon-reasons", "LeaveSoonReasons\LeaveSoonReasonController@list_leave_soon_reasons");
+Route::get("/admin/list-leave-soon-reasons-trash", "LeaveSoonReasons\LeaveSoonReasonController@list_leave_soon_reasons_trash");
 
-Route::get("/admin/hide-reason-leave-soon/{id}", "Shifts\ShiftController@hide_reason_leave_soon");
-Route::get("/admin/show-reason-leave-soon/{id}", "Shifts\ShiftController@show_reason_leave_soon");
-Route::get("/admin/trash-reason-leave-soon/{id}", "Shifts\ShiftController@trash_reason_leave_soon");
-Route::get("/admin/restore-reason-leave-soon/{id}", "Shifts\ShiftController@restore_reason_leave_soon");
+Route::get("/admin/hide-leave-soon-reasons/{id}", "LeaveSoonReasons\LeaveSoonReasonController@hide_leave_soon_reasons");
+Route::get("/admin/show-leave-soon-reasons/{id}", "LeaveSoonReasons\LeaveSoonReasonController@show_leave_soon_reasons");
+Route::get("/admin/trash-leave-soon-reasons/{id}", "LeaveSoonReasons\LeaveSoonReasonController@trash_leave_soon_reasons");
+Route::get("/admin/restore-leave-soon-reasons/{id}", "LeaveSoonReasons\LeaveSoonReasonController@restore_leave_soon_reasons");
 
-Route::get("/admin/edit-reason-leave-soon/{id}", "Shifts\ShiftController@edit_reason_leave_soon");
-Route::post("/admin/update-reason-leave-soon/{id}", "Shifts\ShiftController@update_reason_leave_soon");
+Route::get("/admin/edit-leave-soon-reasons/{id}", "LeaveSoonReasons\LeaveSoonReasonController@edit_leave_soon_reasons");
+Route::post("/admin/update-leave-soon-reasons/{id}", "LeaveSoonReasons\LeaveSoonReasonController@update_leave_soon_reasons");
 
-Route::get("/admin/delete-reason-leave-soon/{id}", "Shifts\ShiftController@delete_reason_leave_soon");
+Route::get("/admin/delete-leave-soon-reasons/{id}", "LeaveSoonReasons\LeaveSoonReasonController@delete_leave_soon_reasons");
 
-## Type take leave (Pending)
-Route::get("/admin/add-type-take-leave", "Shifts\ShiftController@add_type_take_leave");
-Route::post("/admin/save-type-take-leave", "Shifts\ShiftController@save_type_take_leave");
+## Type take leave
+Route::get("/admin/add-take-leave-types", "TakeLeaveTypes\TakeLeaveTypeController@add_take_leave_types");
+Route::post("/admin/save-take-leave-types", "TakeLeaveTypes\TakeLeaveTypeController@save_take_leave_types");
 
-Route::get("/admin/list-type-take-leave", "Shifts\ShiftController@list_type_take_leave");
-Route::get("/admin/list-type-take-leave-trash", "Shifts\ShiftController@list_type_take_leave_trash");
+Route::get("/admin/list-take-leave-types", "TakeLeaveTypes\TakeLeaveTypeController@list_take_leave_types");
+Route::get("/admin/list-take-leave-types-trash", "TakeLeaveTypes\TakeLeaveTypeController@list_take_leave_types_trash");
 
-Route::get("/admin/hide-type-take-leave/{id}", "Shifts\ShiftController@hide_type_take_leave");
-Route::get("/admin/show-type-take-leave/{id}", "Shifts\ShiftController@show_type_take_leave");
-Route::get("/admin/trash-type-take-leave/{id}", "Shifts\ShiftController@trash_type_take_leave");
-Route::get("/admin/restore-type-take-leave/{id}", "Shifts\ShiftController@restore_type_take_leave");
+Route::get("/admin/hide-take-leave-types/{id}", "TakeLeaveTypes\TakeLeaveTypeController@hide_take_leave_types");
+Route::get("/admin/show-take-leave-types/{id}", "TakeLeaveTypes\TakeLeaveTypeController@show_take_leave_types");
+Route::get("/admin/trash-take-leave-types/{id}", "TakeLeaveTypes\TakeLeaveTypeController@trash_take_leave_types");
+Route::get("/admin/restore-take-leave-types/{id}", "TakeLeaveTypes\TakeLeaveTypeController@restore_take_leave_types");
 
-Route::get("/admin/edit-type-take-leave/{id}", "Shifts\ShiftController@edit_type_take_leave");
-Route::post("/admin/update-type-take-leave/{id}", "Shifts\ShiftController@update_type_take_leave");
+Route::get("/admin/edit-take-leave-types/{id}", "TakeLeaveTypes\TakeLeaveTypeController@edit_take_leave_types");
+Route::post("/admin/update-take-leave-types/{id}", "TakeLeaveTypes\TakeLeaveTypeController@update_take_leave_types");
 
-Route::get("/admin/delete-type-take-leave/{id}", "Shifts\ShiftController@delete_type_take_leave");
+Route::get("/admin/delete-type-take-leave/{id}", "TakeLeaveTypes\TakeLeaveTypeController@delete_take_leave_types");
 
-## Type date take leave (Pending)
-Route::get("/admin/add-type-date-take-leave", "Shifts\ShiftController@add_type_date_take_leave");
-Route::post("/admin/save-type-date-take-leave", "Shifts\ShiftController@save_type_date_take_leave");
+## Type date take leave
+Route::get("/admin/add-date-take-leave-types", "DateTakeLeaveTypes\DateTakeLeaveTypeController@add_date_take_leave_types");
+Route::post("/admin/save-date-take-leave-types", "DateTakeLeaveTypes\DateTakeLeaveTypeController@save_date_take_leave_types");
 
-Route::get("/admin/list-type-date-take-leave", "Shifts\ShiftController@list_type_date_take_leave");
-Route::get("/admin/list-type-date-take-leave-trash", "Shifts\ShiftController@list_type_date_take_leave_trash");
+Route::get("/admin/list-date-take-leave-types", "DateTakeLeaveTypes\DateTakeLeaveTypeController@list_date_take_leave_types");
+Route::get("/admin/list-date-take-leave-types-trash", "DateTakeLeaveTypes\DateTakeLeaveTypeController@list_date_take_leave_types_trash");
 
-Route::get("/admin/hide-type-date-take-leave/{id}", "Shifts\ShiftController@hide_type_date_take_leave");
-Route::get("/admin/show-type-date-take-leave/{id}", "Shifts\ShiftController@show_type_date_take_leave");
-Route::get("/admin/trash-type-date-take-leave/{id}", "Shifts\ShiftController@trash_type_date_take_leave");
-Route::get("/admin/restore-type-date-take-leave/{id}", "Shifts\ShiftController@restore_type_date_take_leave");
+Route::get("/admin/hide-date-take-leave-types/{id}", "DateTakeLeaveTypes\DateTakeLeaveTypeController@hide_date_take_leave_types");
+Route::get("/admin/show-date-take-leave-types/{id}", "DateTakeLeaveTypes\DateTakeLeaveTypeController@show_date_take_leave_types");
+Route::get("/admin/trash-date-take-leave-types/{id}", "DateTakeLeaveTypes\DateTakeLeaveTypeController@trash_date_take_leave_types");
+Route::get("/admin/restore-date-take-leave-types/{id}", "DateTakeLeaveTypes\DateTakeLeaveTypeController@restore_date_take_leave_types");
 
-Route::get("/admin/edit-type-date-take-leave/{id}", "Shifts\ShiftController@edit_type_date_take_leave");
-Route::post("/admin/update-type-date-take-leave/{id}", "Shifts\ShiftController@update_type_date_take_leave");
+Route::get("/admin/edit-date-take-leave-types/{id}", "DateTakeLeaveTypes\DateTakeLeaveTypeController@edit_date_take_leave_types");
+Route::post("/admin/update-date-take-leave-types/{id}", "DateTakeLeaveTypes\DateTakeLeaveTypeController@update_date_take_leave_types");
 
-Route::get("/admin/delete-type-date-take-leave/{id}", "Shifts\ShiftController@delete_type_date_take_leave");
+Route::get("/admin/delete-date-take-leave-types/{id}", "DateTakeLeaveTypes\DateTakeLeaveTypeController@delete_date_take_leave_types");
 
 ## Take leave manager app and web (Pending)
+Route::get("/admin/list-requirements-takeleave", "Requirements\RequirementController@list_requirements_takeleave");
 
 ## Be late manager app and web (Pending)
+Route::get("/admin/list-requirements-late", "Requirements\RequirementController@list_requirements_late");
 
 ## Leave soon manager app and web (Pending)
+Route::get("/admin/list-requirements-soon", "Requirements\RequirementController@list_requirements_soon");
 
+## Attendance
+Route::get("/admin/list-attendances", "Attendances\AttendanceController@list_attendances");
+Route::get("/admin/delete-attendances/{id}", "Attendances\AttendanceController@delete_attendances");
+Route::get("/admin/list-attendances-history", "Attendances\AttendanceController@list_attendances_history");
+
+## Voyager
 Route::group(['prefix' => 'admin'], function () {
     Voyager::routes();
 });

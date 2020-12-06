@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\BeLateReasons;
+namespace App\Http\Controllers\LeaveSoonReasons;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -8,9 +8,9 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Carbon\Carbon;
-use App\Belatereason;
+use App\Leavesoonreason;
 
-class BeLateReasonController extends Controller
+class LeaveSoonReasonController extends Controller
 {
     /**
      * This function to check accesses from outside
@@ -28,30 +28,30 @@ class BeLateReasonController extends Controller
     }
 
     /**
-     * This function to show list take leave reasons with company id by GET method
+     * This function to show list leave soon reasons with company id by GET method
      * created by : DatNQ
      * created at : 26/11/2020
      */
-    public function list_be_late_reasons() { //done
+    public function list_leave_soon_reasons() { 
         $this->AuthLogin();
         $idCompany = Session::get('maCongTy');
-        $beLateReason = Belatereason::where('status', '1')
+        $leaveSoonReason = Leavesoonreason::where('status', '1')
         ->orWhere('status', '0')->where('ma_cong_ty',$idCompany)->get();
-        return view('admin.belatereasons.list-be-late-reasons')
-        ->with('list_be_late_reasons', $beLateReason);
+        return view('admin.leavesoonreasons.list-leave-soon-reasons')
+        ->with('list_leave_soon_reasons', $leaveSoonReason);
     }
 
     /**
-     * This function to show list trash take leave reason with company id by GET method
+     * This function to show list trash leave soon reason with company id by GET method
      * created by : DatNQ
      * created at : 26/11/2020
      */
-    public function list_be_late_reasons_trash() { //done
+    public function list_leave_soon_reasons_trash() { 
         $this->AuthLogin();
         $idCompany = Session::get('maCongTy');
-        $beLateReason = Belatereason::where('status', '2')->where('ma_cong_ty',$idCompany)->get();
-        return view('admin.belatereasons.list-be-late-reasons-trash')
-        ->with('list_be_late_reasons', $beLateReason);
+        $leaveSoonReason = Leavesoonreason::where('status', '2')->where('ma_cong_ty',$idCompany)->get();
+        return view('admin.leavesoonreasons.list-leave-soon-reasons-trash')
+        ->with('list_leave_soon_reasons', $leaveSoonReason);
     }
 
     /**
@@ -59,17 +59,17 @@ class BeLateReasonController extends Controller
      * created by : DatNQ
      * created at : 26/11/2020
      */
-    public function add_be_late_reasons() { //done
+    public function add_leave_soon_reasons() { 
         $this->AuthLogin();
-        return view('admin.belatereasons.add-be-late-reasons');
+        return view('admin.leavesoonreasons.add-leave-soon-reasons');
     }
 
     /**
-     * This function to handle data take leave reason by post method
+     * This function to handle data leave soon reason by post method
      * created by : DatNQ
      * created at : 26/11/2020
      */
-    public function save_be_late_reasons(Request $request) { //done
+    public function save_leave_soon_reasons(Request $request) { 
         $this->AuthLogin();
         $data = array();
         $name = $request->name;
@@ -78,22 +78,22 @@ class BeLateReasonController extends Controller
         $maCongTy = Session::get('maCongTy');
         if($name == "" || $status == "") {
             Session::flash("failure", "Các trường không được để trống.");
-            return Redirect::to('/admin/list-be-late-reasons');
+            return Redirect::to('/admin/list-leave-soon-reasons');
         } else if(strlen($name) > 100) {
             Session::flash("failure", "Bạn đã nhập quá ký tự cho phép.");
-            return Redirect::to('/admin/list-be-late-reasons');
+            return Redirect::to('/admin/list-leave-soon-reasons');
         } else if(strlen($name) < 5) {
             Session::flash("failure", "Bạn nhập không đủ ký tự.");
-            return Redirect::to('/admin/list-be-late-reasons');
+            return Redirect::to('/admin/list-leave-soon-reasons');
         } else {
             $data['name'] = $name;
             $data['status'] = $status;
             $data['note'] = $note;
             $data['ma_cong_ty'] = $maCongTy;
             $data['created_at'] = Carbon::now();
-            Belatereason::insert($data);
+            Leavesoonreason::insert($data);
             Session::flash("message", "Thêm lý do thành công.");
-            return Redirect::to('/admin/list-be-late-reasons');
+            return Redirect::to('/admin/list-leave-soon-reasons');
         }
     }
 
@@ -102,11 +102,11 @@ class BeLateReasonController extends Controller
      * created by : DatNQ
      * created at : 26/11/2020
      */
-    public function hide_be_late_reasons($id) { //done
+    public function hide_leave_soon_reasons($id) { 
         $this->AuthLogin();
-        Belatereason::where('id', $id)->update(['status' => 1]);
+        Leavesoonreason::where('id', $id)->update(['status' => 1]);
         Session::put('message', 'Ẩn lý do thành công.');
-        return Redirect::to('/admin/list-be-late-reasons');
+        return Redirect::to('/admin/list-leave-soon-reasons');
     }
 
     /**
@@ -114,35 +114,35 @@ class BeLateReasonController extends Controller
      * created by : DatNQ
      * created at : 26/11/2020
      */
-    public function show_be_late_reasons($id) { //done
+    public function show_leave_soon_reasons($id) { 
         $this->AuthLogin();
-        Belatereason::where('id', $id)->update(['status' => 0]);
+        Leavesoonreason::where('id', $id)->update(['status' => 0]);
         Session::put('message', 'Hiển thị lý do thành công.');
-        return Redirect::to('/admin/list-be-late-reasons');
+        return Redirect::to('/admin/list-leave-soon-reasons');
     }
 
     /**
-     * This function is used to move field on trash take leave reasons
+     * This function is used to move field on trash leave soon reasons
      * created by : DatNQ
      * created at : 26/11/2020
      */
-    public function trash_be_late_reasons($id) { //done
+    public function trash_leave_soon_reasons($id) { 
         $this->AuthLogin();
-        Belatereason::where('id', $id)->update(['status' => 2]);
+        Leavesoonreason::where('id', $id)->update(['status' => 2]);
         Session::put('message', 'Xóa lý do thành công.');
-        return Redirect::to('/admin/list-be-late-reasons');
+        return Redirect::to('/admin/list-leave-soon-reasons');
     }
 
     /**
-     * This function is used to restore field on trash take leave reasons
+     * This function is used to restore field on trash leave soon reasons
      * created by : DatNQ
      * created at : 26/11/2020
      */
-    public function restore_be_late_reasons($id) { //done
+    public function restore_leave_soon_reasons($id) { 
         $this->AuthLogin();
-        Belatereason::where('id', $id)->update(['status' => 0]);
+        Leavesoonreason::where('id', $id)->update(['status' => 0]);
         Session::put('message', 'Restore lý do thành công.');
-        return Redirect::to('/admin/list-be-late-reasons');
+        return Redirect::to('/admin/list-leave-soon-reasons');
     }
     
 
@@ -151,10 +151,10 @@ class BeLateReasonController extends Controller
      * created by : DatNQ
      * created at : 31/10/2020
      */
-    public function edit_be_late_reasons($id) {
+    public function edit_leave_soon_reasons($id) {
         $this->AuthLogin();
-        $capNhatLyDo = Belatereason::where('id', $id)->get();
-        return view('admin.belatereasons.edit-be-late-reasons')->with('belatereasons', $capNhatLyDo);
+        $capNhatLyDo = Leavesoonreason::where('id', $id)->get();
+        return view('admin.leavesoonreasons.edit-leave-soon-reasons')->with('leavesoonreasons', $capNhatLyDo);
     }
 
     /**
@@ -162,39 +162,39 @@ class BeLateReasonController extends Controller
      * created by : DatNQ
      * created at : 31/10/2020
      */
-    public function update_be_late_reasons(Request $request, $id) {
+    public function update_leave_soon_reasons(Request $request, $id) {
         $this->AuthLogin();
         $data = array();
         $name = $request->name;
         $note = $request->note;
         if($name == "") {
             Session::push("failure", "Các trường không được để rỗng.");
-            return Redirect::to('/admin/edit-be-late-reasons/'.$id);
+            return Redirect::to('/admin/edit-leave-soon-reasons/'.$id);
         } else if(strlen($name) > 100) {
             Session::push("failure", "Bạn đã nhập quá ký tự cho phép.");
-            return Redirect::to('/admin/edit-be-late-reasons/'.$id);
+            return Redirect::to('/admin/edit-leave-soon-reasons/'.$id);
         } else if(strlen($name) < 5) {
             Session::push("failure", "Bạn nhập không đủ ký tự.");
-            return Redirect::to('/admin/edit-be-late-reasons/'.$id);
+            return Redirect::to('/admin/edit-leave-soon-reasons/'.$id);
         } else {
             $data['name'] = $name;
             $data['note'] = $note;
             $data['updated_at'] = Carbon::now();
-            Belatereason::where('id', $id)->update($data);
+            Leavesoonreason::where('id', $id)->update($data);
             Session::put('message', 'Cập nhật lý do thành công.');
-            return Redirect::to('/admin/list-be-late-reasons');
+            return Redirect::to('/admin/list-leave-soon-reasons');
         }
     }
 
     /**
-     * This function is used to delete data of take leave reasons by GET method
+     * This function is used to delete data of leave soon reasons by GET method
      * created by : DatNQ
      * created at : 26/11/2020
      */
-    public function delete_be_late_reasons($id) { //done
+    public function delete_leave_soon_reasons($id) { 
         $this->AuthLogin();
-        Belatereason::where('id', $id)->delete();
+        Leavesoonreason::where('id', $id)->delete();
         Session::put('message', 'Xóa lý do thành công.');
-        return Redirect::to('/admin/list-be-late-reasons');
+        return Redirect::to('/admin/list-leave-soon-reasons');
     }
 }

@@ -1,7 +1,7 @@
 @extends('admin_layout')
 @section('admin_content')
 @section('admin_title')
-<title>IZITIME - Danh sách lý do nghỉ phép</title>
+<title>IZITIME - Danh sách loại ngày nghỉ phép</title>
 @stop
 @section('css')
 <?php
@@ -16,12 +16,12 @@ use Illuminate\Support\Facades\Session;
     <!-- Breadcrumb-->
     <div class="row pt-2 pb-2">
         <div class="col-sm-9">
-            <h4 class="page-title">DANH SÁCH LÝ DO NGHỈ PHÉP</h4>
+            <h4 class="page-title">DANH SÁCH LOẠI NGÀY NGHỈ</h4>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="javaScript:void();">CÀI ĐẶT HỆ THỐNG</a></li>
-                <li class="breadcrumb-item"><a href="javaScript:void();">Công Ty</a></li>
-                <li class="breadcrumb-item"><a href="javaScript:void();">Công Ty</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Chi Nhánh</li>
+                <li class="breadcrumb-item"><a href="javaScript:void();">Nghỉ Phép</a></li>
+                <li class="breadcrumb-item"><a href="javaScript:void();">Nghỉ Phép</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Loại Ngày Nghỉ</li>
             </ol>
         </div>
         <div class="col-sm-3">
@@ -47,8 +47,8 @@ use Illuminate\Support\Facades\Session;
             <div class="card">
                 <div class="card-header">
                     <div class="action-button" style="display:flex;">
-                        <div><a href="" data-toggle="modal" data-target="#addTakeLeaveReason" data-whatever="@mdo" class="btn btn-success space">Tạo mới</a></div>
-                        <div><a href="{{URL::to('/admin/list-branches-trash')}}" class="btn btn-primary space">Thùng rác</a></div>
+                        <div><a href="" data-toggle="modal" data-target="#addDateTakeLeaveType" data-whatever="@mdo" class="btn btn-success space">Tạo mới</a></div>
+                        <div><a href="{{URL::to('/admin/list-date-take-leave-types-trash')}}" class="btn btn-primary space">Thùng rác</a></div>
                     </div>
                 </div>
                 <div class="card-body">
@@ -56,34 +56,34 @@ use Illuminate\Support\Facades\Session;
                         <table id="example" class="table table-bordered">
                             <thead>
                                 <tr>
-                                    <th>Tên vùng</th>
+                                    <th>Loại ngày nghỉ</th>
                                     <th>Ghi chú</th>
                                     <th>Trạng thái</th>
                                     <th>Thao tác</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($list_take_leave_reasons as $key => $area)
+                                @foreach($list_date_take_leave_types as $key => $datetakeleave)
                                 <tr>
-                                    <td>{{ $area->name }}</td>
-                                    <td>{{ $area->note }}</td>
+                                    <td>{{ $datetakeleave->name }}</td>
+                                    <td>{{ $datetakeleave->note }}</td>
                                     <td>
                                         <?php
-                                        if ($area->status == 0) {
+                                        if ($datetakeleave->status == 0) {
                                         ?>
-                                            <a href="{{URL::to('/admin/hide-take-leave-reasons/'.$area->id)}}"><span class="fa-styling fa fa-thumbs-up"></span></a>
+                                            <a href="{{URL::to('/admin/hide-date-take-leave-types/'.$datetakeleave->id)}}"><span class="fa-styling fa fa-thumbs-up"></span></a>
                                         <?php
                                         } else {
                                         ?>
-                                            <a href="{{URL::to('/admin/show-take-leave-reasons/'.$area->id)}}"><span class="fa-styling fa fa-thumbs-down"></span></a>
+                                            <a href="{{URL::to('/admin/show-date-take-leave-types/'.$datetakeleave->id)}}"><span class="fa-styling fa fa-thumbs-down"></span></a>
                                         <?php
                                         }
                                         ?>
                                     </td>
                                     <td>
                                         <div class="btn-group group-round m-1">
-                                            <a type="button" href="{{URL::to('/admin/edit-take-leave-reasons/'.$area->id)}}" class="btn btn-success waves-effect waves-light">Sửa</a>
-                                            <a type="button" href="{{URL::to('/admin/trash-take-leave-reasons/'.$area->id)}}" onclick="return confirm('Bạn có chắc chắn muốn xóa vùng này?')" class="btn btn-danger waves-effect waves-light">Xóa</a>
+                                            <a type="button" href="{{URL::to('/admin/edit-date-take-leave-types/'.$datetakeleave->id)}}" class="btn btn-success waves-effect waves-light">Sửa</a>
+                                            <a type="button" href="{{URL::to('/admin/trash-date-take-leave-types/'.$datetakeleave->id)}}" onclick="return confirm('Bạn có chắc chắn muốn xóa vùng này?')" class="btn btn-danger waves-effect waves-light">Xóa</a>
                                         </div>
                                     </td>
 
@@ -92,7 +92,7 @@ use Illuminate\Support\Facades\Session;
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <th>Tên vùng</th>
+                                    <th>Loại ngày nghỉ</th>
                                     <th>Ghi chú</th>
                                     <th>Trạng thái</th>
                                     <th>Thao tác</th>
@@ -104,82 +104,50 @@ use Illuminate\Support\Facades\Session;
             </div>
         </div>
     </div><!-- End Row-->
-    <!-- <div class="modal fade bd-example-modal-lg" id="chinhSuaVung" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade bd-example-modal-lg" id="addDateTakeLeaveType" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content">
+                <div class="modal-content animated fadeInUp">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Chỉnh Sửa Vùng</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">Thêm Lý Do Đi Trễ</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
 
                     <div class="modal-body">
-                        <form method="post" action="{{URL::to('/admin/update-areas')}}" id="editForm">
+                        <form method="post" action="{{URL::to('/admin/save-date-take-leave-types')}}">
                             {{csrf_field()}}
-                            {{method_field('PUT')}}
                             <div class="form-group row">
-                                <label for="input-14" class="col-sm-2 col-form-label">Tên vùng <span class="focus">*</span></label>
+                                <label for="input-14" class="col-sm-2 col-form-label">Lý do <span class="focus">*</span></label>
                                 <div class="col-sm-10">
-                                    <input type="text" value="" class="form-control" id="ten_vung" name="ten_vung" onkeyup="changeToKeyword();">
+                                    <input type="text" class="form-control" id="name" name="name" onkeyup="changeToKeyword();">
                                 </div>
                             </div>
+                            
                             <div class="form-group row">
-                                <label for="input-15" class="col-sm-2 col-form-label">Từ khóa <span class="focus">*</span></label>
+                                <label for="input-15" class="col-sm-2 col-form-label">Trạng thái <span class="focus">*</span></label>
                                 <div class="col-sm-10">
-                                    <input type="text" readonly class="form-control" id="tu_khoa_vung" name="tu_khoa_vung">
+                                    <select name="status" class="form-control" id="basic-select">
+                                        <option value="1">Ẩn</option>
+                                        <option value="0">Hiển thị</option>
+                                    </select>
                                 </div>
                             </div>
-                            <script type="text/javascript">
-                                function changeToKeyword() {
-                                    var tenVung, tuKhoa;
-
-                                    //Lấy text từ thẻ input categoryName 
-                                    tenVung = document.getElementById("ten_vung").value;
-
-                                    //Đổi chữ hoa thành chữ thường
-                                    tuKhoa = tenVung.toLowerCase();
-
-                                    //Đổi ký tự có dấu thành không dấu
-                                    tuKhoa = tuKhoa.replace(/á|à|ả|ạ|ã|ă|ắ|ằ|ẳ|ẵ|ặ|â|ấ|ầ|ẩ|ẫ|ậ/gi, 'a');
-                                    tuKhoa = tuKhoa.replace(/é|è|ẻ|ẽ|ẹ|ê|ế|ề|ể|ễ|ệ/gi, 'e');
-                                    tuKhoa = tuKhoa.replace(/i|í|ì|ỉ|ĩ|ị/gi, 'i');
-                                    tuKhoa = tuKhoa.replace(/ó|ò|ỏ|õ|ọ|ô|ố|ồ|ổ|ỗ|ộ|ơ|ớ|ờ|ở|ỡ|ợ/gi, 'o');
-                                    tuKhoa = tuKhoa.replace(/ú|ù|ủ|ũ|ụ|ư|ứ|ừ|ử|ữ|ự/gi, 'u');
-                                    tuKhoa = tuKhoa.replace(/ý|ỳ|ỷ|ỹ|ỵ/gi, 'y');
-                                    tuKhoa = tuKhoa.replace(/đ/gi, 'd');
-                                    //Xóa các ký tự đặt biệt
-                                    tuKhoa = tuKhoa.replace(/\`|\~|\!|\@|\#|\||\$|\%|\^|\&|\*|\(|\)|\+|\=|\,|\.|\/|\?|\>|\<|\'|\"|\:|\;|_/gi, '');
-                                    //Đổi khoảng trắng thành ký tự gạch ngang
-                                    tuKhoa = tuKhoa.replace(/ /gi, "-");
-                                    //Đổi nhiều ký tự gạch ngang liên tiếp thành 1 ký tự gạch ngang
-                                    //Phòng trường hợp người nhập vào quá nhiều ký tự trắng
-                                    tuKhoa = tuKhoa.replace(/\-\-\-\-\-/gi, '-');
-                                    tuKhoa = tuKhoa.replace(/\-\-\-\-/gi, '-');
-                                    tuKhoa = tuKhoa.replace(/\-\-\-/gi, '-');
-                                    tuKhoa = tuKhoa.replace(/\-\-/gi, '-');
-                                    //Xóa các ký tự gạch ngang ở đầu và cuối
-                                    tuKhoa = '@' + tuKhoa + '@';
-                                    tuKhoa = tuKhoa.replace(/\@\-|\-\@|\@/gi, '');
-                                    //In tuKhoa ra textbox có id tuKhoa
-                                    document.getElementById('tu_khoa_vung').value = tuKhoa;
-                                }
-                            </script>
                             <div class="form-group row">
                                 <label for="input-17" class="col-sm-2 col-form-label">Ghi chú</label>
                                 <div class="col-sm-10">
-                                    <textarea class="form-control" style="resize:none;" rows="4" id="ghi_chu_vung" name="ghi_chu_vung"></textarea>
+                                    <textarea class="form-control" style="resize:none;" rows="4" id="input-17" name="note"></textarea>
                                 </div>
                             </div>
                             <div class="form-footer">
-                                <!-- <button type="submit" name="danh_sach_vung" class="btn btn-danger"><i class="fa fa-times"></i> Hủy Bỏ</button> -->
-                                <button name="add_areas" class="btn btn-primary" type="submit"><i class="fa fa-add"></i> Chỉnh Sửa Vùng</button>
+                                <a type="button" name="danh_sach_vung" class="btn btn-danger"><i class="fa fa-times"></i> Hủy Bỏ</a>
+                                <button name="add_areas" class="btn btn-primary" type="submit"><i class="fa fa-add"></i> Thêm </button>
                             </div>
                         </form>
                     </div>
                 </div>
             </div>
-        </div> -->
+        </div>
     <!--start overlay-->
     <div class="overlay toggle-menu"></div>
     <!--end overlay-->

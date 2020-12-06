@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\BeLateReasons;
+namespace App\Http\Controllers\TakeLeaveTypes;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -8,14 +8,14 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Carbon\Carbon;
-use App\Belatereason;
+use App\Takeleavetype;
 
-class BeLateReasonController extends Controller
+class TakeLeaveTypeController extends Controller
 {
     /**
      * This function to check accesses from outside
      * created by : DatNQ
-     * created at : 26/11/2020
+     * created at : 29/11/2020
      */
     public function AuthLogin() {
         $login_id = Session::get('maCongTy');
@@ -28,48 +28,48 @@ class BeLateReasonController extends Controller
     }
 
     /**
-     * This function to show list take leave reasons with company id by GET method
+     * This function to show list take leave types with company id by GET method
      * created by : DatNQ
-     * created at : 26/11/2020
+     * created at : 29/11/2020
      */
-    public function list_be_late_reasons() { //done
+    public function list_take_leave_types() { 
         $this->AuthLogin();
         $idCompany = Session::get('maCongTy');
-        $beLateReason = Belatereason::where('status', '1')
+        $takeLeaveType = Takeleavetype::where('status', '1')
         ->orWhere('status', '0')->where('ma_cong_ty',$idCompany)->get();
-        return view('admin.belatereasons.list-be-late-reasons')
-        ->with('list_be_late_reasons', $beLateReason);
+        return view('admin.takeleavetypes.list-take-leave-types')
+        ->with('list_take_leave_types', $takeLeaveType);
     }
 
     /**
-     * This function to show list trash take leave reason with company id by GET method
+     * This function to show list trash take leave type with company id by GET method
      * created by : DatNQ
-     * created at : 26/11/2020
+     * created at : 29/11/2020
      */
-    public function list_be_late_reasons_trash() { //done
+    public function list_take_leave_types_trash() { 
         $this->AuthLogin();
         $idCompany = Session::get('maCongTy');
-        $beLateReason = Belatereason::where('status', '2')->where('ma_cong_ty',$idCompany)->get();
-        return view('admin.belatereasons.list-be-late-reasons-trash')
-        ->with('list_be_late_reasons', $beLateReason);
+        $takeLeaveType = Takeleavetype::where('status', '2')->where('ma_cong_ty',$idCompany)->get();
+        return view('admin.takeleavetypes.list-take-leave-types-trash')
+        ->with('list_take_leave_types', $takeLeaveType);
     }
 
     /**
      * This function is used to redirect to add area page
      * created by : DatNQ
-     * created at : 26/11/2020
+     * created at : 29/11/2020
      */
-    public function add_be_late_reasons() { //done
+    public function add_take_leave_types() { 
         $this->AuthLogin();
-        return view('admin.belatereasons.add-be-late-reasons');
+        return view('admin.takeleavetypes.add-take-leave-types');
     }
 
     /**
-     * This function to handle data take leave reason by post method
+     * This function to handle data date take leave type by post method
      * created by : DatNQ
-     * created at : 26/11/2020
+     * created at : 29/11/2020
      */
-    public function save_be_late_reasons(Request $request) { //done
+    public function save_take_leave_types(Request $request) { 
         $this->AuthLogin();
         $data = array();
         $name = $request->name;
@@ -78,71 +78,71 @@ class BeLateReasonController extends Controller
         $maCongTy = Session::get('maCongTy');
         if($name == "" || $status == "") {
             Session::flash("failure", "Các trường không được để trống.");
-            return Redirect::to('/admin/list-be-late-reasons');
+            return Redirect::to('/admin/list-take-leave-types');
         } else if(strlen($name) > 100) {
             Session::flash("failure", "Bạn đã nhập quá ký tự cho phép.");
-            return Redirect::to('/admin/list-be-late-reasons');
+            return Redirect::to('/admin/list-take-leave-types');
         } else if(strlen($name) < 5) {
             Session::flash("failure", "Bạn nhập không đủ ký tự.");
-            return Redirect::to('/admin/list-be-late-reasons');
+            return Redirect::to('/admin/list-take-leave-types');
         } else {
             $data['name'] = $name;
             $data['status'] = $status;
             $data['note'] = $note;
             $data['ma_cong_ty'] = $maCongTy;
             $data['created_at'] = Carbon::now();
-            Belatereason::insert($data);
+            Takeleavetype::insert($data);
             Session::flash("message", "Thêm lý do thành công.");
-            return Redirect::to('/admin/list-be-late-reasons');
+            return Redirect::to('/admin/list-take-leave-types');
         }
     }
 
     /**
      * This function is used to redirect to hide area
      * created by : DatNQ
-     * created at : 26/11/2020
+     * created at : 29/11/2020
      */
-    public function hide_be_late_reasons($id) { //done
+    public function hide_take_leave_types($id) { 
         $this->AuthLogin();
-        Belatereason::where('id', $id)->update(['status' => 1]);
-        Session::put('message', 'Ẩn lý do thành công.');
-        return Redirect::to('/admin/list-be-late-reasons');
+        Takeleavetype::where('id', $id)->update(['status' => 1]);
+        Session::put('message', 'Ẩn loại ngày nghỉ thành công.');
+        return Redirect::to('/admin/list-take-leave-types');
     }
 
     /**
      * This function is used to redirect to show area
      * created by : DatNQ
-     * created at : 26/11/2020
+     * created at : 29/11/2020
      */
-    public function show_be_late_reasons($id) { //done
+    public function show_take_leave_types($id) { 
         $this->AuthLogin();
-        Belatereason::where('id', $id)->update(['status' => 0]);
-        Session::put('message', 'Hiển thị lý do thành công.');
-        return Redirect::to('/admin/list-be-late-reasons');
+        Takeleavetype::where('id', $id)->update(['status' => 0]);
+        Session::put('message', 'Hiển thị loại ngày nghỉ thành công.');
+        return Redirect::to('/admin/list-take-leave-types');
     }
 
     /**
-     * This function is used to move field on trash take leave reasons
+     * This function is used to move field on trash take leave types
      * created by : DatNQ
-     * created at : 26/11/2020
+     * created at : 29/11/2020
      */
-    public function trash_be_late_reasons($id) { //done
+    public function trash_take_leave_types($id) { 
         $this->AuthLogin();
-        Belatereason::where('id', $id)->update(['status' => 2]);
+        Takeleavetype::where('id', $id)->update(['status' => 2]);
         Session::put('message', 'Xóa lý do thành công.');
-        return Redirect::to('/admin/list-be-late-reasons');
+        return Redirect::to('/admin/list-take-leave-types');
     }
 
     /**
-     * This function is used to restore field on trash take leave reasons
+     * This function is used to restore field on trash take leave types
      * created by : DatNQ
-     * created at : 26/11/2020
+     * created at : 29/11/2020
      */
-    public function restore_be_late_reasons($id) { //done
+    public function restore_take_leave_types($id) { 
         $this->AuthLogin();
-        Belatereason::where('id', $id)->update(['status' => 0]);
+        Takeleavetype::where('id', $id)->update(['status' => 0]);
         Session::put('message', 'Restore lý do thành công.');
-        return Redirect::to('/admin/list-be-late-reasons');
+        return Redirect::to('/admin/list-take-leave-types');
     }
     
 
@@ -151,10 +151,10 @@ class BeLateReasonController extends Controller
      * created by : DatNQ
      * created at : 31/10/2020
      */
-    public function edit_be_late_reasons($id) {
+    public function edit_take_leave_types($id) {
         $this->AuthLogin();
-        $capNhatLyDo = Belatereason::where('id', $id)->get();
-        return view('admin.belatereasons.edit-be-late-reasons')->with('belatereasons', $capNhatLyDo);
+        $capNhatLyDo = Takeleavetype::where('id', $id)->get();
+        return view('admin.takeleavetypes.edit-take-leave-types')->with('takeleavetypes', $capNhatLyDo);
     }
 
     /**
@@ -162,39 +162,40 @@ class BeLateReasonController extends Controller
      * created by : DatNQ
      * created at : 31/10/2020
      */
-    public function update_be_late_reasons(Request $request, $id) {
+    public function update_take_leave_types(Request $request, $id) {
         $this->AuthLogin();
         $data = array();
         $name = $request->name;
         $note = $request->note;
         if($name == "") {
             Session::push("failure", "Các trường không được để rỗng.");
-            return Redirect::to('/admin/edit-be-late-reasons/'.$id);
+            return Redirect::to('/admin/edit-take-leave-types/'.$id);
         } else if(strlen($name) > 100) {
             Session::push("failure", "Bạn đã nhập quá ký tự cho phép.");
-            return Redirect::to('/admin/edit-be-late-reasons/'.$id);
+            return Redirect::to('/admin/edit-take-leave-types/'.$id);
         } else if(strlen($name) < 5) {
             Session::push("failure", "Bạn nhập không đủ ký tự.");
-            return Redirect::to('/admin/edit-be-late-reasons/'.$id);
+            return Redirect::to('/admin/edit-take-leave-types/'.$id);
         } else {
             $data['name'] = $name;
             $data['note'] = $note;
             $data['updated_at'] = Carbon::now();
-            Belatereason::where('id', $id)->update($data);
+            Takeleavetype::where('id', $id)->update($data);
             Session::put('message', 'Cập nhật lý do thành công.');
-            return Redirect::to('/admin/list-be-late-reasons');
+            return Redirect::to('/admin/list-take-leave-types');
         }
     }
 
     /**
-     * This function is used to delete data of take leave reasons by GET method
+     * This function is used to delete data of take leave types by GET method
      * created by : DatNQ
-     * created at : 26/11/2020
+     * created at : 29/11/2020
      */
-    public function delete_be_late_reasons($id) { //done
+    public function delete_take_leave_types($id) { 
         $this->AuthLogin();
-        Belatereason::where('id', $id)->delete();
+        Takeleavetype::where('id', $id)->delete();
         Session::put('message', 'Xóa lý do thành công.');
-        return Redirect::to('/admin/list-be-late-reasons');
+        return Redirect::to('/admin/list-take-leave-types');
     }
+
 }

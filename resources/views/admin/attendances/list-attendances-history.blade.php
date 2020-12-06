@@ -1,7 +1,7 @@
 @extends('admin_layout')
 @section('admin_content')
 @section('admin_title')
-<title>IZITIME - Danh sách lý do nghỉ phép</title>
+<title>IZITIME - Lịch sử điểm danh</title>
 @stop
 @section('css')
 <?php
@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Session;
     <!-- Breadcrumb-->
     <div class="row pt-2 pb-2">
         <div class="col-sm-9">
-            <h4 class="page-title">DANH SÁCH LÝ DO NGHỈ PHÉP</h4>
+            <h4 class="page-title">LỊCH SỬ ĐIỂM DANH</h4>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="javaScript:void();">CÀI ĐẶT HỆ THỐNG</a></li>
                 <li class="breadcrumb-item"><a href="javaScript:void();">Công Ty</a></li>
@@ -47,9 +47,8 @@ use Illuminate\Support\Facades\Session;
             <div class="card">
                 <div class="card-header">
                     <div class="action-button" style="display:flex;">
-                        <div class="space"><a href="" data-toggle="modal" data-target="#addTakeLeaveReason" data-whatever="@mdo" class="btn btn-success ">Tạo mới</a></div>
-                        <div class="space"><a href="{{URL::to('/admin/list-take-leave-reasons-trash')}}" class="btn btn-primary ">Thùng rác </a></div>
-                        <div class="space"><a href="{{URL::to('/admin/list-take-leave-reasons')}}" class="btn btn-danger ">Danh sách </a></div>
+                        <div><a href="" data-toggle="modal" data-target="#themChiNhanh" data-whatever="@mdo" class="btn btn-success space">Tạo mới</a></div>
+                        <div><a href="{{URL::to('/admin/list-branches-trash')}}" class="btn btn-primary space">Thùng rác</a></div>
                     </div>
                 </div>
                 <div class="card-body">
@@ -57,20 +56,36 @@ use Illuminate\Support\Facades\Session;
                         <table id="example" class="table table-bordered">
                         <thead>
                                 <tr>
-                                    <th>Tên vùng</th>
-                                    <th>Ghi chú</th>
+                                    <th>Mã nhân viên</th>
+                                    <!-- <th>Mã công ty</th> -->
+                                    <th>Mã vùng</th>
+                                    <th>Mã chi nhánh</th>
+                                    <th>Mã phòng ban</th>
+                                    <th>Mã chức danh</th>
+                                    <th>Giờ vào</th>
+                                    <th>Địa điểm</th>
+                                    <th>Giờ ra</th>
+                                    <th>Địa điểm</th>
                                     <th>Thao tác</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($list_take_leave_reasons as $key => $area)
+                                @foreach($attendances as $key => $attendance)
                                 <tr>
-                                    <td>{{ $area->name }}</td>
-                                    <td>{{ $area->note }}</td>
+                                    <td>{{ $attendance->ten_nhan_vien }}</td>
+                                    <!-- <td>{{ $attendance->ma_cong_ty }}</td> -->
+                                    <td>{{ $attendance->ten_vung }}</td>
+                                    <td>{{ $attendance->ten_chi_nhanh }}</td>
+                                    <td>{{ $attendance->ten_phong_ban }}</td>
+                                    <td>{{ $attendance->ten_chuc_danh }}</td>
+                                    <td>{{ date('d-m-Y h:m:s', strtotime($attendance->check_in_time)) }}</td>
+                                    <td>{{ $attendance->check_in_local }}</td>
+                                    <td>{{ $attendance->check_out_time }}</td>
+                                    <td>{{ $attendance->check_out_local }}</td>
                                     <td>
                                         <div class="btn-group group-round m-1">
-                                            <a type="button" href="{{URL::to('/admin/restore-take-leave-reasons/'.$area->id)}}" class="btn btn-success waves-effect waves-light">Restore</a>
-                                            <a type="button" href="{{URL::to('/admin/delete-take-leave-reasons/'.$area->id)}}" onclick="return confirm('Bạn có chắc chắn muốn xóa lý do này vĩnh viễn?')" class="btn btn-danger waves-effect waves-light">Xóa</a>
+                                            <a type="button" href="{{URL::to('/admin/edit-attendances/'.$attendance->id)}}" class="btn btn-success waves-effect waves-light">Sửa</a>
+                                            <a type="button" href="{{URL::to('/admin/delete-attendances/'.$attendance->id)}}" onclick="return confirm('Bạn có chắc chắn muốn xóa vùng này?')" class="btn btn-danger waves-effect waves-light">Xóa</a>
                                         </div>
                                     </td>
 
@@ -79,8 +94,16 @@ use Illuminate\Support\Facades\Session;
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <th>Tên vùng</th>
-                                    <th>Ghi chú</th>
+                                    <th>Mã nhân viên</th>
+                                    <!-- <th>Mã công ty</th> -->
+                                    <th>Mã vùng</th>
+                                    <th>Mã chi nhánh</th>
+                                    <th>Mã phòng ban</th>
+                                    <th>Mã chức danh</th>
+                                    <th>Giờ vào</th>
+                                    <th>Địa điểm</th>
+                                    <th>Giờ ra</th>
+                                    <th>Địa điểm</th>
                                     <th>Thao tác</th>
                                 </tr>
                             </tfoot>
@@ -90,50 +113,6 @@ use Illuminate\Support\Facades\Session;
             </div>
         </div>
     </div><!-- End Row-->
-    <div class="modal fade bd-example-modal-lg" id="addTakeLeaveReason" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content animated fadeInUp">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Thêm Lý Do Nghỉ Phép</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-
-                    <div class="modal-body">
-                        <form method="post" action="{{URL::to('/admin/save-take-leave-reasons')}}">
-                            {{csrf_field()}}
-                            <div class="form-group row">
-                                <label for="input-14" class="col-sm-2 col-form-label">Lý do <span class="focus">*</span></label>
-                                <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="name" name="name" onkeyup="changeToKeyword();">
-                                </div>
-                            </div>
-
-                            <div class="form-group row">
-                                <label for="input-15" class="col-sm-2 col-form-label">Trạng thái <span class="focus">*</span></label>
-                                <div class="col-sm-10">
-                                    <select name="status" class="form-control" id="basic-select">
-                                        <option value="1">Ẩn</option>
-                                        <option value="0">Hiển thị</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label for="input-17" class="col-sm-2 col-form-label">Ghi chú</label>
-                                <div class="col-sm-10">
-                                    <textarea class="form-control" style="resize:none;" rows="4" id="input-17" name="note"></textarea>
-                                </div>
-                            </div>
-                            <div class="form-footer">
-                                <a type="button" name="danh_sach_vung" class="btn btn-danger"><i class="fa fa-times"></i> Hủy Bỏ</a>
-                                <button name="add_areas" class="btn btn-primary" type="submit"><i class="fa fa-add"></i> Thêm Lý Do</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
     <!--start overlay-->
     <div class="overlay toggle-menu"></div>
     <!--end overlay-->

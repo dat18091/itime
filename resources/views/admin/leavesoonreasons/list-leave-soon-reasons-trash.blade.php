@@ -1,7 +1,7 @@
 @extends('admin_layout')
 @section('admin_content')
 @section('admin_title')
-<title>IZITIME - Danh sách thùng rác lý do đi trễ</title>
+<title>IZITIME - Danh sách thùng rác lý do về sớm</title>
 @stop
 @section('css')
 <!--Data Tables -->
@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Session;
     <!-- Breadcrumb-->
     <div class="row pt-2 pb-2">
         <div class="col-sm-9">
-            <h4 class="page-title">DANH SÁCH LÝ DO ĐI TRỄ</h4>
+            <h4 class="page-title">DANH SÁCH LÝ DO VỀ SỚM</h4>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="javaScript:void();">CÀI ĐẶT HỆ THỐNG</a></li>
                 <li class="breadcrumb-item"><a href="javaScript:void();">Công Ty</a></li>
@@ -50,15 +50,15 @@ use Illuminate\Support\Facades\Session;
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header">
-                    <div class="action-button" style="display:flex;">
-                        <div class="space"><a href="" data-toggle="modal" data-target="#addBeLateReason" data-whatever="@mdo" class="btn btn-success ">Tạo mới</a></div>
-                        <div class="space"><a href="{{URL::to('/admin/list-be-late-reasons-trash')}}" class="btn btn-primary ">Thùng rác </a></div>
-                        <div class="space"><a href="{{URL::to('/admin/list-be-late-reasons')}}" class="btn btn-danger ">Danh sách </a></div>
+                <div class="action-button" style="display:flex;">
+                        <div class="space"><a href="" data-toggle="modal" data-target="#addLeaveSoonReason" data-whatever="@mdo" class="btn btn-success ">Tạo mới</a></div>
+                        <div class="space"><a href="{{URL::to('/admin/list-leave-soon-reasons-trash')}}" class="btn btn-primary ">Thùng rác </a></div>
+                        <div class="space"><a href="{{URL::to('/admin/list-leave-soon-reasons')}}" class="btn btn-danger ">Danh sách </a></div>
                     </div>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table id="example" class="table table-bordered">
+                        <table id="dataTable" class="table table-bordered">
                             <thead>
                                 <tr>
                                     <th>Tên vùng</th>
@@ -67,14 +67,14 @@ use Illuminate\Support\Facades\Session;
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($list_be_late_reasons as $key => $area)
+                                @foreach($list_leave_soon_reasons as $key => $area)
                                 <tr>
                                     <td>{{ $area->name }}</td>
                                     <td>{{ $area->note }}</td>
                                     <td>
                                         <div class="btn-group group-round m-1">
-                                            <a type="button" href="{{URL::to('/admin/restore-be-late-reasons/'.$area->id)}}" class="btn btn-success waves-effect waves-light">Restore</a>
-                                            <a type="button" href="{{URL::to('/admin/delete-be-late-reasons/'.$area->id)}}" onclick="return confirm('Bạn có chắc chắn muốn xóa lý do này vĩnh viễn?')" class="btn btn-danger waves-effect waves-light">Xóa</a>
+                                            <a type="button" href="{{URL::to('/admin/restore-leave-soon-reasons/'.$area->id)}}" class="btn btn-success waves-effect waves-light">Restore</a>
+                                            <a type="button" href="{{URL::to('/admin/delete-leave-soon-reasons/'.$area->id)}}" onclick="return confirm('Bạn có chắc chắn muốn xóa lý do này vĩnh viễn?')" class="btn btn-danger waves-effect waves-light">Xóa</a>
                                         </div>
                                     </td>
 
@@ -95,7 +95,7 @@ use Illuminate\Support\Facades\Session;
         </div>
 
         <!-- ADD AREA -->
-        <div class="modal fade bd-example-modal-lg" id="addBeLateReason" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade bd-example-modal-lg" id="addLeaveSoonReason" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content animated fadeInUp">
                     <div class="modal-header">
@@ -106,7 +106,7 @@ use Illuminate\Support\Facades\Session;
                     </div>
 
                     <div class="modal-body">
-                        <form method="post" action="{{URL::to('/admin/save-be-late-reasons')}}">
+                        <form method="post" action="{{URL::to('/admin/save-leave-soon-reasons')}}">
                             {{csrf_field()}}
                             <div class="form-group row">
                                 <label for="input-14" class="col-sm-2 col-form-label">Lý do <span class="focus">*</span></label>
@@ -114,7 +114,7 @@ use Illuminate\Support\Facades\Session;
                                     <input type="text" class="form-control" id="name" name="name" onkeyup="changeToKeyword();">
                                 </div>
                             </div>
-
+                            
                             <div class="form-group row">
                                 <label for="input-15" class="col-sm-2 col-form-label">Trạng thái <span class="focus">*</span></label>
                                 <div class="col-sm-10">

@@ -47,8 +47,8 @@ use Illuminate\Support\Facades\Session;
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-body">
-                    @foreach($belatereasons as $key => $reason)
-                    <form method="post" action="{{URL::to('/admin/update-be-late-reasons/'.$reason->id)}}">
+                    @foreach($leavesoonreasons as $key => $reason)
+                    <form method="post" action="{{URL::to('/admin/update-leave-soon-reasons/'.$reason->id)}}">
                         {{csrf_field()}}
                         <div class="form-group row">
                             <label for="input-14" class="col-sm-2 col-form-label">Lý do <span class="focus">*</span></label>
