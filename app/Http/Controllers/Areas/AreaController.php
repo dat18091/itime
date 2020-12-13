@@ -7,11 +7,15 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Http;
 use Carbon\Carbon;
 use App\Area;
 
 class AreaController extends Controller
 {
+    // https://www.itsolutionstuff.com/post/laravel-collection-map-method-exampleexample.html
+    // https://morioh.com/p/cba3cd6d424b
+
     /**
      * This function to check accesses from outside
      * created by : DatNQ
@@ -34,13 +38,29 @@ class AreaController extends Controller
      */
     public function list_areas() {
         $this->AuthLogin();
+        $client = new \GuzzleHttp\Client();
         $idCompany = Session::get('maCongTy');
-        $danhSachVung = DB::table('areas')->where('trang_thai_vung', '1')
-        ->orWhere('trang_thai_vung', '0')
-        ->where('ma_cong_ty',$idCompany)->get();
-        $areaCountOnl = Area::where('trang_thai_vung', '2')->count();
-        return view('admin.areas.list-areas')
-        ->with('list_area', $danhSachVung)->with('areaCountOnl', $areaCountOnl);
+        // $areasData = Area::where('status', '1')
+        // ->orWhere('status', '0')
+        // ->where('company_id',$idCompany)->get();
+        $areaCountOnl = Area::where('status', '2')->count();
+        // return view('admin.areas.list-areas')
+        // ->with('areasData', $areasData)->with('areaCountOnl', $areaCountOnl);
+        
+        // $collection = User::get();
+        // $collection->map(function($item, $key) {
+        //     return [
+        //         'id' => $item->id,
+        //         'name' => $item->name,
+        //         'creation_date' => $item->created_at->format('m/d/Y')
+        //     ];
+        // });
+
+        $parameters = collect(['what' => "107", 'company_id' => "$idCompany"]);
+        $input = json_encode($parameters);
+        $data = $client->get('http://192.168.1.190:8080/api/izi-timekeeper/Controller/GetAllByWhat.php?input='.$input.'');
+        $res = json_decode($data->getBody(), true);
+        return view('admin.areas.list-areas', ['areasData'=>$res])->with('areaCountOnl', $areaCountOnl);
     }
 
     /**
@@ -51,12 +71,10 @@ class AreaController extends Controller
     public function list_areas_trash() {
         $this->AuthLogin();
         $idCompany = Session::get('maCongTy');
-        $danhSachVung = DB::table('areas')->where('trang_thai_vung', '2')
-        ->where('ma_cong_ty',$idCompany)->get();
-        $areaCount = Area::where('trang_thai_vung', '2')->count("*");
-        $areaCountAllOnl = Area::where('trang_thai_vung', '0')
-        ->orWhere('trang_thai_vung', '1')->count("*");
-        return view('admin.areas.list-areas-trash')->with('list_area', $danhSachVung)
+        $areasData =  Area::where('status', '2')->where('company_id',$idCompany)->get();
+        $areaCount = Area::where('status', '2')->where('company_id', $idCompany)->count("*");
+        $areaCountAllOnl = Area::where('status', '0')->orWhere('status', '1')->where('company_id', $idCompany)->count();
+        return view('admin.areas.list-areas-trash')->with('areasData', $areasData)
         ->with('areaCountAllOnl', $areaCountAllOnl)->with('areaCount', $areaCount);
     }
 
@@ -78,29 +96,33 @@ class AreaController extends Controller
     public function save_areas(Request $request) {
         $this->AuthLogin();
         $data = array();
-        $tenVung = $request->ten_vung;
-        $tuKhoaVung = $request->tu_khoa_vung;
-        $trangThaiVung = $request->trang_thai_vung;
-        $ghiChuVung = $request->ghi_chu_vung;
-        $maCongTy = Session::get('maCongTy');
-        if($tenVung == "" || $tuKhoaVung == "" || $trangThaiVung == "") {
-            Session::flash("failure", "Các trường không được để trống.");
+        $name = $request->name;
+        $keyword = $request->keyword;
+        $status = $request->status;
+        $note = $request->note;
+        $idCompany = Session::get('maCongTy');
+        if($name == "" || $keyword == "" || $status == "") {
+            Session::flash("message", "Các trường không được để trống.");
+            Session::flash("alert-type", "warning");
             return Redirect::to('/admin/add-areas');
-        } else if(strlen($tenVung) > 100) {
-            Session::flash("failure", "Bạn đã nhập quá ký tự cho phép.");
+        } else if(strlen($name) > 100) {
+            Session::flash("message", "Bạn đã nhập quá ký tự cho phép.");
+            Session::flash("alert-type", "warning");
             return Redirect::to('/admin/add-areas');
-        } else if(strlen($tenVung) < 5) {
-            Session::flash("failure", "Bạn nhập không đủ ký tự.");
+        } else if(strlen($name) < 5) {
+            Session::flash("message", "Bạn nhập không đủ ký tự.");
+            Session::flash("alert-type", "warning");
             return Redirect::to('/admin/add-areas');
         } else {
-            $data['ten_vung'] = $tenVung;
-            $data['tu_khoa_vung'] = $tuKhoaVung;
-            $data['trang_thai_vung'] = $trangThaiVung;
-            $data['ghi_chu_vung'] = $ghiChuVung;
-            $data['ma_cong_ty'] = $maCongTy;
+            $data['name'] = $name;
+            $data['keyword'] = $keyword;
+            $data['status'] = $status;
+            $data['note'] = $note;
+            $data['company_id'] = $idCompany;
             $data['created_at'] = Carbon::now();
-            DB::table('areas')->insert($data);
+            Area::insert($data);
             Session::flash("message", "Thêm vùng thành công.");
+            Session::flash("alert-type", "success");
             return Redirect::to('/admin/list-areas');
         }
     }
@@ -112,8 +134,9 @@ class AreaController extends Controller
      */
     public function hide_areas($id) {
         $this->AuthLogin();
-        DB::table('areas')->where('ma_vung', $id)->update(['trang_thai_vung' => 1]);
-        Session::put('message', 'Ẩn vùng thành công.');
+        Area::where('id', $id)->update(['status' => 1]);
+        Session::flash('message', 'Ẩn vùng thành công.');
+        Session::flash("alert-type", "success");
         return Redirect::to('/admin/list-areas');
     }
 
@@ -124,8 +147,9 @@ class AreaController extends Controller
      */
     public function show_areas($id) {
         $this->AuthLogin();
-        DB::table('areas')->where('ma_vung', $id)->update(['trang_thai_vung' => 0]);
-        Session::put('message', 'Hiển thị vùng thành công.');
+        Area::where('id', $id)->update(['status' => 0]);
+        Session::flash('message', 'Hiển thị vùng thành công.');
+        Session::flash("alert-type", "success");
         return Redirect::to('/admin/list-areas');
     }
 
@@ -136,8 +160,9 @@ class AreaController extends Controller
      */
     public function trash_areas($id) {
         $this->AuthLogin();
-        DB::table('areas')->where('ma_vung', $id)->update(['trang_thai_vung' => 2]);
-        Session::put('message', 'Xóa vùng thành công.');
+        Area::where('id', $id)->update(['status' => 2]);
+        Session::flash('message', 'Xóa vùng thành công.');
+        Session::flash("alert-type", "success");
         return Redirect::to('/admin/list-areas');
     }
 
@@ -148,8 +173,9 @@ class AreaController extends Controller
      */
     public function restore_areas($id) {
         $this->AuthLogin();
-        DB::table('areas')->where('ma_vung', $id)->update(['trang_thai_vung' => 0]);
-        Session::put('message', 'Restore vùng thành công.');
+        Area::where('id', $id)->update(['status' => 0]);
+        Session::flash('message', 'Restore vùng thành công.');
+        Session::flash("alert-type", "success");
         return Redirect::to('/admin/list-areas');
     }
     
@@ -161,8 +187,8 @@ class AreaController extends Controller
      */
     public function edit_areas($id) {
         $this->AuthLogin();
-        $capNhatVung = DB::table('areas')->where('ma_vung', $id)->get();
-        return view('admin.areas.edit-areas')->with('areas', $capNhatVung);
+        $updateArea = Area::where('id', $id)->get();
+        return view('admin.areas.edit-areas')->with('updateArea', $updateArea);
     }
 
     /**
@@ -173,25 +199,29 @@ class AreaController extends Controller
     public function update_areas(Request $request, $id) {
         $this->AuthLogin();
         $data = array();
-        $tenVung = $request->ten_vung;
-        $tuKhoaVung = $request->tu_khoa_vung;
-        $ghiChuVung = $request->ghi_chu_vung;
-        if($tenVung == "" || $tuKhoaVung == "") {
-            Session::push("failure", "Các trường không được để rỗng.");
+        $name = $request->name;
+        $keyword = $request->keyword;
+        $note = $request->note;
+        if($name == "" || $keyword == "") {
+            Session::flash("message", "Các trường không được để rỗng.");
+            Session::flash("alert-type", "warning");
             return Redirect::to('/admin/edit-areas/'.$id);
-        } else if(strlen($tenVung) > 100) {
-            Session::push("failure", "Bạn đã nhập quá ký tự cho phép.");
+        } else if(strlen($name) > 100) {
+            Session::flash("message", "Bạn đã nhập quá ký tự cho phép.");
+            Session::flash("alert-type", "warning");
             return Redirect::to('/admin/edit-areas/'.$id);
-        } else if(strlen($tenVung) < 5) {
-            Session::push("failure", "Bạn nhập không đủ ký tự.");
+        } else if(strlen($name) < 5) {
+            Session::flash("message", "Bạn nhập không đủ ký tự.");
+            Session::flash("alert-type", "warning");
             return Redirect::to('/admin/edit-areas/'.$id);
         } else {
-            $data['ten_vung'] = $tenVung;
-            $data['tu_khoa_vung'] = $tuKhoaVung;
-            $data['ghi_chu_vung'] = $ghiChuVung;
+            $data['name'] = $name;
+            $data['keyword'] = $keyword;
+            $data['note'] = $note;
             $data['updated_at'] = Carbon::now();
-            DB::table('areas')->where('ma_vung', $id)->update($data);
-            Session::put('message', 'Cập nhật vùng thành công.');
+            Area::where('id', $id)->update($data);
+            Session::flash('message', 'Cập nhật vùng thành công.');
+            Session::flash("alert-type", "success");
             return Redirect::to('/admin/list-areas');
         }
     }
@@ -203,8 +233,9 @@ class AreaController extends Controller
      */
     public function delete_areas($id) {
         $this->AuthLogin();
-        DB::table('areas')->where('ma_vung', $id)->delete();
-        Session::put('message', 'Xóa vùng thành công.');
+        Area::where('id', $id)->delete();
+        Session::flash('message', 'Xóa vùng thành công.');
+        Session::flash("alert-type", "success");
         return Redirect::to('/admin/areas-trash');
     }
 

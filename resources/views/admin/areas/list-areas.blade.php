@@ -45,13 +45,12 @@ use Illuminate\Support\Facades\Session;
         </div>
     </div>
     <!-- End Breadcrumb-->
-
     <div class="row">
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header">
                     <div class="action-button" style="display:flex;">
-                        <div><a href="" data-toggle="modal" data-target="#themVung" data-whatever="@mdo" class="btn btn-success space">Tạo mới </a></div>
+                        <div><a href="" data-toggle="modal" data-target="#addArea" data-whatever="@mdo" class="btn btn-success space">Tạo mới </a></div>
                         <div><a href="{{URL::to('/admin/list-areas-trash')}}" class="btn btn-primary space">Thùng rác <span class="badge badge-warning badge-pill">{{ $areaCountOnl }}</span></a></div>
                     </div>
                 </div>
@@ -67,30 +66,29 @@ use Illuminate\Support\Facades\Session;
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($list_area as $key => $area)
+                                @foreach($areasData as $key => $area)
                                 <tr>
-                                    <td>{{ $area->ten_vung }}</td>
-                                    <td>{{ $area->ghi_chu_vung }}</td>
+                                    <td>{{ $area['name'] }}</td>
+                                    <td>{{ $area['note'] }}</td>
                                     <td>
                                         <?php
-                                        if ($area->trang_thai_vung == 0) {
+                                        if ($area['status'] == 0) {
                                         ?>
-                                            <a href="{{URL::to('/admin/hide-areas/'.$area->ma_vung)}}"><span class="fa-styling fa fa-thumbs-up"></span></a>
+                                            <a href="{{URL::to('/admin/hide-areas/'.$area['id'])}}"><span class="fa-styling fa fa-thumbs-up"></span></a>
                                         <?php
                                         } else {
                                         ?>
-                                            <a href="{{URL::to('/admin/show-areas/'.$area->ma_vung)}}"><span class="fa-styling fa fa-thumbs-down"></span></a>
+                                            <a href="{{URL::to('/admin/show-areas/'.$area['id'])}}"><span class="fa-styling fa fa-thumbs-down"></span></a>
                                         <?php
                                         }
                                         ?>
                                     </td>
                                     <td>
                                         <div class="btn-group group-round m-1">
-                                            <a type="button" href="{{URL::to('/admin/edit-areas/'.$area->ma_vung)}}" class="btn btn-success waves-effect waves-light">Sửa</a>
-                                            <a type="button" href="{{URL::to('/admin/trash-areas/'.$area->ma_vung)}}" onclick="return confirm('Bạn có chắc chắn muốn xóa vùng này?')" class="btn btn-danger waves-effect waves-light">Xóa</a>
+                                            <a type="button" href="{{URL::to('/admin/edit-areas/'.$area['id'])}}" class="btn btn-success waves-effect waves-light">Sửa</a>
+                                            <a type="button" href="{{URL::to('/admin/trash-areas/'.$area['id'])}}" onclick="return confirm('Bạn có chắc chắn muốn xóa vùng này?')" class="btn btn-danger waves-effect waves-light">Xóa</a>
                                         </div>
                                     </td>
-
                                 </tr>
                                 @endforeach
                             </tbody>
@@ -109,7 +107,7 @@ use Illuminate\Support\Facades\Session;
         </div>
 
         <!-- ADD AREA -->
-        <div class="modal fade bd-example-modal-lg" id="themVung" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade bd-example-modal-lg" id="addArea" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content animated fadeInUp">
                     <div class="modal-header">
@@ -125,13 +123,13 @@ use Illuminate\Support\Facades\Session;
                             <div class="form-group row">
                                 <label for="input-14" class="col-sm-2 col-form-label">Tên vùng <span class="focus">*</span></label>
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="ten_vung" name="ten_vung" onkeyup="changeToKeyword();">
+                                    <input type="text" class="form-control" id="name" name="name" onkeyup="changeToKeyword();">
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label for="input-15" class="col-sm-2 col-form-label">Từ khóa <span class="focus">*</span></label>
                                 <div class="col-sm-10">
-                                    <input type="text" readonly class="form-control" id="tu_khoa_vung" name="tu_khoa_vung">
+                                    <input type="text" readonly class="form-control" id="keyword" name="keyword">
                                 </div>
                             </div>
                             <script type="text/javascript">
@@ -139,7 +137,7 @@ use Illuminate\Support\Facades\Session;
                                     var tenVung, tuKhoa;
 
                                     //Lấy text từ thẻ input categoryName 
-                                    tenVung = document.getElementById("ten_vung").value;
+                                    tenVung = document.getElementById("name").value;
 
                                     //Đổi chữ hoa thành chữ thường
                                     tuKhoa = tenVung.toLowerCase();
@@ -166,13 +164,13 @@ use Illuminate\Support\Facades\Session;
                                     tuKhoa = '@' + tuKhoa + '@';
                                     tuKhoa = tuKhoa.replace(/\@\-|\-\@|\@/gi, '');
                                     //In tuKhoa ra textbox có id tuKhoa
-                                    document.getElementById('tu_khoa_vung').value = tuKhoa;
+                                    document.getElementById('keyword').value = tuKhoa;
                                 }
                             </script>
                             <div class="form-group row">
                                 <label for="input-15" class="col-sm-2 col-form-label">Trạng thái <span class="focus">*</span></label>
                                 <div class="col-sm-10">
-                                    <select name="trang_thai_vung" class="form-control" id="basic-select">
+                                    <select name="status" class="form-control" id="basic-select">
                                         <option value="1">Ẩn</option>
                                         <option value="0">Hiển thị</option>
                                     </select>
@@ -181,7 +179,7 @@ use Illuminate\Support\Facades\Session;
                             <div class="form-group row">
                                 <label for="input-17" class="col-sm-2 col-form-label">Ghi chú</label>
                                 <div class="col-sm-10">
-                                    <textarea class="form-control" style="resize:none;" rows="4" id="input-17" name="ghi_chu_vung"></textarea>
+                                    <textarea class="form-control" style="resize:none;" rows="4" id="input-17" name="note"></textarea>
                                 </div>
                             </div>
                             <div class="form-footer">
@@ -198,7 +196,48 @@ use Illuminate\Support\Facades\Session;
     <!--start overlay-->
     <div class="overlay toggle-menu"></div>
     <!--end overlay-->
-
+    <?php
+        $message = Session::get('message');
+        $alert_type = Session::get('alert-type');
+        if ($message && $alert_type == 'warning') {
+            echo '<script>
+            setTimeout(function() {
+                swal({
+                    title: "Thông báo",
+                    text: "'.$message.'",
+                    type: "'.$alert_type.'",
+                    showConfirmButton: true
+                },);
+            }, 1000);
+            </script>';
+            Session::put('message', null);
+        } else if ($message && $alert_type == 'success') {
+            echo '<script>
+            setTimeout(function() {
+                swal({
+                    title: "Thông báo",
+                    text: "' . $message . '",
+                    type: "' . $alert_type . '",
+                    showConfirmButton: true
+                },);
+            }, 1000);
+            </script>';
+            Session::put('message', null);
+        } else if ($message && $alert_type == 'danger') {
+            echo '<script>
+            function success_noti() {
+                Lobibox.notify(' . $alert_type . ', {
+                    pauseDelayOnHover: true,
+                    continueDelayOnInactiveTab: false,
+                    position: "top right",
+                    icon: "",
+                    msg: ' . $message . '
+                });
+            }
+            </script>';
+            Session::put('message', null);
+        }
+        ?>
 </div>
 <!-- End container-fluid-->
 @stop

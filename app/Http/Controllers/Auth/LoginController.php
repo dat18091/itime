@@ -79,37 +79,41 @@ class LoginController extends Controller
      */
     public function sign_in(Request $request)
     {
-        $tenTruyCap = $request->ten_truy_cap;
-        $matKhau = md5($request->mat_khau);
-        // $maCongTy = $request->ma_cong_ty;
-        if ($tenTruyCap == "" || $matKhau == "") {
-            Session::flash("message", "Tên truy cập hoặc mật khẩu không đúng.");
+        $username = $request->username;
+        $password = md5($request->password);
+        if ($username == "" || $password == "") {
+            Session::flash("message", "Tên truy cập hoặc mật khẩu không được để trống.");
+            Session::flash("alert-type", "warning");
             return Redirect::to('/login');
-        } else if (strlen($tenTruyCap) > 100 || strlen($matKhau) > 100) {
-            Session::flash("message", "Tên truy cập hoặc mật khẩu không đúng.");
+        } else if (strlen($username) > 100 || strlen($password) > 100) {
+            Session::flash("message", "Bạn đã nhập quá ký tự cho phép.");
+            Session::flash("alert-type", "warning");
             return Redirect::to('/login');
-        } else if (strlen($tenTruyCap) < 5 || strlen($matKhau) < 5) {
-            Session::flash("message", "Tên truy cập hoặc mật khẩu không đúng.");
+        } else if (strlen($username) < 5 || strlen($password) < 5) {
+            Session::flash("message", "Bạn đã nhập ký tự quá ngắn.");
+            Session::flash("alert-type", "warning");
             return Redirect::to('/login');
         } else if (
-            strpos($matKhau, "OR") === 0 || strpos($matKhau, "or") === 0 || strpos($matKhau, "1=1") === 0 ||
-            strpos($matKhau, ";") === 0 || strpos($matKhau, "--") === 0
+            strpos($password, "OR") === 0 || strpos($password, "or") === 0 || strpos($password, "1=1") === 0 ||
+            strpos($password, ";") === 0 || strpos($password, "--") === 0
         ) {
             # === dùng để so sánh giá trị giữa các biến và hằng đúng theo giá trị và kiểu dữ liệu của nó
-            Session::flash("message", "Tên truy cập hoặc mật khẩu không đúng.");
+            Session::flash("message", "Mật khẩu của bạn chứa ký tự nguy hiểm.");
+            Session::flash("alert-type", "danger");
             return Redirect::to('/login');
         } else {
-            $result = Company::where('ten_truy_cap', $tenTruyCap)
-                ->where('mat_khau', $matKhau)->first();
+            $result = Company::where('username', $username)->where('password', $password)->first();
             if ($result) {
-                Session::put("tenTruyCap", $tenTruyCap);
+                Session::put("tenTruyCap", $username);
                 Session::put('maCongTy', $result->id);
                 Session::put('phanQuyen', $result->roles_id);
-                Session::put('email', $result->email_cong_ty);
-                Session::flash('message', 'Đăng nhập thành công.');
+                Session::put('email', $result->email);
+                Session::flash("message", "Đăng nhập thành công.");
+                Session::flash("alert-type", "success");
                 return Redirect::to("/admin/dashboard");
             } else {
                 Session::flash('message', 'Tên truy cập hoặc mật khẩu không đúng.');
+                Session::flash("alert-type", "warning");
                 return Redirect::to("/login");
             }
         }

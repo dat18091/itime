@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Carbon\Carbon;
-
+use App\Company;
 
 class RegisterController extends Controller
 {
@@ -82,10 +82,9 @@ class RegisterController extends Controller
      * created at : 30/10/2020
      */
     public function register() { 
-        $quanHuyen = DB::table('districts')->get();
-        $tinhThanh = DB::table('provinces')->get();
-        return view("auth.register")->with("quanhuyen", $quanHuyen)->with("tinhthanh", $tinhThanh);
-        #with(key, value)
+        $getDistricts = DB::table('districts')->get();
+        $getProvinces = DB::table('provinces')->get();
+        return view("auth.register")->with("getDistricts", $getDistricts)->with("getProvinces", $getProvinces);
     } 
 
     /**
@@ -94,68 +93,107 @@ class RegisterController extends Controller
      * created at : 30/10/2020
      */
     public function sign_up(Request $request) {
-        #tao mang de luu tat ca cac phan tu
         $data = array();
-        #lay request tren web tao ra bien de map vao
-        $tenCongTy = $request->ten_cong_ty;
-        $tenTruyCap = $request->ten_truy_cap;
-        $matKhau = $request->mat_khau;
-        $loaiHinhDoanhNghiep = $request->loai_hinh_doanh_nghiep;
-        $emailCongTy = $request->email_cong_ty;
-        $soDienThoaiCongTy = $request->so_dien_thoai_cong_ty;
-        $quanHuyen = $request->district_id;
-        $tinhThanh = $request->province_id;
-        $websiteCongTy = $request->website_cong_ty;
-        $ngayThanhLap = $request->ngay_thanh_lap;
-        $ghiChuCongTy = $request->ghi_chu_cong_ty;
-        #dieu kien validate
-        if($tenCongTy == "" || $tenTruyCap == "" || $matKhau == "" || $emailCongTy == "" ||
-            $soDienThoaiCongTy == "" || $quanHuyen == "" || $tinhThanh == "" || $ngayThanhLap == "") {
-            Session::put("message", "Các trường không được để trống.");
+
+        $name = $request->name;
+        $username = $request->username;
+        $password = $request->password;
+        $type_of_business = $request->type_of_business;
+        $email = $request->email;
+        $phone = $request->phone;
+        $district_id = $request->district_id;
+        $province_id = $request->province_id;
+        $website = $request->website;
+        $establish_date = $request->establish_date;
+        $note = $request->note;
+
+        if($name == "" || $username == "" || $password == "" || $email == "" || $website == "" ||
+            $phone == "" || $district_id == "" || $province_id == "" || $establish_date == "") {
+            Session::flash("message", "Các trường không được để trống.");
+            Session::flash("alert-type", "warning");
             return Redirect::to('/register');
-        } else if(strlen($tenCongTy) > 100 || strlen($tenTruyCap) > 100 || strlen($matKhau) > 100 || 
-                strlen($emailCongTy) > 100 || strlen($soDienThoaiCongTy) > 100 || strlen($loaiHinhDoanhNghiep) > 100) {
-            Session::put("tencongty", $tenCongTy);
-            Session::put("message", "Bạn đã nhập quá ký tự cho phép.");
+        } else if(strlen($name) > 100 || strlen($username) > 100 || strlen($password) > 100 || 
+                strlen($email) > 100 || strlen($phone) > 100 || strlen($type_of_business) > 100) {
+            Session::flash("message", "Bạn đã nhập quá ký tự cho phép.");
+            Session::flash("alert-type", "warning");
             return Redirect::to('/register');
-        } else if(strlen($tenCongTy) < 5 || strlen($tenTruyCap) < 5 || strlen($matKhau) < 5 || 
-            strlen($emailCongTy) < 5 || strlen($soDienThoaiCongTy) < 5 || strlen($loaiHinhDoanhNghiep) < 5) {
-            Session::put("message", "Bạn nhập không đủ ký tự.");
+        } else if(strlen($name) < 5 || strlen($username) < 5 || strlen($password) < 5 || 
+            strlen($email) < 5 || strlen($phone) < 5 || strlen($type_of_business) < 5) {
+            Session::flash("message", "Bạn nhập không đủ ký tự.");
+            Session::flash("alert-type", "warning");
             return Redirect::to('/register');
-        } else if(strpos($matKhau, "OR") === 0 || strpos($matKhau, "or") === 0 || strpos($matKhau, "1=1") === 0 || 
-            strpos($matKhau, ";") === 0 || strpos($matKhau, "--") === 0) {
+        } else if(strpos($password, "OR") === 0 || strpos($password, "or") === 0 || strpos($password, "1=1") === 0 || 
+            strpos($password, ";") === 0 || strpos($password, "--") === 0) {
             # === dùng để so sánh giá trị giữa các biến và hằng đúng theo giá trị và kiểu dữ liệu của nó
-            Session::put("message", "Mật khẩu của bạn không hợp lệ.");
+            Session::flash("message", "Mật khẩu của bạn không hợp lệ.");
+            Session::flash("alert-type", "warning");
             return Redirect::to('/register');
-        } else if (!filter_var($emailCongTy, FILTER_VALIDATE_EMAIL)) {
-            Session::put("message", "Email của bạn không hợp lệ.");
+        } else if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            Session::flash("message", "Email của bạn không hợp lệ.");
+            Session::flash("alert-type", "warning");
             return Redirect::to('/register');
-        } else if(!preg_match("/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i",$websiteCongTy)) {
-            Session::put("message", "Website của bạn không hợp lệ.");
+        } else if(!preg_match("/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i",$website)) {
+            Session::flash("message", "Website của bạn không hợp lệ.");
+            Session::flash("alert-type", "warning");
             return Redirect::to('/register');
-        } else if(!preg_match('/^(0|\+84)(\s|\.)?((3[2-9])|(5[689])|(7[06-9])|(8[1-689])|(9[0-46-9]))(\d)(\s|\.)?(\d{3})(\s|\.)?(\d{3})$/', $soDienThoaiCongTy,  $matches ) ) {
-            Session::put("message", "Số điện thoại của bạn không hợp lệ.");
+        } else if(!preg_match('/^(0|\+84)(\s|\.)?((3[2-9])|(5[689])|(7[06-9])|(8[1-689])|(9[0-46-9]))(\d)(\s|\.)?(\d{3})(\s|\.)?(\d{3})$/', $phone,  $matches ) ) {
+            Session::flash("message", "Số điện thoại của bạn không hợp lệ.");
+            Session::flash("alert-type", "warning");
             return Redirect::to('/register');
-        } else if($matKhau == $tenTruyCap) {
-            Session::push('message', "Tên đăng nhập không được trùng với tên truy cập");
+        } else if($password == $username) {
+            Session::flash('message', "Tên đăng nhập không được trùng với tên truy cập");
+            Session::flash("alert-type", "warning");
+            return Redirect::to('/register');
+        } else if($this->checkEmail($email) > 0) {
+            Session::flash('message', "Email này đã tồn tại");
+            Session::flash("alert-type", "warning");
+            return Redirect::to('/register');
+        } else if($this->checkPhone($phone) > 0) {
+            Session::flash('message', "Số điện thoại này đã tồn tại");
+            Session::flash("alert-type", "warning");
+            return Redirect::to('/register');
+        } else if($this->checkWebsite($website) > 0) {
+            Session::flash('message', "Website này đã tồn tại");
+            Session::flash("alert-type", "warning");
+            return Redirect::to('/register');
+        } else if($this->checkCompanyName($name)) {
+            Session::flash('message', "Tên công ty này đã tồn tại, vui lòng liên hệ với admin.");
+            Session::flash("alert-type", "warning");
             return Redirect::to('/register');
         } else {
-            $data['ten_cong_ty'] = $tenCongTy;
-            $data['ten_truy_cap'] = $tenTruyCap;
-            $data['mat_khau'] = md5($matKhau);
-            $data['loai_hinh_doanh_nghiep'] = $loaiHinhDoanhNghiep;
-            $data['email_cong_ty'] = $emailCongTy;
-            $data['so_dien_thoai_cong_ty'] = $soDienThoaiCongTy;
-            $data['province_id'] = $tinhThanh;
-            $data['district_id'] = $quanHuyen;
-            $data['website_cong_ty'] = $websiteCongTy;
-            $data['ngay_thanh_lap'] = date('Y-m-d', strtotime($ngayThanhLap));
-            $data['ghi_chu_cong_ty'] = $ghiChuCongTy;
+            $data['name'] = $name;
+            $data['username'] = $username;
+            $data['password'] = md5($password);
+            $data['type_of_business'] = $type_of_business;
+            $data['email'] = $email;
+            $data['phone'] = $phone;
+            $data['province_id'] = $province_id;
+            $data['district_id'] = $district_id;
+            $data['website'] = $website;
+            $data['establish_date'] = date('Y-m-d', strtotime($establish_date));
+            $data['note'] = $note;
             $data['roles_id'] = 2;
             $data['created_at'] = Carbon::now();
-            DB::table('companies')->insert($data);
-            Session::put('message', 'Bạn đã đăng ký thành công.');
+            Company::insert($data);
+            Session::flash('message', 'Bạn đã đăng ký thành công.');
+            Session::flash("alert-type", "success");
             return Redirect::to('/login');
         }
+    }
+
+    public function checkEmail($email) {
+        return Company::where('email', $email)->count();
+    }
+
+    public function checkPhone($phone) {
+        return Company::where('phone', $phone)->count();
+    }
+
+    public function checkWebsite($website) {
+        return Company::where('website', $website)->count();
+    }
+
+    public function checkCompanyName($name) {
+        return Company::where('name', $name)->count();
     }
 }

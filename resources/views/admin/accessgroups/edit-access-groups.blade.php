@@ -124,64 +124,42 @@ use Illuminate\Support\Facades\Session;
     <!--end overlay-->
     <?php
         $message = Session::get('message');
-        if (strpos($message, "Thêm vùng")) {
-            echo '<script>
-                setTimeout(function() {
-                swal({
-                    title: "Thông báo",
-                    text: "Thêm vùng thành công",
-                    type: "success",
-                    showConfirmButton: true
-                    },);
-                }, 1000);
-            </script>';
-            Session::put('message', null);
-        } else if (strpos($message, "trống")) {
+        $alert_type = Session::get('alert-type');
+        if ($message && $alert_type == 'warning') {
             echo '<script>
             setTimeout(function() {
                 swal({
                     title: "Thông báo",
-                    text: "Các trường không được để trống.",
-                    type: "error",
+                    text: "'.$message.'",
+                    type: "'.$alert_type.'",
                     showConfirmButton: true
                 },);
             }, 1000);
             </script>';
             Session::put('message', null);
-        } else if (strpos($message, "quá ký tự")) {
+        } else if ($message && $alert_type == 'success') {
             echo '<script>
             setTimeout(function() {
                 swal({
                     title: "Thông báo",
-                    text: "Bạn đã nhập quá ký tự cho phép.",
-                    type: "error",
+                    text: "' . $message . '",
+                    type: "' . $alert_type . '",
                     showConfirmButton: true
                 },);
             }, 1000);
             </script>';
             Session::put('message', null);
-        } else if (strpos($message, "không đủ ký tự")) {
+        } else if ($message && $alert_type == 'danger') {
             echo '<script>
-            setTimeout(function() {
-                swal({
-                    title: "Thông báo",
-                    text: "Bạn đã nhập không đủ ký tự.",
-                    type: "error",
-                    showConfirmButton: true
-                },);
-            }, 1000);
-            </script>';
-            Session::put('message', null);
-        } else if (strpos($message, "không hợp lệ")) {
-            echo '<script>
-            setTimeout(function() {
-                swal({
-                    title: "Thông báo",
-                    text: "Bạn cần kiểm tra lại mật khẩu, website, email và số điện thoại.",
-                    type: "error",
-                    showConfirmButton: true
-                },);
-            }, 1000);
+            function success_noti() {
+                Lobibox.notify(' . $alert_type . ', {
+                    pauseDelayOnHover: true,
+                    continueDelayOnInactiveTab: false,
+                    position: "top right",
+                    icon: "",
+                    msg: ' . $message . '
+                });
+            }
             </script>';
             Session::put('message', null);
         }

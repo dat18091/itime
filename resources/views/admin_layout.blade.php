@@ -375,9 +375,6 @@ use Illuminate\Support\Facades\Session;
                             <li class="dropdown-item user-details">
                                 <?php
                                 $id = Session::get('maCongTy');
-                                // if ($id) {
-                                //     echo $name;
-                                // }
                                 ?>
                                 <a href="{{URL::to('/admin/edit-profile/'.$id)}}">
                                     <div class="media">

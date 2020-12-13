@@ -35,10 +35,10 @@ class AdminController extends Controller
     */
     public function dashboard() {
         $this->AuthLogin();
-        $maCongTy = Session::get('maCongTy');
+        $idCompany = Session::get('maCongTy');
         $companyCount = Company::count('*');
-        $employeeCount = Employee::where('hoat_dong', '1')->orWhere('hoat_dong', '0')
-        ->where('ma_cong_ty', $maCongTy)->count('*');
+        $employeeCount = Employee::where('active', '1')
+        ->where('company_id', $idCompany)->count('*');
         return view('admin.dashboard')->with('companyCount', $companyCount)->with('employeeCount', $employeeCount);
     }
     

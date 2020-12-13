@@ -65,7 +65,6 @@ use Illuminate\Support\Facades\Session;
                                 <tr>
                                     <th>Tên nhóm truy cập</th>
                                     <th>Ghi chú</th>
-                                    <th>Trạng thái</th>
                                     <th>Thao tác</th>
                                 </tr>
                             </thead>
@@ -74,19 +73,6 @@ use Illuminate\Support\Facades\Session;
                                 <tr>
                                     <td>{{ $access->ten_nhom_truy_cap }}</td>
                                     <td>{{ $access->ghi_chu_nhom_truy_cap }}</td>
-                                    <td>
-                                        <?php
-                                        if ($access->trang_thai_nhom_truy_cap == 0) {
-                                        ?>
-                                            <a href="{{URL::to('/admin/hide-access-groups/'.$access->ma_nhom_truy_cap)}}"><span class="fa-styling fa fa-thumbs-up"></span></a>
-                                        <?php
-                                        } else {
-                                        ?>
-                                            <a href="{{URL::to('/admin/show-access-groups/'.$access->ma_nhom_truy_cap)}}"><span class="fa-styling fa fa-thumbs-down"></span></a>
-                                        <?php
-                                        }
-                                        ?>
-                                    </td>
                                     <td>
                                         <div class="btn-group group-round m-1">
                                             <a type="button" href="{{URL::to('/admin/restore-access-groups/'.$access->ma_nhom_truy_cap)}}" class="btn btn-success waves-effect waves-light">Restore</a>
@@ -100,7 +86,6 @@ use Illuminate\Support\Facades\Session;
                                 <tr>
                                     <th>Tên vùng</th>
                                     <th>Ghi chú</th>
-                                    <th>Trạng thái</th>
                                     <th>Thao tác</th>
                                 </tr>
                             </tfoot>
@@ -199,7 +184,48 @@ use Illuminate\Support\Facades\Session;
     <!--start overlay-->
     <div class="overlay toggle-menu"></div>
     <!--end overlay-->
-
+    <?php
+        $message = Session::get('message');
+        $alert_type = Session::get('alert-type');
+        if ($message && $alert_type == 'warning') {
+            echo '<script>
+            setTimeout(function() {
+                swal({
+                    title: "Thông báo",
+                    text: "'.$message.'",
+                    type: "'.$alert_type.'",
+                    showConfirmButton: true
+                },);
+            }, 1000);
+            </script>';
+            Session::put('message', null);
+        } else if ($message && $alert_type == 'success') {
+            echo '<script>
+            setTimeout(function() {
+                swal({
+                    title: "Thông báo",
+                    text: "' . $message . '",
+                    type: "' . $alert_type . '",
+                    showConfirmButton: true
+                },);
+            }, 1000);
+            </script>';
+            Session::put('message', null);
+        } else if ($message && $alert_type == 'danger') {
+            echo '<script>
+            function success_noti() {
+                Lobibox.notify(' . $alert_type . ', {
+                    pauseDelayOnHover: true,
+                    continueDelayOnInactiveTab: false,
+                    position: "top right",
+                    icon: "",
+                    msg: ' . $message . '
+                });
+            }
+            </script>';
+            Session::put('message', null);
+        }
+        ?>
 </div>
 <!-- End container-fluid-->
 @stop

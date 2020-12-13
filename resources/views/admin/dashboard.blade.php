@@ -6,6 +6,11 @@
 <!-- Vector CSS -->
 <link href="{{asset('public/backend/assets/plugins/vectormap/jquery-jvectormap-2.0.2.css')}}" rel="stylesheet" />
 @stop
+<?php
+
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Session;
+?>
 @section('admin_content')
 <div class="container-fluid">
     <!--Start Dashboard Content-->
@@ -634,6 +639,37 @@
     <!--start overlay-->
     <div class="overlay toggle-menu"></div>
     <!--end overlay-->
+
+    <?php 
+        $message = Session::get('message');
+        $alert_type = Session::get('alert-type');
+        if($message && $alert_type == 'warning') {
+            echo '<script>
+            setTimeout(function() {
+                swal({
+                    title: "Thông báo",
+                    text: "'.$message.'",
+                    type: "'.$alert_type.'",
+                    showConfirmButton: true
+                },);
+            }, 1000);
+            </script>';
+            Session::put('message', null);
+        } else if ($message && $alert_type == 'success') {
+            echo '<script>
+            setTimeout(function() {
+                swal({
+                    title: "Thông báo",
+                    text: "'.$message.'",
+                    type: "'.$alert_type.'",
+                    showConfirmButton: true
+                },);
+            }, 1000);
+            </script>';
+            Session::put('message', null);
+        }
+        ?>
+
 </div>
 <!-- End container-fluid-->
 

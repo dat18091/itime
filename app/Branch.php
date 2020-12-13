@@ -17,4 +17,9 @@ class Branch extends Model
     public function provinceId() {
         return $this->belongsTo(Province::class);
     }
+
+    public function areaId()
+    {
+        return $this->belongsTo(Area::class);
+    }
 }

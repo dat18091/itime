@@ -57,8 +57,8 @@ use Illuminate\Support\Facades\Session;
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-body">
-                    @foreach($chiNhanh as $key => $branch)
-                    <form id="signupForm" method="post" action="{{URL::to('/admin/update-branches/'.$branch->ma_chi_nhanh)}}">
+                    @foreach($dataBranch as $key => $branch)
+                    <form id="signupForm" method="post" action="{{URL::to('/admin/update-branches/'.$branch->id)}}">
                         {{csrf_field()}}
                         <h4 class="form-header text-uppercase">
                             <i class="fa fa-envelope-o"></i>
@@ -68,11 +68,11 @@ use Illuminate\Support\Facades\Session;
                         <div class="form-group row">
                             <label for="input-14" class="col-sm-2 col-form-label">Tên chi nhánh <span class="focus">*</span></label>
                             <div class="col-sm-4">
-                                <input type="text" class="form-control" value="{{$branch->ten_chi_nhanh}}" id="ten_chi_nhanh" name="ten_chi_nhanh" onkeyup="changeToKeyword();">
+                                <input type="text" class="form-control" value="{{$branch->name}}" id="name" name="name" onkeyup="changeToKeyword();">
                             </div>
                             <label for="input-15" class="col-sm-2 col-form-label">Từ khóa <span class="focus">*</span></label>
                             <div class="col-sm-4">
-                                <input type="text" readonly class="form-control" value="{{$branch->tu_khoa_chi_nhanh}}" id="tu_khoa_chi_nhanh" name="tu_khoa_chi_nhanh">
+                                <input type="text" readonly class="form-control" value="{{$branch->keyword}}" id="keyword" name="keyword">
                             </div>
                         </div>
                         <script type="text/javascript">
@@ -80,7 +80,7 @@ use Illuminate\Support\Facades\Session;
                                 var tenChucDanh, tuKhoa;
 
                                 //Lấy text từ thẻ input categoryName 
-                                tenChucDanh = document.getElementById("ten_chi_nhanh").value;
+                                tenChucDanh = document.getElementById("name").value;
 
                                 //Đổi chữ hoa thành chữ thường
                                 tuKhoa = tenChucDanh.toLowerCase();
@@ -107,56 +107,56 @@ use Illuminate\Support\Facades\Session;
                                 tuKhoa = '@' + tuKhoa + '@';
                                 tuKhoa = tuKhoa.replace(/\@\-|\-\@|\@/gi, '');
                                 //In tuKhoa ra textbox có id tuKhoa
-                                document.getElementById('tu_khoa_chi_nhanh').value = tuKhoa;
+                                document.getElementById('keyword').value = tuKhoa;
                             }
                         </script>
                         <div class="form-group row">
                             <label for="input-14" class="col-sm-2 col-form-label">Địa chỉ <span class="focus">*</span></label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" value="{{$branch->dia_chi_chi_nhanh}}" id="dia_chi_chi_nhanh" name="dia_chi_chi_nhanh" onkeyup="changeToKeyword();">
+                                <input type="text" class="form-control" value="{{$branch->address}}" id="address" name="address">
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="input-14" class="col-sm-2 col-form-label">Thứ tự hiển thị <span class="focus">*</span></label>
                             <div class="col-sm-4">
-                                <input class="form-control" type="number" min="0" max="50" value="{{$branch->thu_tu_hien_thi_cn}}" name="thu_tu_hien_thi_cn" id="example-number-input">
+                                <input class="form-control" type="number" min="0" max="50" value="{{$branch->displayOrder}}" name="displayOrder" id="example-number-input">
                             </div>
                             <label for="input-15" class="col-sm-2 col-form-label">Tên vùng <span class="focus">*</span></label>
                             <div class="col-sm-4">
-                                <select name="ma_vung" class="form-control single-select">
-                                    @foreach($vung as $key => $area)
-                                        @if($area->ma_vung == $branch->ma_vung)
-                                            <option selected value="{{$area->ma_vung}}">{{$area->ten_vung}}</option>
-                                        @else 
-                                            <option value="{{$area->ma_vung}}">{{$area->ten_vung}}</option>
-                                        @endif
+                                <select name="idArea" class="form-control single-select">
+                                    @foreach($getAreas as $key => $area)
+                                    @if($area->id == $branch->idArea)
+                                    <option selected value="{{$area->id}}">{{$area->name}}</option>
+                                    @else
+                                    <option value="{{$area->id}}">{{$area->name}}</option>
+                                    @endif
                                     @endforeach
                                 </select>
                             </div>
                         </div>
 
                         <div class="form-group row">
-                        <label for="input-15" class="col-sm-2 col-form-label">Tỉnh/Thành <span class="focus">*</span></label>
+                            <label for="input-15" class="col-sm-2 col-form-label">Tỉnh/Thành <span class="focus">*</span></label>
                             <div class="col-sm-4">
-                                <select name="province_id" class="form-control single-select">
-                                    @foreach($tinhThanh as $key => $province)
-                                        @if($province->province_id == $branch->province_id)
-                                            <option selected value="{{$province->province_id}}">{{$province->province_name}}</option>
-                                        @else
-                                            <option value="{{$province->province_id}}">{{$province->province_name}}</option>
-                                        @endif
+                                <select name="idProvince" class="form-control single-select">
+                                    @foreach($getProvinces as $key => $province)
+                                    @if($province->id == $branch->name)
+                                    <option selected value="{{$province->id}}">{{$province->name}}</option>
+                                    @else
+                                    <option value="{{$province->id}}">{{$province->name}}</option>
+                                    @endif
                                     @endforeach
                                 </select>
                             </div>
                             <label for="input-15" class="col-sm-2 col-form-label">Quận/Huyện <span class="focus">*</span></label>
                             <div class="col-sm-4">
-                                <select name="district_id" class="form-control single-select">
-                                    @foreach($quanHuyen as $key => $district)
-                                        @if($district->district_id == $branch->district_id)
-                                            <option selected value="{{$district->district_id}}">{{$district->district_name}}</option>
-                                        @else 
-                                            <option value="{{$district->district_id}}">{{$district->district_name}}</option>
-                                        @endif
+                                <select name="idDistrict" class="form-control single-select">
+                                    @foreach($getDistricts as $key => $district)
+                                    @if($district->id == $branch->idDistrict)
+                                    <option selected value="{{$district->id}}">{{$district->name}}</option>
+                                    @else
+                                    <option value="{{$district->id}}">{{$district->name}}</option>
+                                    @endif
                                     @endforeach
                                 </select>
                             </div>
@@ -164,10 +164,10 @@ use Illuminate\Support\Facades\Session;
                         <div class="form-group row">
                             <label for="input-17" class="col-sm-2 col-form-label">Ghi chú</label>
                             <div class="col-sm-10">
-                                <textarea class="form-control" rows="4" id="input-17" name="ghi_chu_chi_nhanh">{{$branch->ghi_chu_chi_nhanh}}</textarea>
+                                <textarea class="form-control" rows="4" id="input-17" name="note">{{$branch->note}}</textarea>
                             </div>
                         </div>
-                        
+
                         <div class="form-footer">
                             <button type="submit" name="danh_sach_sinh_vien" class="btn btn-danger"><i class="fa fa-times"></i> Hủy bỏ</button>
                             <button name="them_sinh_vien" class="btn btn-primary" type="submit"><i class="fa fa-add"></i> Chỉnh Sửa chi nhánh</button>
@@ -182,6 +182,48 @@ use Illuminate\Support\Facades\Session;
     <!--start overlay-->
     <div class="overlay toggle-menu"></div>
     <!--end overlay-->
+    <?php
+    $message = Session::get('message');
+    $alert_type = Session::get('alert-type');
+    if ($message && $alert_type == 'warning') {
+        echo '<script>
+            setTimeout(function() {
+                swal({
+                    title: "Thông báo",
+                    text: "' . $message . '",
+                    type: "' . $alert_type . '",
+                    showConfirmButton: true
+                },);
+            }, 1000);
+            </script>';
+        Session::put('message', null);
+    } else if ($message && $alert_type == 'success') {
+        echo '<script>
+            setTimeout(function() {
+                swal({
+                    title: "Thông báo",
+                    text: "' . $message . '",
+                    type: "' . $alert_type . '",
+                    showConfirmButton: true
+                },);
+            }, 1000);
+            </script>';
+        Session::put('message', null);
+    } else if ($message && $alert_type == 'danger') {
+        echo '<script>
+            function success_noti() {
+                Lobibox.notify(' . $alert_type . ', {
+                    pauseDelayOnHover: true,
+                    continueDelayOnInactiveTab: false,
+                    position: "top right",
+                    icon: "",
+                    msg: ' . $message . '
+                });
+            }
+            </script>';
+        Session::put('message', null);
+    }
+    ?>
 </div>
 <!-- End container-fluid-->
 

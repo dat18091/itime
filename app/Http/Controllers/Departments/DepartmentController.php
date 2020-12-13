@@ -34,11 +34,13 @@ class DepartmentController extends Controller
      */
     public function list_departments() {
         $this->AuthLogin();
-        $maCongTy = Session::get('maCongTy');
-        $danhSach = Department::where('trang_thai_phong_ban', '1')
-        ->orWhere('trang_thai_phong_ban', '0')
-        ->where('ma_cong_ty', $maCongTy)->get();
-        return view('admin.departments.list-departments')->with('phongBan', $danhSach);
+        $idCompany = Session::get('maCongTy');
+        $dataDepartments = Department::where('status', '1')
+        ->orWhere('status', '0')
+        ->where('company_id', $idCompany)->get();
+        $departmentCountOnl = Department::where('status', '2')->count();
+        return view('admin.departments.list-departments')->with('dataDepartments', $dataDepartments)
+        ->with('departmentCountOnl', $departmentCountOnl);
     }
     
     /**
@@ -58,34 +60,38 @@ class DepartmentController extends Controller
      */
     public function save_departments(Request $request) {
         $this->AuthLogin();
-        $maCongTy = Session::get('maCongTy');
+        $idCompany = Session::get('maCongTy');
         $data = array();
-        $tenPhongBan = $request->ten_phong_ban;
-        $tuKhoaPhongBan = $request->tu_khoa_phong_ban;
-        $trangThaiPhongBan = $request->trang_thai_phong_ban;
-        $thuTuHienThi = $request->thu_tu_hien_thi_pb;
-        $phongBanDungDau = $request->phong_ban_dung_dau;
-        $ghiChuPhongBan = $request->ghi_chu_phong_ban;
-        if($tenPhongBan == "" || $trangThaiPhongBan == "" || $phongBanDungDau == "") {
+        $name = $request->name;
+        $keyword = $request->keyword;
+        $status = $request->status;
+        $display_order = $request->display_order;
+        $head_department = $request->head_department;
+        $note = $request->note;
+        if($name == "" || $status == "" || $head_department == "") {
             Session::flash("failure", "Các trường không được để trống.");
+            Session::flash("alert-type", "warning");
             return Redirect::to('/admin/add-departments');
-        } else if(strlen($tenPhongBan) > 100) {
+        } else if(strlen($name) > 100) {
             Session::flash("failure", "Bạn đã nhập quá ký tự cho phép.");
+            Session::flash("alert-type", "warning");
             return Redirect::to('/admin/add-departments');
-        } else if(strlen($tenPhongBan) < 5) {
+        } else if(strlen($name) < 5) {
             Session::flash("failure", "Bạn nhập không đủ ký tự.");
+            Session::flash("alert-type", "warning");
             return Redirect::to('/admin/add-departments');
         } else {
-            $data["ten_phong_ban"] = $tenPhongBan;
-            $data["tu_khoa_phong_ban"] = $tuKhoaPhongBan;
-            $data["trang_thai_phong_ban"] = $trangThaiPhongBan;
-            $data["thu_tu_hien_thi_pb"] = $thuTuHienThi;
-            $data["phong_ban_dung_dau"] = $phongBanDungDau;
-            $data["ghi_chu_phong_ban"] = $ghiChuPhongBan;
-            $data["ma_cong_ty"] = $maCongTy;
+            $data["name"] = $name;
+            $data["keyword"] = $keyword;
+            $data["status"] = $status;
+            $data["display_order"] = $display_order;
+            $data["head_department"] = $head_department;
+            $data["note"] = $note;
+            $data["company_id"] = $idCompany;
             $data["created_at"] = Carbon::now();
-            Session::flash('message', 'Thêm phòng ban thành công.');
             Department::insert($data);
+            Session::flash('message', 'Thêm phòng ban thành công.');
+            Session::flash("alert-type", "success");
             return Redirect::to('/admin/list-departments'); 
         }
     }
@@ -97,8 +103,9 @@ class DepartmentController extends Controller
      */
     public function hide_departments($id) {
         $this->AuthLogin();
-        Department::where('ma_phong_ban', $id)->update(['trang_thai_phong_ban' => 1]);
+        Department::where('id', $id)->update(['status' => 1]);
         Session::flash('message', 'Ẩn phòng ban thành công');
+        Session::flash("alert-type", "success");
         return Redirect::to('/admin/list-departments');
     }
 
@@ -109,8 +116,9 @@ class DepartmentController extends Controller
      */
     public function show_departments($id) {
         $this->AuthLogin();
-        Department::where('ma_phong_ban', $id)->update(['trang_thai_phong_ban' => 0]);
+        Department::where('id', $id)->update(['status' => 0]);
         Session::flash('message', 'Hiển thị phòng ban thành công');
+        Session::flash("alert-type", "success");
         return Redirect::to('/admin/list-departments');
     }
 
@@ -121,8 +129,9 @@ class DepartmentController extends Controller
      */
     public function second_departments($id) {
         $this->AuthLogin();
-        Department::where('ma_phong_ban', $id)->update(['phong_ban_dung_dau' => 1]);
+        Department::where('id', $id)->update(['head_department' => 1]);
         Session::flash('message', 'Tắt hiển thị phòng ban đứng đầu thành công');
+        Session::flash("alert-type", "success");
         return Redirect::to('/admin/list-departments');
     }
 
@@ -133,8 +142,9 @@ class DepartmentController extends Controller
      */
     public function first_departments($id) {
         $this->AuthLogin();
-        Department::where('ma_phong_ban', $id)->update(['phong_ban_dung_dau' => 0]);
+        Department::where('id', $id)->update(['head_department' => 0]);
         Session::flash('message', 'Hiển thị phòng ban đứng đầu thành công');
+        Session::flash("alert-type", "success");
         return Redirect::to('/admin/list-departments');
     }
 
@@ -145,8 +155,8 @@ class DepartmentController extends Controller
      */
     public function edit_departments($id) {
         $this->AuthLogin();
-        $chinhSua = Department::where('ma_phong_ban', $id)->get();
-        return view('admin.departments.edit-departments')->with('phongBan', $chinhSua);
+        $dataDepartments = Department::where('id', $id)->get();
+        return view('admin.departments.edit-departments')->with('dataDepartments', $dataDepartments);
     }
 
     /**
@@ -156,29 +166,32 @@ class DepartmentController extends Controller
      */
     public function update_departments(Request $request, $id) {
         $this->AuthLogin();
-        $maCongTy = Session::get('maCongTy');
         $data = array();
-        $tenPhongBan = $request->ten_phong_ban;
-        $tuKhoaPhongBan = $request->tu_khoa_phong_ban;
-        $thuTuHienThi = $request->thu_tu_hien_thi_pb;
-        $ghiChuPhongBan = $request->ghi_chu_phong_ban;
-        if($tenPhongBan == "") {
+        $name = $request->name;
+        $keyword = $request->keyword;
+        $display_order = $request->display_order;
+        $note = $request->note;
+        if($name == "") {
             Session::flash("failure", "Các trường không được để trống.");
+            Session::flash("alert-type", "warning");
             return Redirect::to('/admin/add-departments');
-        } else if(strlen($tenPhongBan) > 100) {
+        } else if(strlen($name) > 100) {
             Session::flash("failure", "Bạn đã nhập quá ký tự cho phép.");
+            Session::flash("alert-type", "warning");
             return Redirect::to('/admin/add-departments');
-        } else if(strlen($tenPhongBan) < 5) {
+        } else if(strlen($name) < 5) {
             Session::flash("failure", "Bạn nhập không đủ ký tự.");
+            Session::flash("alert-type", "warning");
             return Redirect::to('/admin/add-departments');
         } else {
-            $data["ten_phong_ban"] = $tenPhongBan;
-            $data["tu_khoa_phong_ban"] = $tuKhoaPhongBan;
-            $data["thu_tu_hien_thi_pb"] = $thuTuHienThi;
-            $data["ghi_chu_phong_ban"] = $ghiChuPhongBan;
+            $data["name"] = $name;
+            $data["keyword"] = $keyword;
+            $data["display_order"] = $display_order;
+            $data["note"] = $note;
             $data["updated_at"] = Carbon::now();
-            Department::where('ma_phong_ban', $id)->update($data);
+            Department::where('id', $id)->update($data);
             Session::flash('message', 'Cập nhật phòng ban thành công.');
+            Session::flash("alert-type", "success");
             return Redirect::to('/admin/list-departments'); 
         }
     }
@@ -190,8 +203,9 @@ class DepartmentController extends Controller
      */
     public function delete_departments($id) {
         $this->AuthLogin();
-        Department::where('ma_phong_ban', $id)->delete();
+        Department::where('id', $id)->delete();
         Session::flash('message', 'Xóa phòng ban thành công.');
+        Session::flash("alert-type", "success");
         return Redirect::to('/admin/list-departments');
     }
 
@@ -202,10 +216,12 @@ class DepartmentController extends Controller
      */
     public function list_departments_trash() {
         $this->AuthLogin();
-        $maCongTy = Session::get('maCongTy');
-        $danhSach = Department::where('trang_thai_phong_ban', '2')
-        ->where('ma_cong_ty', $maCongTy)->get();
-        return view('admin.departments.list-departments-trash')->with('phongBan', $danhSach);
+        $idCompany = Session::get('maCongTy');
+        $dataDepartments = Department::where('status', '2')->where('company_id', $idCompany)->get();
+        $departmentCount = Department::where('status', '2')->where('company_id', $idCompany)->count("*");
+        $departmentCountAllOnl = Department::where('status', '0')->orWhere('status', '1')->where('company_id', $idCompany)->count("*");
+        return view('admin.departments.list-departments-trash')->with('dataDepartments', $dataDepartments)
+        ->with('departmentCount', $departmentCount)->with('departmentCountAllOnl', $departmentCountAllOnl);
     }
 
     /**
@@ -215,8 +231,9 @@ class DepartmentController extends Controller
      */
     public function trash_departments($id) {
         $this->AuthLogin();
-        Department::where('ma_phong_ban', $id)->update(['trang_thai_phong_ban' => 2]);
-        Session::flash('message', 'Hiển thị phòng ban thành công');
+        Department::where('id', $id)->update(['status' => 2]);
+        Session::flash('message', 'Xóa phòng ban thành công');
+        Session::flash("alert-type", "success");
         return Redirect::to('/admin/list-departments');
     }
 
@@ -227,8 +244,9 @@ class DepartmentController extends Controller
      */
     public function restore_departments($id) {
         $this->AuthLogin();
-        Department::where('ma_phong_ban', $id)->update(['trang_thai_phong_ban' => 0]);
+        Department::where('id', $id)->update(['status' => 0]);
         Session::flash('message', 'Hiển thị phòng ban thành công');
+        Session::flash("alert-type", "success");
         return Redirect::to('/admin/list-departments');
     }
 }

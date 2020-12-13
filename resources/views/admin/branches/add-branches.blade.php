@@ -131,18 +131,18 @@ use Illuminate\Support\Facades\Session;
                             <div class="col-sm-4">
                                 <select name="ma_vung" class="form-control single-select">
                                     @foreach($vung as $key => $area)
-                                    <option value="{{$area->ma_vung}}">{{$area->ten_vung}}</option>
+                                    <option value="{{$area->id}}">{{$area->name}}</option>
                                     @endforeach
                                 </select>
                             </div>
                         </div>
 
                         <div class="form-group row">
-                        <label for="input-15" class="col-sm-2 col-form-label">Tỉnh/Thành <span class="focus">*</span></label>
+                            <label for="input-15" class="col-sm-2 col-form-label">Tỉnh/Thành <span class="focus">*</span></label>
                             <div class="col-sm-4">
                                 <select name="province_id" class="form-control single-select">
                                     @foreach($tinhThanh as $key => $province)
-                                    <option value="{{$province->province_id}}">{{$province->province_name}}</option>
+                                    <option value="{{$province->id}}">{{$province->name}}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -150,7 +150,7 @@ use Illuminate\Support\Facades\Session;
                             <div class="col-sm-4">
                                 <select name="district_id" class="form-control single-select">
                                     @foreach($quanHuyen as $key => $district)
-                                    <option value="{{$district->district_id}}">{{$district->district_name}}</option>
+                                    <option value="{{$district->id}}">{{$district->name}}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -161,7 +161,7 @@ use Illuminate\Support\Facades\Session;
                                 <textarea class="form-control" rows="4" id="input-17" name="ghi_chu_chi_nhanh"></textarea>
                             </div>
                         </div>
-                        
+
                         <div class="form-footer">
                             <button type="submit" name="danh_sach_sinh_vien" class="btn btn-danger"><i class="fa fa-times"></i> Hủy bỏ</button>
                             <button name="them_sinh_vien" class="btn btn-primary" type="submit"><i class="fa fa-add"></i> Thêm chi nhánh</button>
@@ -175,7 +175,48 @@ use Illuminate\Support\Facades\Session;
     <!--start overlay-->
     <div class="overlay toggle-menu"></div>
     <!--end overlay-->
-    
+    <?php
+    $message = Session::get('message');
+    $alert_type = Session::get('alert-type');
+    if ($message && $alert_type == 'warning') {
+        echo '<script>
+            setTimeout(function() {
+                swal({
+                    title: "Thông báo",
+                    text: "' . $message . '",
+                    type: "' . $alert_type . '",
+                    showConfirmButton: true
+                },);
+            }, 1000);
+            </script>';
+        Session::put('message', null);
+    } else if ($message && $alert_type == 'success') {
+        echo '<script>
+            setTimeout(function() {
+                swal({
+                    title: "Thông báo",
+                    text: "' . $message . '",
+                    type: "' . $alert_type . '",
+                    showConfirmButton: true
+                },);
+            }, 1000);
+            </script>';
+        Session::put('message', null);
+    } else if ($message && $alert_type == 'danger') {
+        echo '<script>
+            function success_noti() {
+                Lobibox.notify(' . $alert_type . ', {
+                    pauseDelayOnHover: true,
+                    continueDelayOnInactiveTab: false,
+                    position: "top right",
+                    icon: "",
+                    msg: ' . $message . '
+                });
+            }
+            </script>';
+        Session::put('message', null);
+    }
+    ?>
 </div>
 <!-- End container-fluid-->
 

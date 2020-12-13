@@ -54,48 +54,48 @@ use Illuminate\Support\Facades\Session;
                         <div class="form-group row">
                             <label for="input-14" class="col-sm-2 col-form-label">Tên công ty <span class="focus">*</span></label>
                             <div class="col-sm-4">
-                                <input type="text" class="form-control" id="input-14" name="ten_cong_ty">
+                                <input type="text" class="form-control" id="input-14" name="name">
                             </div>
                             <label for="input-15" class="col-sm-2 col-form-label">Tên truy cập <span class="focus">*</span></label>
                             <div class="col-sm-4">
-                                <input type="text" class="form-control" id="input-15" name="ten_truy_cap">
+                                <input type="text" class="form-control" id="input-15" name="username">
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="input-14" class="col-sm-2 col-form-label">Mật khẩu <span class="focus">*</span></label>
                             <div class="col-sm-4">
-                                <input type="password" class="form-control" id="input-14" name="mat_khau">
+                                <input type="password" class="form-control" id="input-14" name="password">
                             </div>
                             <label for="input-15" class="col-sm-2 col-form-label">Loại hình doanh nghiệp</label>
                             <div class="col-sm-4">
-                                <input type="text" class="form-control" id="input-15" name="loai_hinh_doanh_nghiep">
+                                <input type="text" class="form-control" id="input-15" name="type_of_business">
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="input-14" class="col-sm-2 col-form-label">Email <span class="focus">*</span></label>
                             <div class="col-sm-4">
-                                <input type="text" class="form-control" id="email_cong_ty" name="email_cong_ty">
+                                <input type="text" class="form-control" id="email" name="email">
                             </div>
 
                             <label for="input-15" class="col-sm-2 col-form-label">Số điện thoại <span class="focus">*</span></label>
                             <div class="col-sm-4">
-                                <input type="text" class="form-control" id="input-15" name="so_dien_thoai_cong_ty">
+                                <input type="text" class="form-control" id="input-15" name="phone">
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="input-14" class="col-sm-2 col-form-label">Tỉnh/Thành Phố <span class="focus">*</span></label>
                             <div class="col-sm-4">
                                 <select name="province_id" class="form-control single-select">
-                                    @foreach($tinhthanh as $key => $province)
-                                    <option value="{{$province->province_id}}">{{$province->province_name}}</option>
+                                    @foreach($getProvinces as $key => $province)
+                                    <option value="{{$province->id}}">{{$province->name}}</option>
                                     @endforeach
                                 </select>
                             </div>
                             <label for="input-15" class="col-sm-2 col-form-label">Quận/Huyện <span class="focus">*</span></label>
                             <div class="col-sm-4">
                                 <select name="district_id" class="form-control single-select">
-                                    @foreach($quanhuyen as $key => $district)
-                                    <option value="{{$district->district_id}}">{{$district->district_name}}</option>
+                                    @foreach($getDistricts as $key => $district)
+                                    <option value="{{$district->id}}">{{$district->name}}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -103,17 +103,17 @@ use Illuminate\Support\Facades\Session;
                         <div class="form-group row">
                             <label for="input-14" class="col-sm-2 col-form-label">Website công ty </label>
                             <div class="col-sm-4">
-                                <input type="text" class="form-control" id="input-14" name="website_cong_ty">
+                                <input type="text" class="form-control" id="input-14" name="website">
                             </div>
                             <label for="input-15" class="col-sm-2 col-form-label">Ngày thành lập <span class="focus">*</span></label>
                             <div class="col-sm-4">
-                                <input type="text" id="autoclose-datepicker" name="ngay_thanh_lap" class="form-control">
+                                <input type="text" id="autoclose-datepicker" name="establish_date" class="form-control">
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="input-17" class="col-sm-2 col-form-label">Ghi chú</label>
                             <div class="col-sm-10">
-                                <textarea class="form-control" row s="4" id="input-17" name="ghi_chu_cong_ty"></textarea>
+                                <textarea class="form-control" row s="4" id="input-17" name="note"></textarea>
                             </div>
                         </div>
 
@@ -138,64 +138,42 @@ use Illuminate\Support\Facades\Session;
 
         <?php
         $message = Session::get('message');
-        if (strpos($message, "thành công")) {
-            echo '<script>
-                setTimeout(function() {
-                swal({
-                    title: "Thông báo",
-                    text: "Đăng ký thành công",
-                    type: "success",
-                    showConfirmButton: true
-                    },);
-                }, 1000);
-            </script>';
-            Session::put('message', null);
-        } else if (strpos($message, "trống")) {
+        $alert_type = Session::get('alert-type');
+        if ($message && $alert_type == 'warning') {
             echo '<script>
             setTimeout(function() {
                 swal({
                     title: "Thông báo",
-                    text: "Các trường không được để trống.",
-                    type: "error",
+                    text: "'.$message.'",
+                    type: "'.$alert_type.'",
                     showConfirmButton: true
                 },);
             }, 1000);
             </script>';
             Session::put('message', null);
-        } else if (strpos($message, "quá ký tự")) {
+        } else if ($message && $alert_type == 'success') {
             echo '<script>
             setTimeout(function() {
                 swal({
                     title: "Thông báo",
-                    text: "Bạn đã nhập quá ký tự cho phép.",
-                    type: "error",
+                    text: "' . $message . '",
+                    type: "' . $alert_type . '",
                     showConfirmButton: true
                 },);
             }, 1000);
             </script>';
             Session::put('message', null);
-        } else if (strpos($message, "không đủ ký tự")) {
+        } else if ($message && $alert_type == 'danger') {
             echo '<script>
-            setTimeout(function() {
-                swal({
-                    title: "Thông báo",
-                    text: "Bạn đã nhập không đủ ký tự.",
-                    type: "error",
-                    showConfirmButton: true
-                },);
-            }, 1000);
-            </script>';
-            Session::put('message', null);
-        } else if (strpos($message, "không hợp lệ")) {
-            echo '<script>
-            setTimeout(function() {
-                swal({
-                    title: "Thông báo",
-                    text: "Bạn cần kiểm tra lại mật khẩu, website, email và số điện thoại.",
-                    type: "error",
-                    showConfirmButton: true
-                },);
-            }, 1000);
+            function success_noti() {
+                Lobibox.notify(' . $alert_type . ', {
+                    pauseDelayOnHover: true,
+                    continueDelayOnInactiveTab: false,
+                    position: "top right",
+                    icon: "",
+                    msg: ' . $message . '
+                });
+            }
             </script>';
             Session::put('message', null);
         }
@@ -291,6 +269,34 @@ use Illuminate\Support\Facades\Session;
     <script src="{{asset('public/backend/assets/plugins/notifications/js/notification-custom-script.js')}}"></script>
     <!--Sweet Alerts -->
     <script src="{{asset('node_modules/sweetalert/dist/sweetalert.min.js')}}"></script>
+    <script>
+        document.onkeydown = function(e) {
+            if (e.ctrlKey &&
+                (e.keyCode === 67 ||
+                    e.keyCode === 86 ||
+                    e.keyCode === 85 ||
+                    e.keyCode === 117)) {
+                return false;
+            } else {
+                return true;
+            }
+        };
+        $(document).keypress("u", function(e) {
+            if (e.ctrlKey) {
+                return false;
+            } else {
+                return true;
+            }
+        });
+        $(window).on('keydown', function(event) {
+            if (event.ctrlKey && event.shiftKey && event.keyCode == 73) {
+                return false; //Prevent from ctrl+shift+i
+            }
+        })
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+        });
+    </script>
 </body>
 
 </html>

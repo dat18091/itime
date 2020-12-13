@@ -51,8 +51,8 @@ use Illuminate\Support\Facades\Session;
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-body">
-                @foreach($phongBan as $key => $department)
-                    <form id="signupForm" method="post" action="{{URL::to('/admin/update-departments/'.$department->ma_phong_ban)}}">
+                    @foreach($dataDepartments as $key => $department)
+                    <form id="signupForm" method="post" action="{{URL::to('/admin/update-departments/'.$department->id)}}">
                         {{csrf_field()}}
                         <h4 class="form-header text-uppercase">
                             <i class="fa fa-envelope-o"></i>
@@ -62,11 +62,11 @@ use Illuminate\Support\Facades\Session;
                         <div class="form-group row">
                             <label for="input-14" class="col-sm-2 col-form-label">Tên phòng ban <span class="focus">*</span></label>
                             <div class="col-sm-4">
-                                <input type="text" class="form-control" value="{{$department->ten_phong_ban}}" id="ten_phong_ban" name="ten_phong_ban" onkeyup="changeToKeyword();">
+                                <input type="text" class="form-control" value="{{$department->name}}" id="name" name="name" onkeyup="changeToKeyword();">
                             </div>
                             <label for="input-15" class="col-sm-2 col-form-label">Từ khóa tên vùng <span class="focus">*</span></label>
                             <div class="col-sm-4">
-                                <input type="text" readonly class="form-control" value="{{$department->tu_khoa_phong_ban}}" id="tu_khoa_phong_ban" name="tu_khoa_phong_ban">
+                                <input type="text" readonly class="form-control" value="{{$department->tu_khoa_phong_ban}}" id="keyword" name="keyword">
                             </div>
                         </div>
                         <script type="text/javascript">
@@ -74,7 +74,7 @@ use Illuminate\Support\Facades\Session;
                                 var tenPhongBan, tuKhoa;
 
                                 //Lấy text từ thẻ input categoryName 
-                                tenPhongBan = document.getElementById("ten_phong_ban").value;
+                                tenPhongBan = document.getElementById("name").value;
 
                                 //Đổi chữ hoa thành chữ thường
                                 tuKhoa = tenPhongBan.toLowerCase();
@@ -101,20 +101,20 @@ use Illuminate\Support\Facades\Session;
                                 tuKhoa = '@' + tuKhoa + '@';
                                 tuKhoa = tuKhoa.replace(/\@\-|\-\@|\@/gi, '');
                                 //In tuKhoa ra textbox có id tuKhoa
-                                document.getElementById('tu_khoa_phong_ban').value = tuKhoa;
+                                document.getElementById('keyword').value = tuKhoa;
                             }
                         </script>
-                      
+
                         <div class="form-group row">
                             <label for="input-14" class="col-sm-2 col-form-label">Thứ tự hiển thị <span class="focus">*</span></label>
                             <div class="col-sm-4">
-                                <input class="form-control" type="number" min="0" max="50" value="{{$department->thu_tu_hien_thi_pb}}" name="thu_tu_hien_thi_pb" id="example-number-input">
+                                <input class="form-control" type="number" min="0" max="50" value="{{$department->display_order}}" name="display_order" id="example-number-input">
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="input-17" class="col-sm-2 col-form-label">Ghi chú</label>
                             <div class="col-sm-10">
-                                <textarea class="form-control" rows="4" id="input-17" name="ghi_chu_phong_ban">{{$department->ghi_chu_phong_ban}}</textarea>
+                                <textarea class="form-control" rows="4" id="input-17" name="note">{{$department->note}}</textarea>
                             </div>
                         </div>
                         <div class="form-footer">
@@ -132,6 +132,48 @@ use Illuminate\Support\Facades\Session;
     <!--start overlay-->
     <div class="overlay toggle-menu"></div>
     <!--end overlay-->
+    <?php
+    $message = Session::get('message');
+    $alert_type = Session::get('alert-type');
+    if ($message && $alert_type == 'warning') {
+        echo '<script>
+            setTimeout(function() {
+                swal({
+                    title: "Thông báo",
+                    text: "' . $message . '",
+                    type: "' . $alert_type . '",
+                    showConfirmButton: true
+                },);
+            }, 1000);
+            </script>';
+        Session::put('message', null);
+    } else if ($message && $alert_type == 'success') {
+        echo '<script>
+            setTimeout(function() {
+                swal({
+                    title: "Thông báo",
+                    text: "' . $message . '",
+                    type: "' . $alert_type . '",
+                    showConfirmButton: true
+                },);
+            }, 1000);
+            </script>';
+        Session::put('message', null);
+    } else if ($message && $alert_type == 'danger') {
+        echo '<script>
+            function success_noti() {
+                Lobibox.notify(' . $alert_type . ', {
+                    pauseDelayOnHover: true,
+                    continueDelayOnInactiveTab: false,
+                    position: "top right",
+                    icon: "",
+                    msg: ' . $message . '
+                });
+            }
+            </script>';
+        Session::put('message', null);
+    }
+    ?>
 </div>
 <!-- End container-fluid-->
 

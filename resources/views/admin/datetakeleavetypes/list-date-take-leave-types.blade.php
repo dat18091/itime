@@ -105,53 +105,94 @@ use Illuminate\Support\Facades\Session;
         </div>
     </div><!-- End Row-->
     <div class="modal fade bd-example-modal-lg" id="addDateTakeLeaveType" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content animated fadeInUp">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Thêm Lý Do Đi Trễ</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content animated fadeInUp">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Thêm Lý Do Đi Trễ</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
 
-                    <div class="modal-body">
-                        <form method="post" action="{{URL::to('/admin/save-date-take-leave-types')}}">
-                            {{csrf_field()}}
-                            <div class="form-group row">
-                                <label for="input-14" class="col-sm-2 col-form-label">Lý do <span class="focus">*</span></label>
-                                <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="name" name="name" onkeyup="changeToKeyword();">
-                                </div>
+                <div class="modal-body">
+                    <form method="post" action="{{URL::to('/admin/save-date-take-leave-types')}}">
+                        {{csrf_field()}}
+                        <div class="form-group row">
+                            <label for="input-14" class="col-sm-2 col-form-label">Lý do <span class="focus">*</span></label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="name" name="name" onkeyup="changeToKeyword();">
                             </div>
-                            
-                            <div class="form-group row">
-                                <label for="input-15" class="col-sm-2 col-form-label">Trạng thái <span class="focus">*</span></label>
-                                <div class="col-sm-10">
-                                    <select name="status" class="form-control" id="basic-select">
-                                        <option value="1">Ẩn</option>
-                                        <option value="0">Hiển thị</option>
-                                    </select>
-                                </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="input-15" class="col-sm-2 col-form-label">Trạng thái <span class="focus">*</span></label>
+                            <div class="col-sm-10">
+                                <select name="status" class="form-control" id="basic-select">
+                                    <option value="1">Ẩn</option>
+                                    <option value="0">Hiển thị</option>
+                                </select>
                             </div>
-                            <div class="form-group row">
-                                <label for="input-17" class="col-sm-2 col-form-label">Ghi chú</label>
-                                <div class="col-sm-10">
-                                    <textarea class="form-control" style="resize:none;" rows="4" id="input-17" name="note"></textarea>
-                                </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="input-17" class="col-sm-2 col-form-label">Ghi chú</label>
+                            <div class="col-sm-10">
+                                <textarea class="form-control" style="resize:none;" rows="4" id="input-17" name="note"></textarea>
                             </div>
-                            <div class="form-footer">
-                                <a type="button" name="danh_sach_vung" class="btn btn-danger"><i class="fa fa-times"></i> Hủy Bỏ</a>
-                                <button name="add_areas" class="btn btn-primary" type="submit"><i class="fa fa-add"></i> Thêm </button>
-                            </div>
-                        </form>
-                    </div>
+                        </div>
+                        <div class="form-footer">
+                            <a type="button" name="danh_sach_vung" class="btn btn-danger"><i class="fa fa-times"></i> Hủy Bỏ</a>
+                            <button name="add_areas" class="btn btn-primary" type="submit"><i class="fa fa-add"></i> Thêm </button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
+    </div>
     <!--start overlay-->
     <div class="overlay toggle-menu"></div>
     <!--end overlay-->
-
+    <?php
+    $message = Session::get('message');
+    $alert_type = Session::get('alert-type');
+    if ($message && $alert_type == 'warning') {
+        echo '<script>
+            setTimeout(function() {
+                swal({
+                    title: "Thông báo",
+                    text: "' . $message . '",
+                    type: "' . $alert_type . '",
+                    showConfirmButton: true
+                },);
+            }, 1000);
+            </script>';
+        Session::put('message', null);
+    } else if ($message && $alert_type == 'success') {
+        echo '<script>
+            setTimeout(function() {
+                swal({
+                    title: "Thông báo",
+                    text: "' . $message . '",
+                    type: "' . $alert_type . '",
+                    showConfirmButton: true
+                },);
+            }, 1000);
+            </script>';
+        Session::put('message', null);
+    } else if ($message && $alert_type == 'danger') {
+        echo '<script>
+            function success_noti() {
+                Lobibox.notify(' . $alert_type . ', {
+                    pauseDelayOnHover: true,
+                    continueDelayOnInactiveTab: false,
+                    position: "top right",
+                    icon: "",
+                    msg: ' . $message . '
+                });
+            }
+            </script>';
+        Session::put('message', null);
+    }
+    ?>
 </div>
 <!-- End container-fluid-->
 @stop

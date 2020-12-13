@@ -76,9 +76,10 @@ use Illuminate\Support\Facades\Session;
                                 </tr>
                             </thead>
                             <tbody>
+                                @foreach($data as $key => $takeleave)
                                 <tr>
-                                    <td>Nguyễn Quang Đạt</td>
-                                    <td>Izisoft</td>
+                                    <td>{{$takeleave->ten_nhan_vien}}</td>
+                                    <td>{{$takeleave->ten_cong_ty}}</td>
                                     <td>Nghỉ một ngày</td>
                                     <td>0</td>
                                     <td>0</td>
@@ -95,25 +96,7 @@ use Illuminate\Support\Facades\Session;
                                         </div>
                                     </td>
                                 </tr>
-                                <tr>
-                                    <td>Nguyễn Quang Đạt</td>
-                                    <td>Izisoft</td>
-                                    <td>Nghỉ một ngày</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>14/11/2020</td>
-                                    <td>Nghỉ nguyên ngày</td>
-                                    <td>0</td>
-                                    <td>Nghỉ sinh lý</td>
-                                    <td>Nội dung</td>
-                                    <td>
-                                        <div class="btn-group group-round m-1">
-                                            <a type="button" href="" class="btn btn-primary waves-effect waves-light">Chấp nhận</a>
-                                            <a type="button" href="" class="btn btn-warning custom waves-effect waves-light">Từ chối</a>
-                                            <a type="button" href="" onclick="return confirm('Bạn có chắc chắn muốn xóa yêu cầu này?')" class="btn btn-danger waves-effect waves-light">Xóa</a>
-                                        </div>
-                                    </td>
-                                </tr>
+                                @endforeach
                             </tbody>
                             <tfoot>
                                 <tr>

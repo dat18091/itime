@@ -163,8 +163,8 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="section-title">
-                        <span>Why chose us?</span>
-                        <h2>PUSH YOUR LIMITS FORWARD</h2>
+                        <span>Tại sao nên sử dụng?</span>
+                        <h2>ITIME</h2>
                     </div>
                 </div>
             </div>
@@ -172,33 +172,59 @@
                 <div class="col-lg-3 col-sm-6">
                     <div class="cs-item">
                         <span class="flaticon-034-stationary-bike"></span>
-                        <h4>Modern equipment</h4>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-                            dolore facilisis.</p>
+                        <h4>TIỆN LỢI</h4>
+                        <p>Chỉ với chiếc SmartPhone trên tay nhân viên tự mình checkin, checkout, xin phép nghỉ, báo cáo tiền độ công việc. Quản lý chỉ việc truy cập website để theo dõi thông tin và duyệt nghỉ phép ở bất kỳ đâu.</p>
                     </div>
                 </div>
                 <div class="col-lg-3 col-sm-6">
                     <div class="cs-item">
                         <span class="flaticon-033-juice"></span>
-                        <h4>Healthy nutrition plan</h4>
-                        <p>Quis ipsum suspendisse ultrices gravida. Risus commodo viverra maecenas accumsan lacus vel
-                            facilisis.</p>
+                        <h4>HIỆN ĐẠI</h4>
+                        <p>Có thể nói đây là ứng dụng chấm công 4.0, phù hợp với xu thế phát triển của công nghệ hiện nay. Ứng dụng không chỉ quản lý được nhân viên văn phòng mà còn quản lý được cả nhân viên ngoài văn phòng, dễ dàng tương thích với các hệ thống khác.</p>
                     </div>
                 </div>
                 <div class="col-lg-3 col-sm-6">
                     <div class="cs-item">
                         <span class="flaticon-002-dumbell"></span>
-                        <h4>Proffesponal training plan</h4>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-                            dolore facilisis.</p>
+                        <h4>NHANH GỌN</h4>
+                        <p>Ứng dụng có thể triển khai dùng trong vòng 30 phút, dữ liệu đầu vào được nhập vào từ SmartPhone và tự động tổng hợp về một nơi duy nhất, quản lý chỉ việc theo dõi báo cáo.</p>
                     </div>
                 </div>
                 <div class="col-lg-3 col-sm-6">
                     <div class="cs-item">
                         <span class="flaticon-014-heart-beat"></span>
-                        <h4>Unique to your needs</h4>
-                        <p>Quis ipsum suspendisse ultrices gravida. Risus commodo viverra maecenas accumsan lacus vel
-                            facilisis.</p>
+                        <h4>CHI PHÍ THẤP</h4>
+                        <p>Chỉ với 100K/ tháng bạn đã có thể sử dụng được app chấm công hiện đại với nhiều tính năng quản lý nhân viên đơn giản, hiệu quả.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-3 col-sm-6">
+                    <div class="cs-item">
+                        <span class="flaticon-034-stationary-bike"></span>
+                        <h4>LINH HOẠT</h4>
+                        <p>Bạn có thể quản lý hàng loạt chi nhánh dễ như cách bạn quản lý một chi nhánh, quản lý được mọi loại nhân viên, dễ dàng tích hợp với hệ thống khác thông qua API do IZITIME cung cấp.</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-sm-6">
+                    <div class="cs-item">
+                        <span class="flaticon-033-juice"></span>
+                        <h4>BẢO MẬT</h4>
+                        <p>Thông tin khách hàng được cam kết bảo mật tuyệt đối, chúng tôi sẽ không sử dụng thông tin của khách hàng cho bất kỳ mục đích nào khác. Phần mềm đảm bảo hoạt động thông suốt trên mọi thời gian.</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-sm-6">
+                    <div class="cs-item">
+                        <span class="flaticon-002-dumbell"></span>
+                        <h4>Quản lý dự án</h4>
+                        <p>Quản lý thông tin, trạng thái và thống kê danh sách dự án triển khai trong doanh nghiệp.</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-sm-6">
+                    <div class="cs-item">
+                        <span class="flaticon-014-heart-beat"></span>
+                        <h4>Kênh truyền thông nội bộ</h4>
+                        <p>Cung cấp công cụ hỗ trợ truyền thông và triển khai hoạt động nội bộ giúp tăng sự gắn kết giữa nhân viên, giúp xây dựng văn hoá doanh nghiệp.</p>
                     </div>
                 </div>
             </div>
@@ -221,11 +247,11 @@
                 <div class="col-lg-4 col-md-6">
                     <div class="class-item">
                         <div class="ci-pic">
-                            <img src="{{asset('public/frontend/img/classes/class-1.jpg')}}" alt="">
+                            <img src="{{asset('public/uploads/companies/izisoft.png')}}" alt="">
                         </div>
                         <div class="ci-text">
                             <span>STRENGTH</span>
-                            <h5>Weightlifting</h5>
+                            <h5>IZISOFTWARE</h5>
                             <a href="#"><i class="fa fa-angle-right"></i></a>
                         </div>
                     </div>
@@ -233,11 +259,11 @@
                 <div class="col-lg-4 col-md-6">
                     <div class="class-item">
                         <div class="ci-pic">
-                            <img src="{{asset('public/frontend/img/classes/class-2.jpg')}}" alt="">
+                            <img src="{{asset('public/uploads/companies/banviet.png')}}" alt="">
                         </div>
                         <div class="ci-text">
                             <span>Cardio</span>
-                            <h5>Indoor cycling</h5>
+                            <h5>BẢN VIỆT</h5>
                             <a href="#"><i class="fa fa-angle-right"></i></a>
                         </div>
                     </div>
@@ -245,23 +271,24 @@
                 <div class="col-lg-4 col-md-6">
                     <div class="class-item">
                         <div class="ci-pic">
-                            <img src="img/classes/class-3.jpg" alt="">
+                            <img src="{{asset('public/uploads/companies/nuochoangminh.jpg')}}" alt="">
                         </div>
                         <div class="ci-text">
                             <span>STRENGTH</span>
-                            <h5>Kettlebell power</h5>
+                            <h5>NƯỚC HOÀNG MINH</h5>
                             <a href="#"><i class="fa fa-angle-right"></i></a>
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-6 col-md-6">
+                
+                <div class="col-lg-4 col-md-6">
                     <div class="class-item">
                         <div class="ci-pic">
-                            <img src="img/classes/class-4.jpg" alt="">
+                            <img src="{{asset('public/uploads/companies/sabeco.jpg')}}" alt="">
                         </div>
                         <div class="ci-text">
                             <span>Cardio</span>
-                            <h4>Indoor cycling</h4>
+                            <h4>SABECO</h4>
                             <a href="#"><i class="fa fa-angle-right"></i></a>
                         </div>
                     </div>
@@ -269,7 +296,7 @@
                 <div class="col-lg-6">
                     <div class="class-item">
                         <div class="ci-pic">
-                            <img src="img/classes/class-5.jpg" alt="">
+                            <img src="{{asset('public/frontend/img/classes/class-5.jpg')}}" alt="">
                         </div>
                         <div class="ci-text">
                             <span>Training</span>
@@ -284,13 +311,15 @@
     <!-- ChoseUs Section End -->
 
     <!-- Banner Section Begin -->
-    <section class="banner-section set-bg" data-setbg="img/banner-bg.jpg">
+    <section class="banner-section set-bg" data-setbg="{{asset('public/frontend/img/banner-bg.jpg')}}">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12 text-center">
                     <div class="bs-text">
-                        <h2>registration now to get more deals</h2>
-                        <div class="bt-tips">Where health, beauty and fitness meet.</div>
+                        <h2>TẠI SAO BẠN NÊN SỬ DỤNG ỨNG DỤNG CHẤM CÔNG ITIME?</h2>
+                        <div class="bt-tips">Bạn là chủ doanh nghiệp và bạn muốn giám sát chặt chẽ nhân nhân viên hơn, nhưng lại không thể áp dụng máy chấm công vì vướng các vấn đề như đồng bộ giữa các chi nhánh, quản lý nhân viên ngoài phạm vi văn phòng, tích hợp thêm chức năng xin nghỉ phép, xin đi trễ về sớm,....
+
+Hiểu được những khó khăn này, Nhóm xây dựng hệ thống phần mềm chấm công ITIME để giải quyết những vướng mắc này cho các chủ doanh nghiệp..</div>
                         <a href="#" class="primary-btn  btn-normal">Appointment</a>
                     </div>
                 </div>
