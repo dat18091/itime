@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Session;
     <!-- Breadcrumb-->
     <div class="row pt-2 pb-2">
         <div class="col-sm-9">
-            <h4 class="page-title">THÙNG RÁC VÙNG</h4>
+            <h4 class="page-title">DANH SÁCH VÙNG</h4>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="javaScript:void();">CÀI ĐẶT HỆ THỐNG</a></li>
                 <li class="breadcrumb-item"><a href="javaScript:void();">Công Ty</a></li>
@@ -57,7 +57,7 @@ use Illuminate\Support\Facades\Session;
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table id="dataTable" class="table table-bordered">
+                        <table id="example" class="table table-bordered">
                             <thead>
                                 <tr>
                                     <th>Tên vùng</th>
