@@ -57,8 +57,8 @@ use Illuminate\Support\Facades\Session;
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-body">
-                    @foreach($chucDanh as $key => $position)
-                    <form id="signupForm" method="post" action="{{URL::to('/admin/update-positions/'.$position->ma_chuc_danh)}}">
+                    @foreach($dataPosition as $key => $position)
+                    <form id="signupForm" method="post" action="{{URL::to('/admin/update-positions/'.$position->id)}}">
                         {{csrf_field()}}
                         <h4 class="form-header text-uppercase">
                             <i class="fa fa-envelope-o"></i>
@@ -68,11 +68,11 @@ use Illuminate\Support\Facades\Session;
                         <div class="form-group row">
                             <label for="input-14" class="col-sm-2 col-form-label">Tên chức danh <span class="focus">*</span></label>
                             <div class="col-sm-4">
-                                <input type="text" class="form-control" value="{{$position->ten_chuc_danh}}" id="ten_chuc_danh" name="ten_chuc_danh" onkeyup="changeToKeyword();">
+                                <input type="text" class="form-control" value="{{$position->name}}" id="name" name="name" onkeyup="changeToKeyword();">
                             </div>
                             <label for="input-15" class="col-sm-2 col-form-label">Từ khóa <span class="focus">*</span></label>
                             <div class="col-sm-4">
-                                <input type="text" readonly class="form-control" value="{{$position->tu_khoa_chuc_danh}}" id="tu_khoa_chuc_danh" name="tu_khoa_chuc_danh">
+                                <input type="text" readonly class="form-control" value="{{$position->keyword}}" id="keyword" name="keyword">
                             </div>
                         </div>
                         <script type="text/javascript">
@@ -80,7 +80,7 @@ use Illuminate\Support\Facades\Session;
                                 var tenChucDanh, tuKhoa;
 
                                 //Lấy text từ thẻ input categoryName 
-                                tenChucDanh = document.getElementById("ten_chuc_danh").value;
+                                tenChucDanh = document.getElementById("name").value;
 
                                 //Đổi chữ hoa thành chữ thường
                                 tuKhoa = tenChucDanh.toLowerCase();
@@ -107,23 +107,23 @@ use Illuminate\Support\Facades\Session;
                                 tuKhoa = '@' + tuKhoa + '@';
                                 tuKhoa = tuKhoa.replace(/\@\-|\-\@|\@/gi, '');
                                 //In tuKhoa ra textbox có id tuKhoa
-                                document.getElementById('tu_khoa_chuc_danh').value = tuKhoa;
+                                document.getElementById('keyword').value = tuKhoa;
                             }
                         </script>
 
                         <div class="form-group row">
                             <label for="input-14" class="col-sm-2 col-form-label">Kinh nghiệm <span class="focus">*</span></label>
                             <div class="col-sm-4">
-                                <input class="form-control" type="number" min="0" max="50" value="{{$position->kinh_nghiem}}" name="kinh_nghiem" id="example-number-input">
+                                <input class="form-control" type="number" min="0" max="50" value="{{$position->experience}}" name="experience" id="example-number-input">
                             </div>
                             <label for="input-15" class="col-sm-2 col-form-label">Trình độ <span class="focus">*</span></label>
                             <div class="col-sm-4">
-                                <select name="ma_trinh_do" class="form-control single-select">
-                                    @foreach($trinhDo as $key => $level)
-                                        @if($level->ma_trinh_do == $position->ma_trinh_do)
-                                            <option selected value="{{$level->ma_trinh_do}}">{{$level->ten_trinh_do}}</option>
+                                <select name="educationlevel_id" class="form-control single-select">
+                                    @foreach($educationLevel as $key => $level)
+                                        @if($level->id == $position->educationlevel_id)
+                                            <option selected value="{{$level->id}}">{{$level->name}}</option>
                                         @else
-                                            <option value="{{$level->ma_trinh_do}}">{{$level->ten_trinh_do}}</option>
+                                            <option value="{{$level->id}}">{{$level->name}}</option>
                                         @endif
                                     @endforeach
                                 </select>
@@ -133,14 +133,14 @@ use Illuminate\Support\Facades\Session;
                         <div class="form-group row">
                         <label for="input-14" class="col-sm-2 col-form-label">Thứ tự hiển thị </label>
                             <div class="col-sm-4">
-                                <input class="form-control" type="number" min="0" max="50" value="{{$position->thu_tu_hien_thi_cd}}" name="thu_tu_hien_thi" id="example-number-input">
+                                <input class="form-control" type="number" min="0" max="50" value="{{$position->display_order}}" name="display_order" id="example-number-input">
                             </div>
                             
                         </div>
                         <div class="form-group row">
                             <label for="input-17" class="col-sm-2 col-form-label">Ghi chú</label>
                             <div class="col-sm-10">
-                                <textarea class="form-control" rows="4" id="input-17" name="ghi_chu_chuc_danh">{{$position->ghi_chu_chuc_danh}}</textarea>
+                                <textarea class="form-control" rows="4" id="input-17" name="note">{{$position->note}}</textarea>
                             </div>
                         </div>
                         
@@ -158,6 +158,48 @@ use Illuminate\Support\Facades\Session;
     <!--start overlay-->
     <div class="overlay toggle-menu"></div>
     <!--end overlay-->
+    <?php
+    $message = Session::get('message');
+    $alert_type = Session::get('alert-type');
+    if ($message && $alert_type == 'warning') {
+        echo '<script>
+            setTimeout(function() {
+                swal({
+                    title: "Thông báo",
+                    text: "' . $message . '",
+                    type: "' . $alert_type . '",
+                    showConfirmButton: true
+                },);
+            }, 1000);
+            </script>';
+        Session::put('message', null);
+    } else if ($message && $alert_type == 'success') {
+        echo '<script>
+            setTimeout(function() {
+                swal({
+                    title: "Thông báo",
+                    text: "' . $message . '",
+                    type: "' . $alert_type . '",
+                    showConfirmButton: true
+                },);
+            }, 1000);
+            </script>';
+        Session::put('message', null);
+    } else if ($message && $alert_type == 'danger') {
+        echo '<script>
+            function success_noti() {
+                Lobibox.notify(' . $alert_type . ', {
+                    pauseDelayOnHover: true,
+                    continueDelayOnInactiveTab: false,
+                    position: "top right",
+                    icon: "",
+                    msg: ' . $message . '
+                });
+            }
+            </script>';
+        Session::put('message', null);
+    }
+    ?>
 </div>
 <!-- End container-fluid-->
 

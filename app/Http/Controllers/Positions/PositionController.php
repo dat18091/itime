@@ -8,7 +8,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Carbon\Carbon;
-
+use App\Position;
+use App\Educationlevel;
 
 class PositionController extends Controller
 {
@@ -35,10 +36,9 @@ class PositionController extends Controller
     public function add_positions() {
         $this->AuthLogin();
         $idCompany = Session::get('maCongTy');
-        $trinhDo = DB::table('educationlevels')
-        ->where('trang_thai_trinh_do', '=', '0')
-        ->where('ma_cong_ty',$idCompany)->orderby('ma_trinh_do', 'asc')->get();
-        return view('admin.positions.add-positions')->with('trinhDo', $trinhDo);
+        $educationLevel = Educationlevel::where('status', '=', '0')
+        ->where('company_id',$idCompany)->orderby('id', 'asc')->get();
+        return view('admin.positions.add-positions')->with('educationLevel', $educationLevel);
     }
 
     /**
@@ -49,36 +49,40 @@ class PositionController extends Controller
     public function save_positions(Request $request) {
         $this->AuthLogin();
         $data = array();
-        $tenChucDanh = $request->ten_chuc_danh;
-        $tuKhoaChucDanh = $request->tu_khoa_chuc_danh;
-        $kinhNghiem = $request->kinh_nghiem;
-        $trinhDo = $request->ma_trinh_do;
-        $thuTuHienThi = $request->thu_tu_hien_thi;
-        $trangThaiChucDanh = $request->trang_thai_chuc_danh;
-        $ghiChuChucDanh = $request->ghi_chu_chuc_danh;
-        $maCongTy = Session::get('maCongTy');
-        if($tenChucDanh == "" ||$tuKhoaChucDanh =="" || $kinhNghiem =="" || $trinhDo == "" || 
-            $trangThaiChucDanh == "") {
-            Session::push("failure", "Các trường không được để trống.");
+        $name = $request->name;
+        $keyword = $request->keyword;
+        $experience = $request->experience;
+        $educationlevel_id = $request->educationlevel_id;
+        $display_order = $request->display_order;
+        $status = $request->status;
+        $note = $request->note;
+        $idCompany = Session::get('maCongTy');
+        if($name == "" ||$keyword =="" || $experience =="" || $educationlevel_id == "" || 
+            $status == "") {
+            Session::flash("failure", "Các trường không được để trống.");
+            Session::flash("alert-type", "success");
             return Redirect::to("/admin/add-positions");
-        } else if(strlen($tenChucDanh) > 100) {
-            Session::push("failure", "Bạn đã nhập quá ký tự cho phép.");
+        } else if(strlen($name) > 100) {
+            Session::flash("failure", "Bạn đã nhập quá ký tự cho phép.");
+            Session::flash("alert-type", "success");
             return Redirect::to('/admin/add-positions');
-        } else if(strlen($tenChucDanh) < 5) {
-            Session::push("failure", "Bạn nhập không đủ ký tự.");
+        } else if(strlen($name) < 5) {
+            Session::flash("failure", "Bạn nhập không đủ ký tự.");
+            Session::flash("alert-type", "success");
             return Redirect::to('/admin/add-positions');
         } else {
-            $data['ten_chuc_danh'] = $tenChucDanh;
-            $data['tu_khoa_chuc_danh'] = $tuKhoaChucDanh;
-            $data['kinh_nghiem'] = $kinhNghiem;
-            $data['ma_trinh_do'] = $trinhDo;
-            $data['thu_tu_hien_thi_cd'] = $thuTuHienThi;
-            $data['trang_thai_chuc_danh'] = $trangThaiChucDanh;
-            $data['ghi_chu_chuc_danh'] = $ghiChuChucDanh;
-            $data['ma_cong_ty'] = $maCongTy;
+            $data['name'] = $name;
+            $data['keyword'] = $keyword;
+            $data['experience'] = $experience;
+            $data['educationlevel_id'] = $educationlevel_id;
+            $data['display_order'] = $display_order;
+            $data['status'] = $status;
+            $data['note'] = $note;
+            $data['company_id'] = $idCompany;
             $data['created_at'] = Carbon::now();
-            DB::table('positions')->insert($data);
-            Session::push('message', 'Thêm chức danh thành công.');
+            Position::insert($data);
+            Session::flash('message', 'Thêm chức danh thành công.');
+            Session::flash("alert-type", "success");
             return Redirect::to('/admin/list-positions');
         }
     }
@@ -90,14 +94,15 @@ class PositionController extends Controller
      */
     public function list_positions() {
         $this->AuthLogin();
-        $maCongTy = Session::get('maCongTy');
-        $danhSach = DB::table('positions')
-        ->join('educationlevels', 'educationlevels.ma_trinh_do' , '=', 'positions.ma_trinh_do')
-        ->where('positions.trang_thai_chuc_danh', '1')
-        ->orWhere('positions.trang_thai_chuc_danh', '0')
-        ->where('positions.ma_cong_ty', $maCongTy)->get();
-        $trinhDo = DB::table('educationlevels')->get();
-        return view('admin.positions.list-positions')->with('positions', $danhSach)->with('trinhDo', $trinhDo);
+        $idCompany = Session::get('maCongTy');
+        $dataPosition = Position::join('educationlevels', 'educationlevels.id' , '=', 'positions.educationlevel_id')
+        ->select(['positions.*', 'educationlevels.id as idEducationLevel'])
+        ->where('positions.status', '1')->orWhere('positions.status', '0')
+        ->where('positions.company_id', $idCompany)->get();
+        $educationLevel = Educationlevel::where('status', '0')->where('company_id',$idCompany)->get();
+        $positionCountOnl = Position::where('status', '2')->count();
+        return view('admin.positions.list-positions')->with('dataPosition', $dataPosition)->with('educationLevel', $educationLevel)
+        ->with('positionCountOnl', $positionCountOnl);
     }
 
     /**
@@ -107,8 +112,9 @@ class PositionController extends Controller
      */
     public function hide_positions($id) {
         $this->AuthLogin();
-        DB::table('positions')->where('positions.ma_chuc_danh', $id)->update(['trang_thai_chuc_danh' => 1]);
-        Session::push('message', 'Ẩn chức danh thành công.');
+        Position::where('id', $id)->update(['status' => 1]);
+        Session::flash('message', 'Ẩn chức danh thành công.');
+        Session::flash("alert-type", "success");
         return Redirect::to('/admin/list-positions');
     }
 
@@ -119,8 +125,9 @@ class PositionController extends Controller
      */
     public function show_positions($id) {
         $this->AuthLogin();
-        DB::table('positions')->where('positions.ma_chuc_danh', $id)->distinct()->update(['trang_thai_chuc_danh' => 0]);
-        Session::push('message', 'Hiển thị chức danh thành công.');
+        Position::where('id', $id)->distinct()->update(['status' => 0]);
+        Session::flash('message', 'Hiển thị chức danh thành công.');
+        Session::flash("alert-type", "success");
         return Redirect::to('/admin/list-positions');
     }
 
@@ -131,10 +138,10 @@ class PositionController extends Controller
      */
     public function edit_positions($id) {
         $this->AuthLogin();
-        $maCongTy = Session::get('maCongTy');
-        $trinhDo = DB::table('educationlevels')->where('ma_cong_ty',$maCongTy)->get();
-        $chinhSua = DB::table('positions')->where('ma_cong_ty',$maCongTy)->where('positions.ma_chuc_danh', $id)->get(); 
-        return view('admin.positions.edit-positions')->with('trinhDo', $trinhDo)->with('chucDanh',$chinhSua);
+        $idCompany = Session::get('maCongTy');
+        $educationLevel = Educationlevel::where('company_id',$idCompany)->get();
+        $dataPosition = Position::where('company_id',$idCompany)->where('id', $id)->get(); 
+        return view('admin.positions.edit-positions')->with('educationLevel', $educationLevel)->with('dataPosition',$dataPosition);
     }
 
     /**
@@ -145,32 +152,35 @@ class PositionController extends Controller
     public function update_positions(Request $request, $id) {
         $this->AuthLogin();
         $data = array();
-        $tenChucDanh = $request->ten_chuc_danh;
-        $tuKhoaChucDanh = $request->tu_khoa_chuc_danh;
-        $kinhNghiem = $request->kinh_nghiem;
-        $trinhDo = $request->ma_trinh_do;
-        $thuTuHienThi = $request->thu_tu_hien_thi;
-        // $trangThaiChucDanh = $request->trang_thai_chuc_danh;
-        $ghiChuChucDanh = $request->ghi_chu_chuc_danh;
-        if($tenChucDanh == "" ||$tuKhoaChucDanh =="" || $kinhNghiem =="" || $trinhDo == "") {
-            Session::push("message", "Các trường không được để trống.");
+        $name = $request->name;
+        $keyword = $request->keyword;
+        $experience = $request->experience;
+        $educationlevel_id = $request->educationlevel_id;
+        $display_order = $request->display_order;
+        $note = $request->note;
+        if($name == "" ||$keyword =="" || $experience =="" || $educationlevel_id == "") {
+            Session::flash("message", "Các trường không được để trống.");
+            Session::flash("alert-type", "warning");
             return Redirect::to("/admin/edit-positions/".$id);
-        } else if(strlen($tenChucDanh) > 100) {
-            Session::push("message", "Bạn đã nhập quá ký tự cho phép.");
+        } else if(strlen($name) > 100) {
+            Session::flash("message", "Bạn đã nhập quá ký tự cho phép.");
+            Session::flash("alert-type", "warning");
             return Redirect::to('/admin/edit-positions/'.$id);
-        } else if(strlen($tenChucDanh) < 5) {
-            Session::push("message", "Bạn nhập không đủ ký tự.");
+        } else if(strlen($name) < 5) {
+            Session::flash("message", "Bạn nhập không đủ ký tự.");
+            Session::flash("alert-type", "warning");
             return Redirect::to('/admin/edit-positions/'.$id);
         } else {
-            $data['ten_chuc_danh'] = $tenChucDanh;
-            $data['tu_khoa_chuc_danh'] = $tuKhoaChucDanh;
-            $data['kinh_nghiem'] = $kinhNghiem;
-            $data['ma_trinh_do'] = $trinhDo;
-            $data['thu_tu_hien_thi_cd'] = $thuTuHienThi;
-            $data['ghi_chu_chuc_danh'] = $ghiChuChucDanh;
+            $data['name'] = $name;
+            $data['keyword'] = $keyword;
+            $data['experience'] = $experience;
+            $data['educationlevel_id'] = $educationlevel_id;
+            $data['display_order'] = $display_order;
+            $data['note'] = $note;
             $data['updated_at'] = Carbon::now();
-            DB::table('positions')->where('ma_chuc_danh', $id)->update($data);
-            Session::push('message', 'Chỉnh sửa chức danh thành công.');
+            Position::where('id', $id)->update($data);
+            Session::flash('message', 'Chỉnh sửa chức danh thành công.');
+            Session::flash("alert-type", "success");
             return Redirect::to('/admin/list-positions');
         }
     }
@@ -182,8 +192,9 @@ class PositionController extends Controller
      */
     public function delete_positions($id) {
         $this->AuthLogin();
-        DB::table('positions')->where('ma_chuc_danh', $id)->delete();
-        Session::push('message', 'Xóa chức danh thành công.');
+        Position::where('id', $id)->delete();
+        Session::flash('message', 'Xóa chức danh thành công.');
+        Session::flash("alert-type", "success");
         return Redirect::to('/admin/list-positions');
     }
 
@@ -194,26 +205,30 @@ class PositionController extends Controller
      */
     public function list_positions_trash() {
         $this->AuthLogin();
-        $maCongTy = Session::get('maCongTy');
-        $danhSach = DB::table('positions')
-        ->join('educationlevels', 'educationlevels.ma_trinh_do' , '=', 'positions.ma_trinh_do')
-        ->where('positions.trang_thai_chuc_danh', '2')
-        ->where('positions.ma_cong_ty', $maCongTy)->get();
-        $trinhDo = DB::table('educationlevels')->get();
-        return view('admin.positions.list-positions-trash')->with('positions', $danhSach)->with('trinhDo', $trinhDo);
+        $idCompany = Session::get('maCongTy');
+        $dataPosition = Position::join('educationlevels', 'educationlevels.id' , '=', 'positions.educationlevel_id')
+        ->select(['positions.*', 'educationlevels.id as idEducationLevel'])
+        ->where('positions.status', '2')->where('positions.company_id', $idCompany)->get();
+        $educationLevel = Educationlevel::get();
+        $positionCount = Position::where('status', '2')->where('company_id', $idCompany)->count("*");
+        $positionCountAllOnl = Position::where('status', '0')->orWhere('status', '1')->where('company_id', $idCompany)->count();
+        return view('admin.positions.list-positions-trash')->with('dataPosition', $dataPosition)->with('educationLevel', $educationLevel)
+        ->with('positionCount', $positionCount)->with('positionCountAllOnl', $positionCountAllOnl);
     }
 
     public function trash_positions($id) {
         $this->AuthLogin();
-        DB::table('positions')->where('positions.ma_chuc_danh', $id)->update(['trang_thai_chuc_danh' => 2]);
-        Session::push('message', 'Xóa chức danh thành công.');
+        Position::where('id', $id)->update(['status' => 2]);
+        Session::flash('message', 'Xóa chức danh thành công.');
+        Session::flash("alert-type", "success");
         return Redirect::to('/admin/list-positions');
     }
 
     public function restore_positions($id) {
         $this->AuthLogin();
-        DB::table('positions')->where('positions.ma_chuc_danh', $id)->update(['trang_thai_chuc_danh' => 0]);
-        Session::push('message', 'Khôi phục chức danh thành công.');
+        Position::where('id', $id)->update(['status' => 0]);
+        Session::flash('message', 'Khôi phục chức danh thành công.');
+        Session::flash("alert-type", "success");
         return Redirect::to('/admin/list-positions');
     }
 }

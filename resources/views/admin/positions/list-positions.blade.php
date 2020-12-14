@@ -47,8 +47,8 @@ use Illuminate\Support\Facades\Session;
             <div class="card">
                 <div class="card-header">
                     <div class="action-button" style="display:flex;">
-                        <div><a href="" data-toggle="modal" data-target="#themChucDanh" data-whatever="@mdo" class="btn btn-success space">Tạo mới</a></div>
-                        <div><a href="{{URL::to('/admin/list-positions-trash')}}" class="btn btn-primary space">Thùng rác</a></div>
+                        <div><a href="" data-toggle="modal" data-target="#addPosition" data-whatever="@mdo" class="btn btn-success space">Tạo mới</a></div>
+                        <div><a href="{{URL::to('/admin/list-positions-trash')}}" class="btn btn-primary space">Thùng rác <span class="badge badge-warning badge-pill">{{ $positionCountOnl }}</span></a></div>
                     </div>
                 </div>
                 <div class="card-body">
@@ -64,34 +64,34 @@ use Illuminate\Support\Facades\Session;
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($positions as $key => $position)
+                                @foreach($dataPosition as $key => $position)
                                 <tr>
-                                    <td>{{ $position->ten_chuc_danh }}</td>
+                                    <td>{{ $position->name }}</td>
                                     <td>
-                                        @foreach($trinhDo as $key => $level)
-                                        @if($position->ma_trinh_do == $level->ma_trinh_do)
-                                        {{$level->ten_trinh_do}}
+                                        @foreach($educationLevel as $key => $level)
+                                        @if($position->educationlevel_id == $level->id)
+                                        {{$level->name}}
                                         @endif
                                         @endforeach
                                     </td>
-                                    <td>{{ $position->kinh_nghiem }}</td>
+                                    <td>{{ $position->experience }}</td>
                                     <td>
                                         <?php
-                                        if ($position->trang_thai_chuc_danh == 0) {
+                                        if ($position->status == 0) {
                                         ?>
-                                            <a href="{{URL::to('/admin/hide-positions/'.$position->ma_chuc_danh)}}"><span class="fa-styling fa fa-thumbs-up"></span></a>
+                                            <a href="{{URL::to('/admin/hide-positions/'.$position->id)}}"><span class="fa-styling fa fa-thumbs-up"></span></a>
                                         <?php
                                         } else {
                                         ?>
-                                            <a href="{{URL::to('/admin/show-positions/'.$position->ma_chuc_danh)}}"><span class="fa-styling fa fa-thumbs-down"></span></a>
+                                            <a href="{{URL::to('/admin/show-positions/'.$position->id)}}"><span class="fa-styling fa fa-thumbs-down"></span></a>
                                         <?php
                                         }
                                         ?>
                                     </td>
                                     <td>
                                         <div class="btn-group group-round m-1">
-                                            <a type="button" href="{{URL::to('/admin/edit-positions/'.$position->ma_chuc_danh)}}" class="btn btn-success waves-effect waves-light">Sửa</a>
-                                            <a type="button" href="{{URL::to('/admin/trash-positions/'.$position->ma_chuc_danh)}}" onclick="return confirm('Bạn có chắc chắn muốn xóa vùng này?')" class="btn btn-danger waves-effect waves-light">Xóa</a>
+                                            <a type="button" href="{{URL::to('/admin/edit-positions/'.$position->id)}}" class="btn btn-success waves-effect waves-light">Sửa</a>
+                                            <a type="button" href="{{URL::to('/admin/trash-positions/'.$position->id)}}" onclick="return confirm('Bạn có chắc chắn muốn xóa chức danh này?')" class="btn btn-danger waves-effect waves-light">Xóa</a>
                                         </div>
                                     </td>
                                 </tr>
@@ -113,7 +113,7 @@ use Illuminate\Support\Facades\Session;
         </div>
     </div><!-- End Row-->
     <!-- ADD POSITIONS -->
-    <div class="modal fade bd-example-modal-lg" id="themChucDanh" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade bd-example-modal-lg" id="addPosition" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content animated fadeInUp">
                 <div class="modal-header">
@@ -130,11 +130,11 @@ use Illuminate\Support\Facades\Session;
                         <div class="form-group row">
                             <label for="input-14" class="col-sm-2 col-form-label">Tên chức danh <span class="focus">*</span></label>
                             <div class="col-sm-4">
-                                <input type="text" class="form-control" id="ten_chuc_danh" name="ten_chuc_danh" onkeyup="changeToKeyword();">
+                                <input type="text" class="form-control" id="name" name="name" onkeyup="changeToKeyword();">
                             </div>
                             <label for="input-15" class="col-sm-2 col-form-label">Từ khóa <span class="focus">*</span></label>
                             <div class="col-sm-4">
-                                <input type="text" readonly class="form-control" id="tu_khoa_chuc_danh" name="tu_khoa_chuc_danh">
+                                <input type="text" readonly class="form-control" id="keyword" name="keyword">
                             </div>
                         </div>
                         <script type="text/javascript">
@@ -142,7 +142,7 @@ use Illuminate\Support\Facades\Session;
                                 var tenChucDanh, tuKhoa;
 
                                 //Lấy text từ thẻ input categoryName 
-                                tenChucDanh = document.getElementById("ten_chuc_danh").value;
+                                tenChucDanh = document.getElementById("name").value;
 
                                 //Đổi chữ hoa thành chữ thường
                                 tuKhoa = tenChucDanh.toLowerCase();
@@ -169,20 +169,20 @@ use Illuminate\Support\Facades\Session;
                                 tuKhoa = '@' + tuKhoa + '@';
                                 tuKhoa = tuKhoa.replace(/\@\-|\-\@|\@/gi, '');
                                 //In tuKhoa ra textbox có id tuKhoa
-                                document.getElementById('tu_khoa_chuc_danh').value = tuKhoa;
+                                document.getElementById('keyword').value = tuKhoa;
                             }
                         </script>
 
                         <div class="form-group row">
                             <label for="input-14" class="col-sm-2 col-form-label">Kinh nghiệm <span class="focus">*</span></label>
                             <div class="col-sm-4">
-                                <input class="form-control" type="number" min="0" max="50" value="0" name="kinh_nghiem" id="example-number-input">
+                                <input class="form-control" type="number" min="0" max="50" value="0" name="experience" id="example-number-input">
                             </div>
                             <label for="input-15" class="col-sm-2 col-form-label">Trình độ <span class="focus">*</span></label>
                             <div class="col-sm-4">
-                                <select name="ma_trinh_do" class="form-control single-select">
-                                    @foreach($trinhDo as $key => $level)
-                                    <option value="{{$level->ma_trinh_do}}">{{$level->ten_trinh_do}}</option>
+                                <select name="educationlevel_id" class="form-control single-select">
+                                    @foreach($educationLevel as $key => $level)
+                                    <option value="{{$level->id}}">{{$level->name}}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -191,11 +191,11 @@ use Illuminate\Support\Facades\Session;
                         <div class="form-group row">
                             <label for="input-14" class="col-sm-2 col-form-label">Thứ tự hiển thị </label>
                             <div class="col-sm-4">
-                                <input class="form-control" type="number" min="0" max="50" value="0" name="thu_tu_hien_thi" id="example-number-input">
+                                <input class="form-control" type="number" min="0" max="50" value="0" name="display_order" id="example-number-input">
                             </div>
                             <label for="input-15" class="col-sm-2 col-form-label">Trạng thái <span class="focus">*</span></label>
                             <div class="col-sm-4">
-                                <select name="trang_thai_chuc_danh" class="form-control" id="basic-select">
+                                <select name="status" class="form-control" id="basic-select">
                                     <option value="1">Ẩn</option>
                                     <option value="0">Hiển thị</option>
                                 </select>
@@ -204,7 +204,7 @@ use Illuminate\Support\Facades\Session;
                         <div class="form-group row">
                             <label for="input-17" class="col-sm-2 col-form-label">Ghi chú</label>
                             <div class="col-sm-10">
-                                <textarea class="form-control" rows="4" id="input-17" name="ghi_chu_chuc_danh"></textarea>
+                                <textarea class="form-control" rows="4" id="input-17" name="note"></textarea>
                             </div>
                         </div>
                         <div class="form-footer">
@@ -220,6 +220,48 @@ use Illuminate\Support\Facades\Session;
     <!--start overlay-->
     <div class="overlay toggle-menu"></div>
     <!--end overlay-->
+    <?php
+    $message = Session::get('message');
+    $alert_type = Session::get('alert-type');
+    if ($message && $alert_type == 'warning') {
+        echo '<script>
+            setTimeout(function() {
+                swal({
+                    title: "Thông báo",
+                    text: "' . $message . '",
+                    type: "' . $alert_type . '",
+                    showConfirmButton: true
+                },);
+            }, 1000);
+            </script>';
+        Session::put('message', null);
+    } else if ($message && $alert_type == 'success') {
+        echo '<script>
+            setTimeout(function() {
+                swal({
+                    title: "Thông báo",
+                    text: "' . $message . '",
+                    type: "' . $alert_type . '",
+                    showConfirmButton: true
+                },);
+            }, 1000);
+            </script>';
+        Session::put('message', null);
+    } else if ($message && $alert_type == 'danger') {
+        echo '<script>
+            function success_noti() {
+                Lobibox.notify(' . $alert_type . ', {
+                    pauseDelayOnHover: true,
+                    continueDelayOnInactiveTab: false,
+                    position: "top right",
+                    icon: "",
+                    msg: ' . $message . '
+                });
+            }
+            </script>';
+        Session::put('message', null);
+    }
+    ?>
 </div>
 <!-- End container-fluid-->
 @stop
