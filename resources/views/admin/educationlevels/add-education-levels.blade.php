@@ -57,11 +57,11 @@ use Illuminate\Support\Facades\Session;
                         <div class="form-group row">
                             <label for="input-14" class="col-sm-2 col-form-label">Tên trình độ <span class="focus">*</span></label>
                             <div class="col-sm-4">
-                                <input type="text" class="form-control" id="ten_trinh_do" name="ten_trinh_do" onkeyup="changeToKeyword();">
+                                <input type="text" class="form-control" id="name" name="name" onkeyup="changeToKeyword();">
                             </div>
                             <label for="input-15" class="col-sm-2 col-form-label">Từ khóa trình độ <span class="focus">*</span></label>
                             <div class="col-sm-4">
-                                <input type="text" readonly class="form-control" id="tu_khoa_trinh_do" name="tu_khoa_trinh_do">
+                                <input type="text" readonly class="form-control" id="keyword" name="keyword">
                             </div>
                         </div>
                         <script type="text/javascript">
@@ -69,7 +69,7 @@ use Illuminate\Support\Facades\Session;
                                 var tenTrinhDo, tuKhoa;
 
                                 //Lấy text từ thẻ input categoryName 
-                                tenTrinhDo = document.getElementById("ten_trinh_do").value;
+                                tenTrinhDo = document.getElementById("name").value;
 
                                 //Đổi chữ hoa thành chữ thường
                                 tuKhoa = tenTrinhDo.toLowerCase();
@@ -96,13 +96,13 @@ use Illuminate\Support\Facades\Session;
                                 tuKhoa = '@' + tuKhoa + '@';
                                 tuKhoa = tuKhoa.replace(/\@\-|\-\@|\@/gi, '');
                                 //In tuKhoa ra textbox có id tuKhoa
-                                document.getElementById('tu_khoa_trinh_do').value = tuKhoa;
+                                document.getElementById('keyword').value = tuKhoa;
                             }
                         </script>
                         <div class="form-group row">
                             <label for="input-15" class="col-sm-2 col-form-label">Trạng thái <span class="focus">*</span></label>
                             <div class="col-sm-10">
-                                <select name="trang_thai_trinh_do" class="form-control" id="basic-select">
+                                <select name="status" class="form-control" id="basic-select">
                                     <option value="1">Ẩn</option>
                                     <option value="0">Hiển thị</option>
                                 </select>
@@ -111,7 +111,7 @@ use Illuminate\Support\Facades\Session;
                         <div class="form-group row">
                             <label for="input-17" class="col-sm-2 col-form-label">Ghi chú</label>
                             <div class="col-sm-10">
-                                <textarea class="form-control" rows="4" id="input-17" name="ghi_chu_trinh_do"></textarea>
+                                <textarea class="form-control" rows="4" id="input-17" name="note"></textarea>
                             </div>
                         </div>
                         <div class="form-footer">
@@ -127,7 +127,48 @@ use Illuminate\Support\Facades\Session;
     <!--start overlay-->
     <div class="overlay toggle-menu"></div>
     <!--end overlay-->
-    
+    <?php
+    $message = Session::get('message');
+    $alert_type = Session::get('alert-type');
+    if ($message && $alert_type == 'warning') {
+        echo '<script>
+            setTimeout(function() {
+                swal({
+                    title: "Thông báo",
+                    text: "' . $message . '",
+                    type: "' . $alert_type . '",
+                    showConfirmButton: true
+                },);
+            }, 1000);
+            </script>';
+        Session::put('message', null);
+    } else if ($message && $alert_type == 'success') {
+        echo '<script>
+            setTimeout(function() {
+                swal({
+                    title: "Thông báo",
+                    text: "' . $message . '",
+                    type: "' . $alert_type . '",
+                    showConfirmButton: true
+                },);
+            }, 1000);
+            </script>';
+        Session::put('message', null);
+    } else if ($message && $alert_type == 'danger') {
+        echo '<script>
+            function success_noti() {
+                Lobibox.notify(' . $alert_type . ', {
+                    pauseDelayOnHover: true,
+                    continueDelayOnInactiveTab: false,
+                    position: "top right",
+                    icon: "",
+                    msg: ' . $message . '
+                });
+            }
+            </script>';
+        Session::put('message', null);
+    }
+    ?>
 </div>
 <!-- End container-fluid-->
 

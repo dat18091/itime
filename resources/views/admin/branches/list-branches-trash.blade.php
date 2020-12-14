@@ -66,7 +66,7 @@ use Illuminate\Support\Facades\Session;
                                 @foreach($dataBranch as $key => $branch)
                                 <tr>
                                     <td>{{$branch->name}}</td>
-                                    
+
                                     <td>{{$branch->address > 25 ? substr($branch->address, 0, 25)."..." : $branch->address}}</td>
                                     <td>
                                         @foreach($getAreas as $key => $area)
@@ -98,7 +98,7 @@ use Illuminate\Support\Facades\Session;
             </div>
         </div>
     </div><!-- End Row-->
-    
+
 
     <!--start overlay-->
     <div class="overlay toggle-menu"></div>

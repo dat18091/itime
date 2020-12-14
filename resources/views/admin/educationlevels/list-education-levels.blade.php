@@ -4,6 +4,10 @@
 <title>IZITIME - Danh sách trình độ</title>
 @stop
 @section('css')
+<?php
+
+use Illuminate\Support\Facades\Session;
+?>
 <!--Data Tables -->
 <link href="{{asset('public/backend/assets/plugins/bootstrap-datatable/css/dataTables.bootstrap4.min.css')}}" rel="stylesheet" type="text/css">
 <link href="{{asset('public/backend/assets/plugins/bootstrap-datatable/css/buttons.bootstrap4.min.css')}}" rel="stylesheet" type="text/css">
@@ -43,8 +47,8 @@
             <div class="card">
                 <div class="card-header">
                 <div class="action-button" style="display:flex;">
-                    <div><a href="" data-toggle="modal" data-target="#themTrinhDo" data-whatever="@mdo" class="btn btn-success space">Tạo mới</a></div>
-                    <div><a href="{{URL::to('/admin/list-education-levels-trash')}}" class="btn btn-primary space">Thùng rác</a></div>
+                    <div><a href="" data-toggle="modal" data-target="#addEducationLevel" data-whatever="@mdo" class="btn btn-success space">Tạo mới</a></div>
+                    <div><a href="{{URL::to('/admin/list-education-levels-trash')}}" class="btn btn-primary space">Thùng rác <span class="badge badge-warning badge-pill">{{ $levelCountOnl }}</span></a></div>
                 </div>
                 </div>
 
@@ -60,27 +64,27 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($educationlevels as $key => $level)
+                                @foreach($dataLevels as $key => $level)
                                 <tr>
-                                    <td>{{ $level->ten_trinh_do }}</td>
-                                    <td>{{ $level->ghi_chu_trinh_do }}</td>
+                                    <td>{{ $level->name }}</td>
+                                    <td>{{ $level->note }}</td>
                                     <td>
                                         <?php
-                                        if ($level->trang_thai_trinh_do == 0) {
+                                        if ($level->status == 0) {
                                         ?>
-                                            <a href="{{URL::to('/admin/hide-education-levels/'.$level->ma_trinh_do)}}"><span class="fa-styling fa fa-thumbs-up"></span></a>
+                                            <a href="{{URL::to('/admin/hide-education-levels/'.$level->id)}}"><span class="fa-styling fa fa-thumbs-up"></span></a>
                                         <?php
                                         } else {
                                         ?>
-                                            <a href="{{URL::to('/admin/show-education-levels/'.$level->ma_trinh_do)}}"><span class="fa-styling fa fa-thumbs-down"></span></a>
+                                            <a href="{{URL::to('/admin/show-education-levels/'.$level->id)}}"><span class="fa-styling fa fa-thumbs-down"></span></a>
                                         <?php
                                         }
                                         ?>
                                     </td>
                                     <td>
                                         <div class="btn-group group-round m-1">
-                                            <a type="button" href="{{URL::to('/admin/edit-education-levels/'.$level->ma_trinh_do)}}" class="btn btn-success waves-effect waves-light">Sửa</a>
-                                            <a type="button" href="{{URL::to('/admin/trash-education-levels/'.$level->ma_trinh_do)}}" onclick="return confirm('Bạn có chắc chắn muốn xóa trình độ này?')" class="btn btn-danger waves-effect waves-light">Xóa</a>
+                                            <a type="button" href="{{URL::to('/admin/edit-education-levels/'.$level->id)}}" class="btn btn-success waves-effect waves-light">Sửa</a>
+                                            <a type="button" href="{{URL::to('/admin/trash-education-levels/'.$level->id)}}" onclick="return confirm('Bạn có chắc chắn muốn xóa trình độ này?')" class="btn btn-danger waves-effect waves-light">Xóa</a>
                                         </div>
                                     </td>
                                 </tr>
@@ -101,7 +105,7 @@
         </div>
     </div><!-- End Row-->
     <!-- ADD EDUCATION LEVELS -->
-    <div class="modal fade bd-example-modal-lg" id="themTrinhDo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade bd-example-modal-lg" id="addEducationLevel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content animated fadeInUp">
                 <div class="modal-header">
@@ -117,11 +121,11 @@
                         <div class="form-group row">
                             <label for="input-14" class="col-sm-2 col-form-label">Tên trình độ<span class="focus">*</span></label>
                             <div class="col-sm-4">
-                                <input type="text" class="form-control" id="ten_trinh_do" name="ten_trinh_do" onkeyup="changeToKeyword();">
+                                <input type="text" class="form-control" id="name" name="name" onkeyup="changeToKeyword();">
                             </div>
                             <label for="input-15" class="col-sm-2 col-form-label">Từ khóa <span class="focus">*</span></label>
                             <div class="col-sm-4">
-                                <input type="text" readonly class="form-control" id="tu_khoa_trinh_do" name="tu_khoa_trinh_do">
+                                <input type="text" readonly class="form-control" id="keyword" name="keyword">
                             </div>
                         </div>
                         <script type="text/javascript">
@@ -129,7 +133,7 @@
                                 var tenTrinhDo, tuKhoa;
 
                                 //Lấy text từ thẻ input categoryName 
-                                tenTrinhDo = document.getElementById("ten_trinh_do").value;
+                                tenTrinhDo = document.getElementById("name").value;
 
                                 //Đổi chữ hoa thành chữ thường
                                 tuKhoa = tenTrinhDo.toLowerCase();
@@ -156,13 +160,13 @@
                                 tuKhoa = '@' + tuKhoa + '@';
                                 tuKhoa = tuKhoa.replace(/\@\-|\-\@|\@/gi, '');
                                 //In tuKhoa ra textbox có id tuKhoa
-                                document.getElementById('tu_khoa_trinh_do').value = tuKhoa;
+                                document.getElementById('keyword').value = tuKhoa;
                             }
                         </script>
                         <div class="form-group row">
                             <label for="input-15" class="col-sm-2 col-form-label">Trạng thái <span class="focus">*</span></label>
                             <div class="col-sm-10">
-                                <select name="trang_thai_trinh_do" class="form-control" id="basic-select">
+                                <select name="status" class="form-control" id="basic-select">
                                     <option value="1">Ẩn</option>
                                     <option value="0">Hiển thị</option>
                                 </select>
@@ -171,7 +175,7 @@
                         <div class="form-group row">
                             <label for="input-17" class="col-sm-2 col-form-label">Ghi chú</label>
                             <div class="col-sm-10">
-                                <textarea class="form-control" rows="4" id="input-17" name="ghi_chu_trinh_do"></textarea>
+                                <textarea class="form-control" rows="4" id="input-17" name="note"></textarea>
                             </div>
                         </div>
                         <div class="form-footer">
@@ -187,6 +191,48 @@
     <!--start overlay-->
     <div class="overlay toggle-menu"></div>
     <!--end overlay-->
+    <?php
+    $message = Session::get('message');
+    $alert_type = Session::get('alert-type');
+    if ($message && $alert_type == 'warning') {
+        echo '<script>
+            setTimeout(function() {
+                swal({
+                    title: "Thông báo",
+                    text: "' . $message . '",
+                    type: "' . $alert_type . '",
+                    showConfirmButton: true
+                },);
+            }, 1000);
+            </script>';
+        Session::put('message', null);
+    } else if ($message && $alert_type == 'success') {
+        echo '<script>
+            setTimeout(function() {
+                swal({
+                    title: "Thông báo",
+                    text: "' . $message . '",
+                    type: "' . $alert_type . '",
+                    showConfirmButton: true
+                },);
+            }, 1000);
+            </script>';
+        Session::put('message', null);
+    } else if ($message && $alert_type == 'danger') {
+        echo '<script>
+            function success_noti() {
+                Lobibox.notify(' . $alert_type . ', {
+                    pauseDelayOnHover: true,
+                    continueDelayOnInactiveTab: false,
+                    position: "top right",
+                    icon: "",
+                    msg: ' . $message . '
+                });
+            }
+            </script>';
+        Session::put('message', null);
+    }
+    ?>
 </div>
 <!-- End container-fluid-->
 @stop

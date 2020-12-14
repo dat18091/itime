@@ -4,6 +4,10 @@
 <title>IZITIME - Danh sách thùng rác trình độ</title>
 @stop
 @section('css')
+<?php
+
+use Illuminate\Support\Facades\Session;
+?>
 <!--Data Tables -->
 <link href="{{asset('public/backend/assets/plugins/bootstrap-datatable/css/dataTables.bootstrap4.min.css')}}" rel="stylesheet" type="text/css">
 <link href="{{asset('public/backend/assets/plugins/bootstrap-datatable/css/buttons.bootstrap4.min.css')}}" rel="stylesheet" type="text/css">
@@ -43,9 +47,8 @@
             <div class="card">
                 <div class="card-header">
                     <div class="action-button" style="display:flex;">
-                        <div class="space"><a href="" data-toggle="modal" data-target="#themTrinhDo" data-whatever="@mdo" class="btn btn-success ">Tạo mới</a></div>
-                        <div class="space"><a href="{{URL::to('/admin/list-education-levels-trash')}}" class="btn btn-primary ">Thùng rác</a></div>
-                        <div class="space"><a href="{{URL::to('/admin/list-education-levels')}}" class="btn btn-danger ">Danh sách</a></div>
+                        <div class="space"><a href="{{URL::to('/admin/list-education-levels-trash')}}" class="btn btn-primary ">Thùng rác <span class="badge badge-warning badge-pill">{{ $levelCount }}</span></a></div>
+                        <div class="space"><a href="{{URL::to('/admin/list-education-levels')}}" class="btn btn-danger ">Danh sách <span class="badge badge-primary badge-pill">{{ $levelCountAllOnl }}</span></a></div>
                     </div>
                 </div>
 
@@ -56,32 +59,18 @@
                                 <tr>
                                     <th>Tên Trình Độ</th>
                                     <th>Ghi chú</th>
-                                    <th>Trạng thái</th>
                                     <th>Thao tác</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($educationlevels as $key => $level)
+                                @foreach($dataLevels as $key => $level)
                                 <tr>
-                                    <td>{{ $level->ten_trinh_do }}</td>
-                                    <td>{{ $level->ghi_chu_trinh_do }}</td>
-                                    <td>
-                                        <?php
-                                        if ($level->trang_thai_trinh_do == 0) {
-                                        ?>
-                                            <a href="{{URL::to('/admin/hide-education-levels/'.$level->ma_trinh_do)}}"><span class="fa-styling fa fa-thumbs-up"></span></a>
-                                        <?php
-                                        } else {
-                                        ?>
-                                            <a href="{{URL::to('/admin/show-education-levels/'.$level->ma_trinh_do)}}"><span class="fa-styling fa fa-thumbs-down"></span></a>
-                                        <?php
-                                        }
-                                        ?>
-                                    </td>
+                                    <td>{{ $level->name }}</td>
+                                    <td>{{ $level->note }}</td>
                                     <td>
                                         <div class="btn-group group-round m-1">
-                                            <a type="button" href="{{URL::to('/admin/restore-education-levels/'.$level->ma_trinh_do)}}" class="btn btn-success waves-effect waves-light">Sửa</a>
-                                            <a type="button" href="{{URL::to('/admin/delete-education-levels/'.$level->ma_trinh_do)}}" onclick="return confirm('Bạn có chắc chắn muốn xóa trình độ này?')" class="btn btn-danger waves-effect waves-light">Xóa</a>
+                                            <a type="button" href="{{URL::to('/admin/restore-education-levels/'.$level->id)}}" class="btn btn-success waves-effect waves-light">Restore</a>
+                                            <a type="button" href="{{URL::to('/admin/delete-education-levels/'.$level->id)}}" onclick="return confirm('Bạn có chắc chắn muốn xóa trình độ này?')" class="btn btn-danger waves-effect waves-light">Xóa</a>
                                         </div>
                                     </td>
                                 </tr>
@@ -91,7 +80,6 @@
                                 <tr>
                                     <th>Tên vùng</th>
                                     <th>Ghi chú</th>
-                                    <th>Trạng thái</th>
                                     <th>Thao tác</th>
                                 </tr>
                             </tfoot>
@@ -101,93 +89,52 @@
             </div>
         </div>
     </div><!-- End Row-->
-    <!-- ADD EDUCATION LEVELS -->
-    <div class="modal fade bd-example-modal-lg" id="themTrinhDo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content animated fadeInUp">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Thêm Trình Độ</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-
-                <div class="modal-body">
-                    <form id="signupForm" method="post" action="{{URL::to('/admin/save-education-levels')}}">
-                        {{csrf_field()}}
-                        <div class="form-group row">
-                            <label for="input-14" class="col-sm-2 col-form-label">Tên trình độ<span class="focus">*</span></label>
-                            <div class="col-sm-4">
-                                <input type="text" class="form-control" id="ten_trinh_do" name="ten_trinh_do" onkeyup="changeToKeyword();">
-                            </div>
-                            <label for="input-15" class="col-sm-2 col-form-label">Từ khóa <span class="focus">*</span></label>
-                            <div class="col-sm-4">
-                                <input type="text" readonly class="form-control" id="tu_khoa_trinh_do" name="tu_khoa_trinh_do">
-                            </div>
-                        </div>
-                        <script type="text/javascript">
-                            function changeToKeyword() {
-                                var tenTrinhDo, tuKhoa;
-
-                                //Lấy text từ thẻ input categoryName 
-                                tenTrinhDo = document.getElementById("ten_trinh_do").value;
-
-                                //Đổi chữ hoa thành chữ thường
-                                tuKhoa = tenTrinhDo.toLowerCase();
-
-                                //Đổi ký tự có dấu thành không dấu
-                                tuKhoa = tuKhoa.replace(/á|à|ả|ạ|ã|ă|ắ|ằ|ẳ|ẵ|ặ|â|ấ|ầ|ẩ|ẫ|ậ/gi, 'a');
-                                tuKhoa = tuKhoa.replace(/é|è|ẻ|ẽ|ẹ|ê|ế|ề|ể|ễ|ệ/gi, 'e');
-                                tuKhoa = tuKhoa.replace(/i|í|ì|ỉ|ĩ|ị/gi, 'i');
-                                tuKhoa = tuKhoa.replace(/ó|ò|ỏ|õ|ọ|ô|ố|ồ|ổ|ỗ|ộ|ơ|ớ|ờ|ở|ỡ|ợ/gi, 'o');
-                                tuKhoa = tuKhoa.replace(/ú|ù|ủ|ũ|ụ|ư|ứ|ừ|ử|ữ|ự/gi, 'u');
-                                tuKhoa = tuKhoa.replace(/ý|ỳ|ỷ|ỹ|ỵ/gi, 'y');
-                                tuKhoa = tuKhoa.replace(/đ/gi, 'd');
-                                //Xóa các ký tự đặt biệt
-                                tuKhoa = tuKhoa.replace(/\`|\~|\!|\@|\#|\||\$|\%|\^|\&|\*|\(|\)|\+|\=|\,|\.|\/|\?|\>|\<|\'|\"|\:|\;|_/gi, '');
-                                //Đổi khoảng trắng thành ký tự gạch ngang
-                                tuKhoa = tuKhoa.replace(/ /gi, "-");
-                                //Đổi nhiều ký tự gạch ngang liên tiếp thành 1 ký tự gạch ngang
-                                //Phòng trường hợp người nhập vào quá nhiều ký tự trắng
-                                tuKhoa = tuKhoa.replace(/\-\-\-\-\-/gi, '-');
-                                tuKhoa = tuKhoa.replace(/\-\-\-\-/gi, '-');
-                                tuKhoa = tuKhoa.replace(/\-\-\-/gi, '-');
-                                tuKhoa = tuKhoa.replace(/\-\-/gi, '-');
-                                //Xóa các ký tự gạch ngang ở đầu và cuối
-                                tuKhoa = '@' + tuKhoa + '@';
-                                tuKhoa = tuKhoa.replace(/\@\-|\-\@|\@/gi, '');
-                                //In tuKhoa ra textbox có id tuKhoa
-                                document.getElementById('tu_khoa_trinh_do').value = tuKhoa;
-                            }
-                        </script>
-                        <div class="form-group row">
-                            <label for="input-15" class="col-sm-2 col-form-label">Trạng thái <span class="focus">*</span></label>
-                            <div class="col-sm-10">
-                                <select name="trang_thai_trinh_do" class="form-control" id="basic-select">
-                                    <option value="1">Ẩn</option>
-                                    <option value="0">Hiển thị</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="input-17" class="col-sm-2 col-form-label">Ghi chú</label>
-                            <div class="col-sm-10">
-                                <textarea class="form-control" rows="4" id="input-17" name="ghi_chu_trinh_do"></textarea>
-                            </div>
-                        </div>
-                        <div class="form-footer">
-                            <button type="submit" name="danh_sach_vung" class="btn btn-danger"><i class="fa fa-times"></i> Hủy Bỏ</button>
-                            <button name="add_areas" class="btn btn-primary" type="submit"><i class="fa fa-add"></i> Thêm Trình Độ</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- END ADD EDUCATION LEVELS -->
+   
     <!--start overlay-->
     <div class="overlay toggle-menu"></div>
     <!--end overlay-->
+    <?php
+    $message = Session::get('message');
+    $alert_type = Session::get('alert-type');
+    if ($message && $alert_type == 'warning') {
+        echo '<script>
+            setTimeout(function() {
+                swal({
+                    title: "Thông báo",
+                    text: "' . $message . '",
+                    type: "' . $alert_type . '",
+                    showConfirmButton: true
+                },);
+            }, 1000);
+            </script>';
+        Session::put('message', null);
+    } else if ($message && $alert_type == 'success') {
+        echo '<script>
+            setTimeout(function() {
+                swal({
+                    title: "Thông báo",
+                    text: "' . $message . '",
+                    type: "' . $alert_type . '",
+                    showConfirmButton: true
+                },);
+            }, 1000);
+            </script>';
+        Session::put('message', null);
+    } else if ($message && $alert_type == 'danger') {
+        echo '<script>
+            function success_noti() {
+                Lobibox.notify(' . $alert_type . ', {
+                    pauseDelayOnHover: true,
+                    continueDelayOnInactiveTab: false,
+                    position: "top right",
+                    icon: "",
+                    msg: ' . $message . '
+                });
+            }
+            </script>';
+        Session::put('message', null);
+    }
+    ?>
 </div>
 <!-- End container-fluid-->
 @stop
