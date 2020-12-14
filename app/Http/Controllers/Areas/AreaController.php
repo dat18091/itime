@@ -10,12 +10,10 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Http;
 use Carbon\Carbon;
 use App\Area;
+use App\Http\Controllers\PortConnect;
 
 class AreaController extends Controller
 {
-    // https://www.itsolutionstuff.com/post/laravel-collection-map-method-exampleexample.html
-    // https://morioh.com/p/cba3cd6d424b
-
     /**
      * This function to check accesses from outside
      * created by : DatNQ
@@ -55,10 +53,9 @@ class AreaController extends Controller
         //         'creation_date' => $item->created_at->format('m/d/Y')
         //     ];
         // });
-
         $parameters = collect(['what' => "107", 'company_id' => "$idCompany"]);
         $input = json_encode($parameters);
-        $data = $client->get('http://192.168.1.190:8080/api/izi-timekeeper/Controller/GetAllByWhat.php?input='.$input.'');
+        $data = $client->get('http://192.168.0.103:8080/api/izi-timekeeper/Controller/SelectAllByWhat.php?input='.$input.'');
         $res = json_decode($data->getBody(), true);
         return view('admin.areas.list-areas', ['areasData'=>$res])->with('areaCountOnl', $areaCountOnl);
     }

@@ -81,6 +81,7 @@ class LoginController extends Controller
     {
         $username = $request->username;
         $password = md5($request->password);
+        $client = new \GuzzleHttp\Client();
         if ($username == "" || $password == "") {
             Session::flash("message", "Tên truy cập hoặc mật khẩu không được để trống.");
             Session::flash("alert-type", "warning");
@@ -104,6 +105,8 @@ class LoginController extends Controller
         } else {
             $result = Company::where('username', $username)->where('password', $password)->first();
             if ($result) {
+                ///////////////////////
+                ///////////////////////
                 Session::put("tenTruyCap", $username);
                 Session::put('maCongTy', $result->id);
                 Session::put('phanQuyen', $result->roles_id);
