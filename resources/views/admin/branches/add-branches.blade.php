@@ -57,21 +57,16 @@ use Illuminate\Support\Facades\Session;
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-body">
-                    <form id="signupForm" method="post" action="{{URL::to('/admin/save-branches')}}">
+                <form id="signupForm" method="post" action="{{URL::to('/admin/save-branches')}}">
                         {{csrf_field()}}
-                        <h4 class="form-header text-uppercase">
-                            <i class="fa fa-envelope-o"></i>
-                            Thêm CHI NHÁNH
-                        </h4>
-
                         <div class="form-group row">
                             <label for="input-14" class="col-sm-2 col-form-label">Tên chi nhánh <span class="focus">*</span></label>
                             <div class="col-sm-4">
-                                <input type="text" class="form-control" id="ten_chi_nhanh" name="ten_chi_nhanh" onkeyup="changeToKeyword();">
+                                <input type="text" class="form-control" id="name" name="name" onkeyup="changeToKeyword();">
                             </div>
                             <label for="input-15" class="col-sm-2 col-form-label">Từ khóa <span class="focus">*</span></label>
                             <div class="col-sm-4">
-                                <input type="text" readonly class="form-control" id="tu_khoa_chi_nhanh" name="tu_khoa_chi_nhanh">
+                                <input type="text" readonly class="form-control" id="keyword" name="keyword">
                             </div>
                         </div>
                         <script type="text/javascript">
@@ -79,7 +74,7 @@ use Illuminate\Support\Facades\Session;
                                 var tenChucDanh, tuKhoa;
 
                                 //Lấy text từ thẻ input categoryName 
-                                tenChucDanh = document.getElementById("ten_chi_nhanh").value;
+                                tenChucDanh = document.getElementById("name").value;
 
                                 //Đổi chữ hoa thành chữ thường
                                 tuKhoa = tenChucDanh.toLowerCase();
@@ -106,31 +101,31 @@ use Illuminate\Support\Facades\Session;
                                 tuKhoa = '@' + tuKhoa + '@';
                                 tuKhoa = tuKhoa.replace(/\@\-|\-\@|\@/gi, '');
                                 //In tuKhoa ra textbox có id tuKhoa
-                                document.getElementById('tu_khoa_chi_nhanh').value = tuKhoa;
+                                document.getElementById('keyword').value = tuKhoa;
                             }
                         </script>
                         <div class="form-group row">
                             <label for="input-15" class="col-sm-2 col-form-label">Trạng thái <span class="focus">*</span></label>
                             <div class="col-sm-4">
-                                <select name="trang_thai_chi_nhanh" class="form-control" id="basic-select">
+                                <select name="status" class="form-control" id="basic-select">
                                     <option value="1">Ẩn</option>
                                     <option value="0">Hiển thị</option>
                                 </select>
                             </div>
                             <label for="input-14" class="col-sm-2 col-form-label">Địa chỉ <span class="focus">*</span></label>
                             <div class="col-sm-4">
-                                <input type="text" class="form-control" id="dia_chi_chi_nhanh" name="dia_chi_chi_nhanh" onkeyup="changeToKeyword();">
+                                <input type="text" class="form-control" id="address" name="address">
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="input-14" class="col-sm-2 col-form-label">Thứ tự hiển thị <span class="focus">*</span></label>
                             <div class="col-sm-4">
-                                <input class="form-control" type="number" min="0" max="50" value="0" name="thu_tu_hien_thi_cn" id="example-number-input">
+                                <input class="form-control" type="number" min="0" max="50" value="0" name="displayOrder" id="example-number-input">
                             </div>
                             <label for="input-15" class="col-sm-2 col-form-label">Tên vùng <span class="focus">*</span></label>
                             <div class="col-sm-4">
-                                <select name="ma_vung" class="form-control single-select">
-                                    @foreach($vung as $key => $area)
+                                <select name="idArea" class="form-control single-select">
+                                    @foreach($getAreas as $key => $area)
                                     <option value="{{$area->id}}">{{$area->name}}</option>
                                     @endforeach
                                 </select>
@@ -140,16 +135,16 @@ use Illuminate\Support\Facades\Session;
                         <div class="form-group row">
                             <label for="input-15" class="col-sm-2 col-form-label">Tỉnh/Thành <span class="focus">*</span></label>
                             <div class="col-sm-4">
-                                <select name="province_id" class="form-control single-select">
-                                    @foreach($tinhThanh as $key => $province)
+                                <select name="idProvince" class="form-control single-select">
+                                    @foreach($getProvinces as $key => $province)
                                     <option value="{{$province->id}}">{{$province->name}}</option>
                                     @endforeach
                                 </select>
                             </div>
                             <label for="input-15" class="col-sm-2 col-form-label">Quận/Huyện <span class="focus">*</span></label>
                             <div class="col-sm-4">
-                                <select name="district_id" class="form-control single-select">
-                                    @foreach($quanHuyen as $key => $district)
+                                <select name="idDistrict" class="form-control single-select">
+                                    @foreach($getDistricts as $key => $district)
                                     <option value="{{$district->id}}">{{$district->name}}</option>
                                     @endforeach
                                 </select>
@@ -158,7 +153,7 @@ use Illuminate\Support\Facades\Session;
                         <div class="form-group row">
                             <label for="input-17" class="col-sm-2 col-form-label">Ghi chú</label>
                             <div class="col-sm-10">
-                                <textarea class="form-control" rows="4" id="input-17" name="ghi_chu_chi_nhanh"></textarea>
+                                <textarea class="form-control" rows="4" id="input-17" name="note"></textarea>
                             </div>
                         </div>
 

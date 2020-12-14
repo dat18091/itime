@@ -41,8 +41,7 @@ class BranchController extends Controller
         ->join('provinces', 'branches.province_id', '=', 'provinces.id')
         ->join('companies', 'branches.company_id', '=', 'companies.id')
         ->select(['branches.*', 'areas.id as idArea', 'districts.id AS idDistrict', 'provinces.id AS idProvince', 'companies.id AS idCompany'])
-        ->where('branches.status', '1')->orWhere('branches.status', '0')->where('branches.company_id', $idCompany)
-        ->get();
+        ->where('branches.status', '1')->orWhere('branches.status', '0')->where('branches.company_id', $idCompany)->get();
         $getAreas = Area::get();
         $getProvinces = DB::table('provinces')->get();
         $getDistricts = DB::table('districts')->get();
@@ -87,15 +86,15 @@ class BranchController extends Controller
             $idProvince == "" || $idDistrict == "") {
             Session::flash('message', 'Các trường không được để trống.');
             Session::flash("alert-type", "warning");
-            return Redirect::to('/admin/add-branches');
+            return Redirect::to('/admin/list-branches');
         } else if(strlen($name) > 100 || strlen($address) > 200) {
             Session::flash('message', 'Bạn đã nhập quá ký tự cho phép.');
             Session::flash("alert-type", "warning");
-            return Redirect::to('/admin/add-branches');
+            return Redirect::to('/admin/list-branches');
         } else if(strlen($name) < 5 || strlen($address) < 5) {
             Session::flash('message', 'Bạn đã nhập không đủ ký tự.');
             Session::flash("alert-type", "warning");
-            return Redirect::to('/admin/add-branches');
+            return Redirect::to('/admin/list-branches');
         } else {
             $data['name'] = $name;
             $data['keyword'] = $keyword;
@@ -159,8 +158,7 @@ class BranchController extends Controller
         $getProvinces = DB::table('provinces')->get();
         $getDistricts = DB::table('districts')->get();
         $branchCount = Branch::where('status', '2')->where('company_id', $idCompany)->count("*");
-        $branchCountAllOnl = Branch::where('status', '0')
-        ->orWhere('status', '1')->where('company_id', $idCompany)->count();
+        $branchCountAllOnl = Branch::where('status', '0')->orWhere('status', '1')->where('company_id', $idCompany)->count();
         return view('admin.branches.list-branches-trash')->with('dataBranch', $dataBranch)->with('branchCount', $branchCount)
         ->with('getAreas', $getAreas)->with('getProvinces', $getProvinces)->with('getDistricts', $getDistricts)->with('branchCountAllOnl', $branchCountAllOnl);
     }
