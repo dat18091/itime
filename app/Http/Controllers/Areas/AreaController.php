@@ -186,7 +186,7 @@ class AreaController extends Controller
 
     /**
      * This function is used is redirect to edit area page
-     * created by : DatNQ
+     * created by : DatNQ     
      * created at : 31/10/2020
      */
     public function edit_areas($id) {
