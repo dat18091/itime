@@ -12,6 +12,7 @@
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css">
 @stop
 <?php
+
 use Illuminate\Support\Facades\Session;
 ?>
 <div class="container-fluid">
@@ -49,7 +50,7 @@ use Illuminate\Support\Facades\Session;
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-body">
-                <form id="signupForm" method="post" action="{{URL::to('/admin/save-branches')}}">
+                    <form id="signupForm" method="post" action="{{URL::to('/admin/save-branches')}}">
                         {{csrf_field()}}
                         <div class="form-group row">
                             <label for="input-14" class="col-sm-2 col-form-label">Tên chi nhánh <span class="focus">*</span></label>
@@ -163,22 +164,10 @@ use Illuminate\Support\Facades\Session;
     <div class="overlay toggle-menu"></div>
     <!--end overlay-->
     <?php
-        $message = Session::get('message');
-        $alert_type = Session::get('alert-type');
-        if ($message && $alert_type == 'warning') {
-            echo '<script>
-            setTimeout(function() {
-                swal({
-                    title: "Thông báo",
-                    text: "'.$message.'",
-                    type: "'.$alert_type.'",
-                    showConfirmButton: true
-                },);
-            }, 1000);
-            </script>';
-            Session::put('message', null);
-        } else if ($message && $alert_type == 'success') {
-            echo '<script>
+    $message = Session::get('message');
+    $alert_type = Session::get('alert-type');
+    if ($message && $alert_type == 'warning') {
+        echo '<script>
             setTimeout(function() {
                 swal({
                     title: "Thông báo",
@@ -188,9 +177,21 @@ use Illuminate\Support\Facades\Session;
                 },);
             }, 1000);
             </script>';
-            Session::put('message', null);
-        } else if ($message && $alert_type == 'danger') {
-            echo '<script>
+        Session::put('message', null);
+    } else if ($message && $alert_type == 'success') {
+        echo '<script>
+            setTimeout(function() {
+                swal({
+                    title: "Thông báo",
+                    text: "' . $message . '",
+                    type: "' . $alert_type . '",
+                    showConfirmButton: true
+                },);
+            }, 1000);
+            </script>';
+        Session::put('message', null);
+    } else if ($message && $alert_type == 'danger') {
+        echo '<script>
             function success_noti() {
                 Lobibox.notify(' . $alert_type . ', {
                     pauseDelayOnHover: true,
@@ -201,9 +202,9 @@ use Illuminate\Support\Facades\Session;
                 });
             }
             </script>';
-            Session::put('message', null);
-        }
-        ?>
+        Session::put('message', null);
+    }
+    ?>
 </div>
 <!-- End container-fluid-->
 
@@ -211,10 +212,10 @@ use Illuminate\Support\Facades\Session;
 @section('javascript')
 <!--notification js -->
 <script src="{{asset('public/backend/assets/plugins/notifications/js/lobibox.min.js')}}"></script>
-    <script src="{{asset('public/backend/assets/plugins/notifications/js/notifications.min.js')}}"></script>
-    <script src="{{asset('public/backend/assets/plugins/notifications/js/notification-custom-script.js')}}"></script>
+<script src="{{asset('public/backend/assets/plugins/notifications/js/notifications.min.js')}}"></script>
+<script src="{{asset('public/backend/assets/plugins/notifications/js/notification-custom-script.js')}}"></script>
 
-    <!--Sweet Alerts -->
-    <script src="{{asset('node_modules/sweetalert/dist/sweetalert.min.js')}}"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+<!--Sweet Alerts -->
+<script src="{{asset('node_modules/sweetalert/dist/sweetalert.min.js')}}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 @stop

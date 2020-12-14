@@ -38,29 +38,16 @@ class AreaController extends Controller
      */
     public function list_areas() {
         $this->AuthLogin();
-        $client = new \GuzzleHttp\Client();
         $idCompany = Session::get('maCongTy');
-        // $areasData = Area::where('status', '1')
-        // ->orWhere('status', '0')
-        // ->where('company_id',$idCompany)->get();
+        $areasData = Area::where('status', '1')->orWhere('status', '0')->where('company_id',$idCompany)->get();
         $areaCountOnl = Area::where('status', '2')->count();
-        // return view('admin.areas.list-areas')
-        // ->with('areasData', $areasData)->with('areaCountOnl', $areaCountOnl);
-        
-        // $collection = User::get();
-        // $collection->map(function($item, $key) {
-        //     return [
-        //         'id' => $item->id,
-        //         'name' => $item->name,
-        //         'creation_date' => $item->created_at->format('m/d/Y')
-        //     ];
-        // });
-
-        $parameters = collect(['what' => "107", 'company_id' => "$idCompany"]);
-        $input = json_encode($parameters);
-        $data = $client->get('http://192.168.1.190:8080/api/izi-timekeeper/Controller/GetAllByWhat.php?input='.$input.'');
-        $res = json_decode($data->getBody(), true);
-        return view('admin.areas.list-areas', ['areasData'=>$res])->with('areaCountOnl', $areaCountOnl);
+        return view('admin.areas.list-areas')->with('areasData', $areasData)->with('areaCountOnl', $areaCountOnl);
+        // $client = new \GuzzleHttp\Client();
+        // $parameters = collect(['what' => "107", 'company_id' => "$idCompany"]);
+        // $input = json_encode($parameters);
+        // $data = $client->get('http://192.168.1.190:8080/api/izi-timekeeper/Controller/GetAllByWhat.php?input='.$input.'');
+        // $res = json_decode($data->getBody(), true);
+        // return view('admin.areas.list-areas', ['areasData'=>$res])->with('areaCountOnl', $areaCountOnl);
     }
 
     /**
