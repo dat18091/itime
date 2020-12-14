@@ -1,7 +1,7 @@
 @extends('admin_layout')
 @section('admin_content')
 @section('admin_title')
-<title>IZITIME - Cập nhật vùng</title>
+<title>IZITIME - Chỉnh sửa vùng</title>
 @stop
 @section('css')
 <!-- Vector CSS -->
@@ -15,13 +15,13 @@ use Illuminate\Support\Facades\Session;
     <!-- Breadcrumb-->
     <div class="row pt-2 pb-2">
         <div class="col-sm-9">
-            <h4 class="page-title">CẬP NHẬT VÙNG</h4>
+            <h4 class="page-title">CHỈNH SỬA VÙNG</h4>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="javaScript:void();">CÀI ĐẶT HỆ THỐNG</a></li>
                 <li class="breadcrumb-item"><a href="javaScript:void();">Công Ty</a></li>
                 <li class="breadcrumb-item"><a href="javaScript:void();">Công Ty</a></li>
                 <li class="breadcrumb-item"><a href="javaScript:void();">Vùng</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Cập Nhật Vùng</li>
+                <li class="breadcrumb-item active" aria-current="page">Chỉnh Sửa Vùng</li>
             </ol>
         </div>
         <div class="col-sm-3">
@@ -47,22 +47,22 @@ use Illuminate\Support\Facades\Session;
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-body">
-                    @foreach($areas as $key => $area)
-                    <form id="signupForm" method="post" action="{{URL::to('/admin/update-areas/'.$area->ma_vung)}}">
+                    @foreach($updateArea as $key => $area)
+                    <form id="signupForm" method="post" action="{{URL::to('/admin/update-areas/'.$area->id)}}">
                         {{csrf_field()}}
                         <h4 class="form-header text-uppercase">
                             <i class="fa fa-envelope-o"></i>
-                            Cập Nhật Vùng
+                            Chỉnh Sửa Vùng
                         </h4>
 
                         <div class="form-group row">
                             <label for="input-14" class="col-sm-2 col-form-label">Tên vùng <span class="focus">*</span></label>
                             <div class="col-sm-4">
-                                <input type="text" class="form-control" value="{{$area->ten_vung}}" id="ten_vung" name="ten_vung" onkeyup="changeToKeyword();">
+                                <input type="text" class="form-control" value="{{$area->name}}" id="name" name="name" onkeyup="changeToKeyword();">
                             </div>
-                            <label for="input-15" class="col-sm-2 col-form-label">Từ khóa tên vùng <span class="focus">*</span></label>
+                            <label for="input-15" class="col-sm-2 col-form-label">Từ khóa <span class="focus">*</span></label>
                             <div class="col-sm-4">
-                                <input type="text" readonly class="form-control" value="{{$area->tu_khoa_vung}}" id="tu_khoa_vung" name="tu_khoa_vung">
+                                <input type="text" readonly class="form-control" value="{{$area->keyword}}" id="keyword" name="keyword">
                             </div>
                         </div>
                         <script type="text/javascript">
@@ -70,7 +70,7 @@ use Illuminate\Support\Facades\Session;
                                 var tenVung, tuKhoa;
 
                                 //Lấy text từ thẻ input categoryName 
-                                tenVung = document.getElementById("ten_vung").value;
+                                tenVung = document.getElementById("name").value;
 
                                 //Đổi chữ hoa thành chữ thường
                                 tuKhoa = tenVung.toLowerCase();
@@ -97,18 +97,18 @@ use Illuminate\Support\Facades\Session;
                                 tuKhoa = '@' + tuKhoa + '@';
                                 tuKhoa = tuKhoa.replace(/\@\-|\-\@|\@/gi, '');
                                 //In tuKhoa ra textbox có id tuKhoa
-                                document.getElementById('tu_khoa_vung').value = tuKhoa;
+                                document.getElementById('keyword').value = tuKhoa;
                             }
                         </script>
                         <div class="form-group row">
                             <label for="input-17" class="col-sm-2 col-form-label">Ghi chú</label>
                             <div class="col-sm-10">
-                                <textarea class="form-control" rows="4" id="input-17" name="ghi_chu_vung">{{$area->ghi_chu_vung}}</textarea>
+                                <textarea class="form-control" rows="4" id="input-17" name="note">{{$area->note}}</textarea>
                             </div>
                         </div>
                         <div class="form-footer">
                             <button type="submit" name="danh_sach_vung" class="btn btn-danger"><i class="fa fa-times"></i> Hủy Bỏ</button>
-                            <button name="add_areas" class="btn btn-primary" type="submit"><i class="fa fa-add"></i> Cập Nhật Vùng</button>
+                            <button name="add_areas" class="btn btn-primary" type="submit"><i class="fa fa-add"></i> Chỉnh Sửa Vùng</button>
                         </div>
                     </form>
                     @endforeach
@@ -122,64 +122,42 @@ use Illuminate\Support\Facades\Session;
     <!--end overlay-->
     <?php
         $message = Session::get('message');
-        if (strpos($message, "Thêm vùng")) {
-            echo '<script>
-                setTimeout(function() {
-                swal({
-                    title: "Thông báo",
-                    text: "Thêm vùng thành công",
-                    type: "success",
-                    showConfirmButton: true
-                    },);
-                }, 1000);
-            </script>';
-            Session::put('message', null);
-        } else if (strpos($message, "trống")) {
+        $alert_type = Session::get('alert-type');
+        if ($message && $alert_type == 'warning') {
             echo '<script>
             setTimeout(function() {
                 swal({
                     title: "Thông báo",
-                    text: "Các trường không được để trống.",
-                    type: "error",
+                    text: "'.$message.'",
+                    type: "'.$alert_type.'",
                     showConfirmButton: true
                 },);
             }, 1000);
             </script>';
             Session::put('message', null);
-        } else if (strpos($message, "quá ký tự")) {
+        } else if ($message && $alert_type == 'success') {
             echo '<script>
             setTimeout(function() {
                 swal({
                     title: "Thông báo",
-                    text: "Bạn đã nhập quá ký tự cho phép.",
-                    type: "error",
+                    text: "' . $message . '",
+                    type: "' . $alert_type . '",
                     showConfirmButton: true
                 },);
             }, 1000);
             </script>';
             Session::put('message', null);
-        } else if (strpos($message, "không đủ ký tự")) {
+        } else if ($message && $alert_type == 'danger') {
             echo '<script>
-            setTimeout(function() {
-                swal({
-                    title: "Thông báo",
-                    text: "Bạn đã nhập không đủ ký tự.",
-                    type: "error",
-                    showConfirmButton: true
-                },);
-            }, 1000);
-            </script>';
-            Session::put('message', null);
-        } else if (strpos($message, "không hợp lệ")) {
-            echo '<script>
-            setTimeout(function() {
-                swal({
-                    title: "Thông báo",
-                    text: "Bạn cần kiểm tra lại mật khẩu, website, email và số điện thoại.",
-                    type: "error",
-                    showConfirmButton: true
-                },);
-            }, 1000);
+            function success_noti() {
+                Lobibox.notify(' . $alert_type . ', {
+                    pauseDelayOnHover: true,
+                    continueDelayOnInactiveTab: false,
+                    position: "top right",
+                    icon: "",
+                    msg: ' . $message . '
+                });
+            }
             </script>';
             Session::put('message', null);
         }

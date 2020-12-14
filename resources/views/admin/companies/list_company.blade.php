@@ -3,6 +3,10 @@
 @section('admin_title')
 <title>IZITIME - Danh sách các công ty đăng ký</title>
 @stop
+<?php
+
+use Illuminate\Support\Facades\Session;
+?>
 @section('css')
 <!--Data Tables -->
 <link href="{{asset('public/backend/assets/plugins/bootstrap-datatable/css/dataTables.bootstrap4.min.css')}}" rel="stylesheet" type="text/css">
@@ -44,7 +48,7 @@
                 <div class="card-header"><i class="fa fa-table"></i> DANH SÁCH CÔNG TY ĐĂNG KÝ</div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table id="example" class="table table-bordered">                            
+                        <table id="example" class="table table-bordered">
                             <thead>
                                 <tr>
                                     <th>Tên công ty</th>
@@ -86,6 +90,48 @@
     <!--start overlay-->
     <div class="overlay toggle-menu"></div>
     <!--end overlay-->
+    <?php
+    $message = Session::get('message');
+    $alert_type = Session::get('alert-type');
+    if ($message && $alert_type == 'warning') {
+        echo '<script>
+            setTimeout(function() {
+                swal({
+                    title: "Thông báo",
+                    text: "' . $message . '",
+                    type: "' . $alert_type . '",
+                    showConfirmButton: true
+                },);
+            }, 1000);
+            </script>';
+        Session::put('message', null);
+    } else if ($message && $alert_type == 'success') {
+        echo '<script>
+            setTimeout(function() {
+                swal({
+                    title: "Thông báo",
+                    text: "' . $message . '",
+                    type: "' . $alert_type . '",
+                    showConfirmButton: true
+                },);
+            }, 1000);
+            </script>';
+        Session::put('message', null);
+    } else if ($message && $alert_type == 'danger') {
+        echo '<script>
+            function success_noti() {
+                Lobibox.notify(' . $alert_type . ', {
+                    pauseDelayOnHover: true,
+                    continueDelayOnInactiveTab: false,
+                    position: "top right",
+                    icon: "",
+                    msg: ' . $message . '
+                });
+            }
+            </script>';
+        Session::put('message', null);
+    }
+    ?>
 </div>
 <!-- End container-fluid-->
 @stop

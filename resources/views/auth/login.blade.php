@@ -27,6 +27,8 @@ use Illuminate\Support\Facades\Session;
     <link href="{{asset('public/backend/assets/css/app-style.css')}}" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="{{asset('node_modules/sweetalert/dist/sweetalert.css')}}">
+
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css">
 </head>
 
 <body>
@@ -47,18 +49,13 @@ use Illuminate\Support\Facades\Session;
                 <div class="card mb-0 ">
                     <div class="card-body">
                         <div class="card-content p-3">
-                            <!-- <div class="text-center">
-                                <img src="{{asset('public/backend/assets/images/logo-icon.png')}}" alt="logo icon">
-                            </div> -->
                             <div class="card-title text-uppercase text-center py-3">Đăng Nhập</div>
                             <form action="{{URL::to('/sign-in')}}" method="post">
-                                {{csrf_field()}}
                                 @csrf
-                                <meta name="csrf-token" content="{{ csrf_token() }}">
                                 <div class="form-group">
                                     <div class="position-relative has-icon-left">
                                         <label for="exampleInputUsername" class="sr-only">Tên truy cập</label>
-                                        <input type="text" id="exampleInputUsername" name="ten_truy_cap" class="form-control" placeholder="Nhập tên truy cập của bạn">
+                                        <input type="text" id="exampleInputUsername" name="username" class="form-control" placeholder="Nhập tên truy cập của bạn">
                                         <div class="form-control-position">
                                             <i class="icon-user"></i>
                                         </div>
@@ -67,7 +64,7 @@ use Illuminate\Support\Facades\Session;
                                 <div class="form-group">
                                     <div class="position-relative has-icon-left">
                                         <label for="exampleInputPassword" class="sr-only">Mật khẩu</label>
-                                        <input type="password" id="exampleInputPassword" name="mat_khau" class="form-control" placeholder="Nhập mật khẩu của bạn">
+                                        <input type="password" id="exampleInputPassword" name="password" class="form-control" placeholder="Nhập mật khẩu của bạn">
                                         <div class="form-control-position">
                                             <i class="icon-lock"></i>
                                         </div>
@@ -102,34 +99,7 @@ use Illuminate\Support\Facades\Session;
                                     <p class="text-dark">Ban chưa có tài khoản? <a href="{{URL::to('/register')}}"> Đăng ký</a></p>
                                 </div>
                             </form>
-                            <?php
-                            $message = Session::get('message');
-                            if (strpos($message, "thành công")) {
-                                echo '<script>
-                                        setTimeout(function() {
-                                            swal({
-                                                title: "Thông báo",
-                                                text: "Thành công",
-                                                type: "success",
-                                                showConfirmButton: true
-                                            },);
-                                        }, 1000);
-                                    </script>';
-                                Session::put('message', null);
-                            } else if (strpos($message, "không đúng")) {
-                                echo '<script>
-                                    setTimeout(function() {
-                                        swal({
-                                            title: "Thông báo",
-                                            text: "Tên truy cập hoặc mật khẩu không đúng.",
-                                            type: "error",
-                                            showConfirmButton: true
-                                        },);
-                                    }, 1000);
-                                    </script>';
-                                Session::put('message', null);
-                            }
-                            ?>
+
                         </div>
                     </div>
                 </div>
@@ -140,7 +110,48 @@ use Illuminate\Support\Facades\Session;
         <a href="javaScript:void();" class="back-to-top"><i class="fa fa-angle-double-up"></i> </a>
         <!--End Back To Top Button-->
 
-
+        <?php
+        $message = Session::get('message');
+        $alert_type = Session::get('alert-type');
+        if ($message && $alert_type == 'warning') {
+            echo '<script>
+            setTimeout(function() {
+                swal({
+                    title: "Thông báo",
+                    text: "' . $message . '",
+                    type: "' . $alert_type . '",
+                    showConfirmButton: true
+                },);
+            }, 1000);
+            </script>';
+            Session::put('message', null);
+        } else if ($message && $alert_type == 'success') {
+            echo '<script>
+            setTimeout(function() {
+                swal({
+                    title: "Thông báo",
+                    text: "' . $message . '",
+                    type: "' . $alert_type . '",
+                    showConfirmButton: true
+                },);
+            }, 1000);
+            </script>';
+            Session::put('message', null);
+        } else if ($message && $alert_type == 'danger') {
+            echo '<script>
+            function success_noti() {
+                Lobibox.notify(' . $alert_type . ', {
+                    pauseDelayOnHover: true,
+                    continueDelayOnInactiveTab: false,
+                    position: "top right",
+                    icon: "",
+                    msg: ' . $message . '
+                });
+            }
+            </script>';
+            Session::put('message', null);
+        }
+        ?>
 
     </div>
     <!--wrapper-->
@@ -161,6 +172,35 @@ use Illuminate\Support\Facades\Session;
 
     <!--Sweet Alerts -->
     <script src="{{asset('node_modules/sweetalert/dist/sweetalert.min.js')}}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script>
+        document.onkeydown = function(e) {
+            if (e.ctrlKey &&
+                (e.keyCode === 67 ||
+                    e.keyCode === 86 ||
+                    e.keyCode === 85 ||
+                    e.keyCode === 117)) {
+                return false;
+            } else {
+                return true;
+            }
+        };
+        $(document).keypress("u", function(e) {
+            if (e.ctrlKey) {
+                return false;
+            } else {
+                return true;
+            }
+        });
+        $(window).on('keydown', function(event) {
+            if (event.ctrlKey && event.shiftKey && event.keyCode == 73) {
+                return false; //Prevent from ctrl+shift+i
+            }
+        })
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+        });
+    </script>
 
 </body>
 

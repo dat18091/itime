@@ -6,6 +6,11 @@
 <!-- Vector CSS -->
 <link href="{{asset('public/backend/assets/plugins/vectormap/jquery-jvectormap-2.0.2.css')}}" rel="stylesheet" />
 @stop
+<?php
+
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Session;
+?>
 @section('admin_content')
 <div class="container-fluid">
     <!--Start Dashboard Content-->
@@ -13,22 +18,22 @@
         <div class="col-12 col-lg-6 col-xl-3">
             <div class="card gradient-deepblue">
                 <div class="card-body">
-                    <h5 class="text-white mb-0">9526 <span class="float-right"><i class="fa fa-shopping-cart"></i></span></h5>
+                    <h5 class="text-white mb-0">{{ $companyCount }} <span class="float-right"><i class="fa fa-shopping-cart"></i></span></h5>
                     <div class="progress my-3" style="height:3px;">
                         <div class="progress-bar" style="width:55%"></div>
                     </div>
-                    <p class="mb-0 text-white small-font">Total Orders <span class="float-right">+4.2% <i class="zmdi zmdi-long-arrow-up"></i></span></p>
+                    <p class="mb-0 text-white small-font">Số lượng công ty <span class="float-right">+4.2% <i class="zmdi zmdi-long-arrow-up"></i></span></p>
                 </div>
             </div>
         </div>
         <div class="col-12 col-lg-6 col-xl-3">
             <div class="card gradient-orange">
                 <div class="card-body">
-                    <h5 class="text-white mb-0">8323 <span class="float-right"><i class="fa fa-usd"></i></span></h5>
+                    <h5 class="text-white mb-0">{{ $employeeCount }} <span class="float-right"><i class="fa fa-usd"></i></span></h5>
                     <div class="progress my-3" style="height:3px;">
                         <div class="progress-bar" style="width:55%"></div>
                     </div>
-                    <p class="mb-0 text-white small-font">Total Revenue <span class="float-right">+1.2% <i class="zmdi zmdi-long-arrow-up"></i></span></p>
+                    <p class="mb-0 text-white small-font">Số lượng nhân viên <span class="float-right">+1.2% <i class="zmdi zmdi-long-arrow-up"></i></span></p>
                 </div>
             </div>
         </div>
@@ -634,6 +639,37 @@
     <!--start overlay-->
     <div class="overlay toggle-menu"></div>
     <!--end overlay-->
+
+    <?php 
+        $message = Session::get('message');
+        $alert_type = Session::get('alert-type');
+        if($message && $alert_type == 'warning') {
+            echo '<script>
+            setTimeout(function() {
+                swal({
+                    title: "Thông báo",
+                    text: "'.$message.'",
+                    type: "'.$alert_type.'",
+                    showConfirmButton: true
+                },);
+            }, 1000);
+            </script>';
+            Session::put('message', null);
+        } else if ($message && $alert_type == 'success') {
+            echo '<script>
+            setTimeout(function() {
+                swal({
+                    title: "Thông báo",
+                    text: "'.$message.'",
+                    type: "'.$alert_type.'",
+                    showConfirmButton: true
+                },);
+            }, 1000);
+            </script>';
+            Session::put('message', null);
+        }
+        ?>
+
 </div>
 <!-- End container-fluid-->
 
