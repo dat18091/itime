@@ -39,9 +39,7 @@ class AreaController extends Controller
         $idCompany = Session::get('maCongTy');
         $areasData = Area::where('status', '1')->orWhere('status', '0')->where('company_id',$idCompany)->get();
         $areaCountOnl = Area::where('status', '2')->count();
-        return view('admin.areas.list-areas')
-        ->with('areasData', $areasData)->with('areaCountOnl', $areaCountOnl);
-        
+        return view('admin.areas.list-areas')->with('areasData', $areasData)->with('areaCountOnl', $areaCountOnl);
         // $client = new \GuzzleHttp\Client();
         // $parameters = collect(['what' => "107", 'company_id' => "$idCompany"]);
         // $input = json_encode($parameters);
@@ -170,7 +168,7 @@ class AreaController extends Controller
 
     /**
      * This function is used is redirect to edit area page
-     * created by : DatNQ
+     * created by : DatNQ     
      * created at : 31/10/2020
      */
     public function edit_areas($id) {
@@ -224,7 +222,7 @@ class AreaController extends Controller
         Area::where('id', $id)->delete();
         Session::flash('message', 'Xóa vùng thành công.');
         Session::flash("alert-type", "success");
-        return Redirect::to('/admin/areas-trash');
+        return Redirect::to('/admin/list-areas');
     }
 
     /**

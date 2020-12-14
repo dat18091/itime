@@ -56,7 +56,7 @@ use Illuminate\Support\Facades\Session;
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table id="dataTable" class="table table-bordered">
+                        <table id="example" class="table table-bordered">
                             <thead>
                                 <tr>
                                     <th>Tên vùng</th>
@@ -68,25 +68,25 @@ use Illuminate\Support\Facades\Session;
                             <tbody>
                                 @foreach($areasData as $key => $area)
                                 <tr>
-                                    <td>{{ $area['name'] }}</td>
-                                    <td>{{ $area['note'] }}</td>
+                                    <td>{{ $area->name }}</td>
+                                    <td>{{ $area->note }}</td>
                                     <td>
                                         <?php
-                                        if ($area['status'] == 0) {
+                                        if ($area->status == 0) {
                                         ?>
-                                            <a href="{{URL::to('/admin/hide-areas/'.$area['id'])}}"><span class="fa-styling fa fa-thumbs-up"></span></a>
+                                            <a href="{{URL::to('/admin/hide-areas/'.$area->id)}}"><span class="fa-styling fa fa-thumbs-up"></span></a>
                                         <?php
                                         } else {
                                         ?>
-                                            <a href="{{URL::to('/admin/show-areas/'.$area['id'])}}"><span class="fa-styling fa fa-thumbs-down"></span></a>
+                                            <a href="{{URL::to('/admin/show-areas/'.$area->id)}}"><span class="fa-styling fa fa-thumbs-down"></span></a>
                                         <?php
                                         }
                                         ?>
                                     </td>
                                     <td>
                                         <div class="btn-group group-round m-1">
-                                            <a type="button" href="{{URL::to('/admin/edit-areas/'.$area['id'])}}" class="btn btn-success waves-effect waves-light">Sửa</a>
-                                            <a type="button" href="{{URL::to('/admin/trash-areas/'.$area['id'])}}" onclick="return confirm('Bạn có chắc chắn muốn xóa vùng này?')" class="btn btn-danger waves-effect waves-light">Xóa</a>
+                                            <a type="button" href="{{URL::to('/admin/edit-areas/'.$area->id)}}" class="btn btn-success waves-effect waves-light">Sửa</a>
+                                            <a type="button" href="{{URL::to('/admin/trash-areas/'.$area->id)}}" onclick="return confirm('Bạn có chắc chắn muốn xóa vùng này?')" class="btn btn-danger waves-effect waves-light">Xóa</a>
                                         </div>
                                     </td>
                                 </tr>
@@ -197,22 +197,10 @@ use Illuminate\Support\Facades\Session;
     <div class="overlay toggle-menu"></div>
     <!--end overlay-->
     <?php
-        $message = Session::get('message');
-        $alert_type = Session::get('alert-type');
-        if ($message && $alert_type == 'warning') {
-            echo '<script>
-            setTimeout(function() {
-                swal({
-                    title: "Thông báo",
-                    text: "'.$message.'",
-                    type: "'.$alert_type.'",
-                    showConfirmButton: true
-                },);
-            }, 1000);
-            </script>';
-            Session::put('message', null);
-        } else if ($message && $alert_type == 'success') {
-            echo '<script>
+    $message = Session::get('message');
+    $alert_type = Session::get('alert-type');
+    if ($message && $alert_type == 'warning') {
+        echo '<script>
             setTimeout(function() {
                 swal({
                     title: "Thông báo",
@@ -222,9 +210,21 @@ use Illuminate\Support\Facades\Session;
                 },);
             }, 1000);
             </script>';
-            Session::put('message', null);
-        } else if ($message && $alert_type == 'danger') {
-            echo '<script>
+        Session::put('message', null);
+    } else if ($message && $alert_type == 'success') {
+        echo '<script>
+            setTimeout(function() {
+                swal({
+                    title: "Thông báo",
+                    text: "' . $message . '",
+                    type: "' . $alert_type . '",
+                    showConfirmButton: true
+                },);
+            }, 1000);
+            </script>';
+        Session::put('message', null);
+    } else if ($message && $alert_type == 'danger') {
+        echo '<script>
             function success_noti() {
                 Lobibox.notify(' . $alert_type . ', {
                     pauseDelayOnHover: true,
@@ -235,9 +235,9 @@ use Illuminate\Support\Facades\Session;
                 });
             }
             </script>';
-            Session::put('message', null);
-        }
-        ?>
+        Session::put('message', null);
+    }
+    ?>
 </div>
 <!-- End container-fluid-->
 @stop
