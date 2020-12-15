@@ -51,8 +51,8 @@ use Illuminate\Support\Facades\Session;
             <div class="card">
                 <div class="card-header">
                     <div class="action-button" style="display:flex;">
-                        <div><a href="" data-toggle="modal" data-target="#themNhomTruyCap" data-whatever="@mdo" class="btn btn-success space">Tạo mới </a></div>
-                        <div><a href="{{URL::to('/admin/list-access-groups-trash')}}" class="btn btn-primary space">Thùng rác <span class="badge badge-warning badge-pill">12</span></a></div>
+                        <div><a href="" data-toggle="modal" data-target="#addAccessGroup" data-whatever="@mdo" class="btn btn-success space">Tạo mới </a></div>
+                        <div><a href="{{URL::to('/admin/list-access-groups-trash')}}" class="btn btn-primary space">Thùng rác <span class="badge badge-warning badge-pill">{{ $accessGroupCountOnl }}</span></a></div>
                     </div>
                 </div>
                 <div class="card-body">
@@ -67,27 +67,27 @@ use Illuminate\Support\Facades\Session;
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($nhomTruyCap as $key => $access)
+                                @foreach($dataAccessGroup as $key => $access)
                                 <tr>
-                                    <td>{{ $access->ten_nhom_truy_cap }}</td>
-                                    <td>{{ $access->ghi_chu_nhom_truy_cap }}</td>
+                                    <td>{{ $access->name }}</td>
+                                    <td>{{ $access->note }}</td>
                                     <td>
                                         <?php
-                                        if ($access->trang_thai_nhom_truy_cap == 0) {
+                                        if ($access->status == 0) {
                                         ?>
-                                            <a href="{{URL::to('/admin/hide-access-groups/'.$access->ma_nhom_truy_cap)}}"><span class="fa-styling fa fa-thumbs-up"></span></a>
+                                            <a href="{{URL::to('/admin/hide-access-groups/'.$access->id)}}"><span class="fa-styling fa fa-thumbs-up"></span></a>
                                         <?php
                                         } else {
                                         ?>
-                                            <a href="{{URL::to('/admin/show-access-groups/'.$access->ma_nhom_truy_cap)}}"><span class="fa-styling fa fa-thumbs-down"></span></a>
+                                            <a href="{{URL::to('/admin/show-access-groups/'.$access->id)}}"><span class="fa-styling fa fa-thumbs-down"></span></a>
                                         <?php
                                         }
                                         ?>
                                     </td>
                                     <td>
                                         <div class="btn-group group-round m-1">
-                                            <a type="button" href="{{URL::to('/admin/edit-access-groups/'.$access->ma_nhom_truy_cap)}}" class="btn btn-success waves-effect waves-light">Sửa</a>
-                                            <a type="button" href="{{URL::to('/admin/trash-access-groups/'.$access->ma_nhom_truy_cap)}}" onclick="return confirm('Bạn có chắc chắn muốn xóa nhóm truy cập này?')" class="btn btn-danger waves-effect waves-light">Xóa</a>
+                                            <a type="button" href="{{URL::to('/admin/edit-access-groups/'.$access->id)}}" class="btn btn-success waves-effect waves-light">Sửa</a>
+                                            <a type="button" href="{{URL::to('/admin/trash-access-groups/'.$access->id)}}" onclick="return confirm('Bạn có chắc chắn muốn xóa nhóm truy cập này?')" class="btn btn-danger waves-effect waves-light">Xóa</a>
                                         </div>
                                     </td>
                                 </tr>
@@ -110,7 +110,7 @@ use Illuminate\Support\Facades\Session;
     </div><!-- End Row-->
 
     <!-- ADD AREA -->
-    <div class="modal fade bd-example-modal-lg" id="themNhomTruyCap" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade bd-example-modal-lg" id="addAccessGroup" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -126,11 +126,11 @@ use Illuminate\Support\Facades\Session;
                         <div class="form-group row">
                             <label for="input-14" class="col-sm-2 col-form-label">Tên nhóm truy cập <span class="focus">*</span></label>
                             <div class="col-sm-4">
-                                <input type="text" class="form-control" id="ten_nhom_truy_cap" name="ten_nhom_truy_cap" onkeyup="changeToKeyword();">
+                                <input type="text" class="form-control" id="name" name="name" onkeyup="changeToKeyword();">
                             </div>
                             <label for="input-15" class="col-sm-2 col-form-label">Từ khóa <span class="focus">*</span></label>
                             <div class="col-sm-4">
-                                <input type="text" readonly class="form-control" id="tu_khoa_nhom_truy_cap" name="tu_khoa_nhom_truy_cap">
+                                <input type="text" readonly class="form-control" id="keyword" name="keyword">
                             </div>
                         </div>
                         <script type="text/javascript">
@@ -138,7 +138,7 @@ use Illuminate\Support\Facades\Session;
                                 var tenVung, tuKhoa;
 
                                 //Lấy text từ thẻ input categoryName 
-                                tenVung = document.getElementById("ten_nhom_truy_cap").value;
+                                tenVung = document.getElementById("name").value;
 
                                 //Đổi chữ hoa thành chữ thường
                                 tuKhoa = tenVung.toLowerCase();
@@ -165,13 +165,13 @@ use Illuminate\Support\Facades\Session;
                                 tuKhoa = '@' + tuKhoa + '@';
                                 tuKhoa = tuKhoa.replace(/\@\-|\-\@|\@/gi, '');
                                 //In tuKhoa ra textbox có id tuKhoa
-                                document.getElementById('tu_khoa_nhom_truy_cap').value = tuKhoa;
+                                document.getElementById('keyword').value = tuKhoa;
                             }
                         </script>
                         <div class="form-group row">
                             <label for="input-15" class="col-sm-2 col-form-label">Trạng thái <span class="focus">*</span></label>
                             <div class="col-sm-10">
-                                <select name="trang_thai_nhom_truy_cap" class="form-control" id="basic-select">
+                                <select name="status" class="form-control" id="basic-select">
                                     <option value="1">Ẩn</option>
                                     <option value="0">Hiển thị</option>
                                 </select>
@@ -180,7 +180,7 @@ use Illuminate\Support\Facades\Session;
                         <div class="form-group row">
                             <label for="input-17" class="col-sm-2 col-form-label">Ghi chú</label>
                             <div class="col-sm-10">
-                                <textarea class="form-control" rows="4" id="input-17" name="ghi_chu_nhom_truy_cap"></textarea>
+                                <textarea class="form-control" rows="4" id="input-17" name="note"></textarea>
                             </div>
                         </div>
                         <div class="form-footer">

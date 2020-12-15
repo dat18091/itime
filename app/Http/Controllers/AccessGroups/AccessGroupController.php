@@ -34,11 +34,11 @@ class AccessGroupController extends Controller
      */
     public function list_access_groups() {
         $this->AuthLogin();
-        $maCongTy = Session::get('maCongTy');
-        $danhSach = Accessgroup::where('trang_thai_nhom_truy_cap', '1')
-        ->orWhere('trang_thai_nhom_truy_cap', '0')
-        ->where('ma_cong_ty', $maCongTy)->get();
-        return view('admin.accessgroups.list-access-groups')->with('nhomTruyCap', $danhSach);
+        $idCompany = Session::get('maCongTy');
+        $dataAccessGroup = Accessgroup::where('status', '1')->orWhere('status', '0')->where('company_id', $idCompany)->get();
+        $accessGroupCountOnl = Accessgroup::where('status', '2')->count();
+        return view('admin.accessgroups.list-access-groups')->with('dataAccessGroup', $dataAccessGroup)
+        ->with('accessGroupCountOnl', $accessGroupCountOnl);
     }
 
     /**
@@ -59,29 +59,29 @@ class AccessGroupController extends Controller
     public function save_access_groups(Request $request) {
         $this->AuthLogin();
         $data = array();
-        $tenNhomTruyCap = $request->ten_nhom_truy_cap;
-        $tuKhoaNhomTruyCap = $request->tu_khoa_nhom_truy_cap;
-        $trangThaiNhomTruyCap = $request->trang_thai_nhom_truy_cap;
-        $ghiChuNhomTruyCap = $request->ghi_chu_nhom_truy_cap;
-        $maCongTy = Session::get('maCongTy');
-        if($tenNhomTruyCap == "" || $tuKhoaNhomTruyCap == "" || $trangThaiNhomTruyCap == "") {
-            Session::flash("failure", "Các trường không được để trống.");
+        $name = $request->name;
+        $keyword = $request->keyword;
+        $status = $request->status;
+        $note = $request->note;
+        $idCompany = Session::get('maCongTy');
+        if($name == "" || $keyword == "" || $status == "") {
+            Session::flash("message", "Các trường không được để trống.");
             Session::flash("alert-type", "warning");
             return Redirect::to('/admin/add-access-groups');
-        } else if(strlen($tenNhomTruyCap) > 100) {
-            Session::flash("failure", "Bạn đã nhập quá ký tự cho phép.");
+        } else if(strlen($name) > 100) {
+            Session::flash("message", "Bạn đã nhập quá ký tự cho phép.");
             Session::flash("alert-type", "warning");
             return Redirect::to('/admin/add-access-groups');
-        } else if(strlen($tenNhomTruyCap) < 5) {
-            Session::flash("failure", "Bạn nhập không đủ ký tự.");
+        } else if(strlen($name) < 5) {
+            Session::flash("message", "Bạn nhập không đủ ký tự.");
             Session::flash("alert-type", "warning");
             return Redirect::to('/admin/add-access-groups');
         } else {
-            $data['ten_nhom_truy_cap'] = $tenNhomTruyCap;
-            $data['tu_khoa_nhom_truy_cap'] = $tuKhoaNhomTruyCap;
-            $data['trang_thai_nhom_truy_cap'] = $trangThaiNhomTruyCap;
-            $data['ghi_chu_nhom_truy_cap'] = $ghiChuNhomTruyCap;
-            $data['ma_cong_ty'] = $maCongTy;
+            $data['name'] = $name;
+            $data['keyword'] = $keyword;
+            $data['status'] = $status;
+            $data['note'] = $note;
+            $data['company_id'] = $idCompany;
             $data['created_at'] = Carbon::now();
             Accessgroup::insert($data);
             Session::flash("message", "Thêm nhóm truy cập thành công.");
@@ -97,7 +97,7 @@ class AccessGroupController extends Controller
      */
     public function hide_access_groups($id) {
         $this->AuthLogin();
-        DB::table('accessgroups')->where('ma_nhom_truy_cap', $id)->update(['trang_thai_nhom_truy_cap' => 1]);
+        DB::table('accessgroups')->where('id', $id)->update(['status' => 1]);
         Session::flash('message', 'Ẩn nhóm truy cập thành công.');
         Session::flash("alert-type", "success");
         return Redirect::to('/admin/list-access-groups');
@@ -110,8 +110,8 @@ class AccessGroupController extends Controller
      */
     public function show_access_groups($id) {
         $this->AuthLogin();
-        DB::table('accessgroups')->where('ma_nhom_truy_cap', $id)->update(['trang_thai_nhom_truy_cap' => 0]);
-        Session::flash('message', 'Ẩn nhóm truy cập thành công.');
+        Accessgroup::where('id', $id)->update(['status' => 0]);
+        Session::flash('message', 'Hiển thị nhóm truy cập thành công.');
         Session::flash("alert-type", "success");
         return Redirect::to('/admin/list-access-groups');
     }
@@ -123,8 +123,8 @@ class AccessGroupController extends Controller
      */
     public function edit_access_groups($id) {
         $this->AuthLogin();
-        $chinhSua = Accessgroup::where('ma_nhom_truy_cap', $id)->get();
-        return view('admin.accessgroups.edit-access-groups')->with('nhomTruyCap', $chinhSua);
+        $dataAccessGroup = Accessgroup::where('id', $id)->get();
+        return view('admin.accessgroups.edit-access-groups')->with('dataAccessGroup', $dataAccessGroup);
     }
 
     /**
@@ -135,29 +135,29 @@ class AccessGroupController extends Controller
     public function update_access_groups(Request $request, $id) {
         $this->AuthLogin();
         $data = array();
-        $tenNhomTruyCap = $request->ten_nhom_truy_cap;
-        $tuKhoaNhomTruyCap = $request->tu_khoa_nhom_truy_cap;
-        $ghiChuNhomTruyCap = $request->ghi_chu_nhom_truy_cap;
-        $maCongTy = Session::get('maCongTy');
-        if($tenNhomTruyCap == "" || $tuKhoaNhomTruyCap == "") {
-            Session::flash("failure", "Các trường không được để trống.");
+        $name = $request->name;
+        $keyword = $request->keyword;
+        $note = $request->note;
+        $idCompany = Session::get('maCongTy');
+        if($name == "" || $keyword == "") {
+            Session::flash("message", "Các trường không được để trống.");
             Session::flash("alert-type", "warning");
             return Redirect::to('/admin/edit-access-groups/'.$id);
-        } else if(strlen($tenNhomTruyCap) > 100) {
-            Session::flash("failure", "Bạn đã nhập quá ký tự cho phép.");
+        } else if(strlen($name) > 100) {
+            Session::flash("message", "Bạn đã nhập quá ký tự cho phép.");
             Session::flash("alert-type", "warning");
             return Redirect::to('/admin/edit-access-groups/'.$id);
-        } else if(strlen($tenNhomTruyCap) < 5) {
-            Session::flash("failure", "Bạn nhập không đủ ký tự.");
+        } else if(strlen($name) < 5) {
+            Session::flash("message", "Bạn nhập không đủ ký tự.");
             Session::flash("alert-type", "warning");
             return Redirect::to('/admin/edit-access-groups/'.$id);
         } else {
-            $data['ten_nhom_truy_cap'] = $tenNhomTruyCap;
-            $data['tu_khoa_nhom_truy_cap'] = $tuKhoaNhomTruyCap;
-            $data['ghi_chu_nhom_truy_cap'] = $ghiChuNhomTruyCap;
-            $data['ma_cong_ty'] = $maCongTy;
+            $data['name'] = $name;
+            $data['keyword'] = $keyword;
+            $data['note'] = $note;
+            $data['company_id'] = $idCompany;
             $data['updated_at'] = Carbon::now();
-            Accessgroup::where('ma_nhom_truy_cap', $id)->update($data);
+            Accessgroup::where('id', $id)->update($data);
             Session::flash("message", "Chỉnh sửa nhóm truy cập thành công.");
             Session::flash("alert-type", "success");
             return Redirect::to('/admin/list-access-groups');
@@ -171,7 +171,7 @@ class AccessGroupController extends Controller
      */
     public function delete_access_groups($id) {
         $this->AuthLogin();
-        Accessgroup::where('ma_nhom_truy_cap', $id)->delete();
+        Accessgroup::where('id', $id)->delete();
         Session::flash('message', 'Xóa nhóm truy cập thành công.');
         Session::flash("alert-type", "success");
         return Redirect::to('/admin/list-access-groups');
@@ -184,15 +184,17 @@ class AccessGroupController extends Controller
      */
     public function list_access_groups_trash() {
         $this->AuthLogin();
-        $maCongTy = Session::get('maCongTy');
-        $danhSach = Accessgroup::where('trang_thai_nhom_truy_cap', '2')
-        ->where('ma_cong_ty', $maCongTy)->get();
-        return view('admin.accessgroups.list-access-groups-trash')->with('nhomTruyCap', $danhSach);
+        $idCompany = Session::get('maCongTy');
+        $dataAccessGroup = Accessgroup::where('status', '2')->where('company_id', $idCompany)->get();
+        $accessGroupCount = Accessgroup::where('status', '2')->where('company_id', $idCompany)->count("*");
+        $accessGroupCountAllOnl = Accessgroup::where('status', '0')->orWhere('status', '1')->where('company_id', $idCompany)->count();
+        return view('admin.accessgroups.list-access-groups-trash')->with('dataAccessGroup', $dataAccessGroup)
+        ->with('accessGroupCount', $accessGroupCount)->with('accessGroupCountAllOnl', $accessGroupCountAllOnl);
     }
 
     public function trash_access_groups($id) {
         $this->AuthLogin();
-        DB::table('accessgroups')->where('ma_nhom_truy_cap', $id)->update(['trang_thai_nhom_truy_cap' => 2]);
+        DB::table('accessgroups')->where('id', $id)->update(['status' => 2]);
         Session::flash('message', 'Xóa nhóm truy cập thành công.');
         Session::flash("alert-type", "success");
         return Redirect::to('/admin/list-access-groups');
@@ -200,7 +202,7 @@ class AccessGroupController extends Controller
 
     public function restore_access_groups($id) {
         $this->AuthLogin();
-        DB::table('accessgroups')->where('ma_nhom_truy_cap', $id)->update(['trang_thai_nhom_truy_cap' => 0]);
+        DB::table('accessgroups')->where('id', $id)->update(['status' => 0]);
         Session::flash('message', 'Hiển thị nhóm truy cập thành công.');
         Session::flash("alert-type", "success");
         return Redirect::to('/admin/list-access-groups');

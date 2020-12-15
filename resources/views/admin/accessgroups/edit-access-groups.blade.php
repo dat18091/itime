@@ -49,8 +49,8 @@ use Illuminate\Support\Facades\Session;
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-body">
-                    @foreach($nhomTruyCap as $key => $access)
-                    <form id="signupForm" method="post" action="{{URL::to('/admin/update-access-groups/'.$access->ma_nhom_truy_cap)}}">
+                    @foreach($dataAccessGroup as $key => $access)
+                    <form id="signupForm" method="post" action="{{URL::to('/admin/update-access-groups/'.$access->id)}}">
                         {{csrf_field()}}
                         <h4 class="form-header text-uppercase">
                             <i class="fa fa-envelope-o"></i>
@@ -60,11 +60,11 @@ use Illuminate\Support\Facades\Session;
                         <div class="form-group row">
                             <label for="input-14" class="col-sm-2 col-form-label">Tên nhóm truy cập <span class="focus">*</span></label>
                             <div class="col-sm-4">
-                                <input type="text" class="form-control" value="{{$access->ten_nhom_truy_cap}}" id="ten_nhom_truy_cap" name="ten_nhom_truy_cap" onkeyup="changeToKeyword();">
+                                <input type="text" class="form-control" value="{{$access->name}}" id="name" name="name" onkeyup="changeToKeyword();">
                             </div>
                             <label for="input-15" class="col-sm-2 col-form-label">Từ khóa <span class="focus">*</span></label>
                             <div class="col-sm-4">
-                                <input type="text" readonly class="form-control" value="{{$access->tu_khoa_nhom_truy_cap}}" id="tu_khoa_nhom_truy_cap" name="tu_khoa_nhom_truy_cap">
+                                <input type="text" readonly class="form-control" value="{{$access->keyword}}" id="keyword" name="keyword">
                             </div>
                         </div>
                         <script type="text/javascript">
@@ -72,7 +72,7 @@ use Illuminate\Support\Facades\Session;
                                 var tenVung, tuKhoa;
 
                                 //Lấy text từ thẻ input categoryName 
-                                tenVung = document.getElementById("ten_nhom_truy_cap").value;
+                                tenVung = document.getElementById("name").value;
 
                                 //Đổi chữ hoa thành chữ thường
                                 tuKhoa = tenVung.toLowerCase();
@@ -99,13 +99,13 @@ use Illuminate\Support\Facades\Session;
                                 tuKhoa = '@' + tuKhoa + '@';
                                 tuKhoa = tuKhoa.replace(/\@\-|\-\@|\@/gi, '');
                                 //In tuKhoa ra textbox có id tuKhoa
-                                document.getElementById('tu_khoa_nhom_truy_cap').value = tuKhoa;
+                                document.getElementById('keyword').value = tuKhoa;
                             }
                         </script>
                         <div class="form-group row">
                             <label for="input-17" class="col-sm-2 col-form-label">Ghi chú</label>
                             <div class="col-sm-10">
-                                <textarea class="form-control" rows="4" id="input-17" name="ghi_chu_nhom_truy_cap">{{$access->ghi_chu_nhom_truy_cap}}</textarea>
+                                <textarea class="form-control" rows="4" id="input-17" name="note">{{$access->note}}</textarea>
                             </div>
                         </div>
                         <div class="form-footer">
