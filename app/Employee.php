@@ -7,6 +7,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class Employee extends Model
 {
-    protected $employees = 'employees';
-    // protected $fillable = ['', '', ''];
+    protected $table = 'employees';
 }

@@ -95,7 +95,7 @@ use Illuminate\Support\Facades\Session;
                                     <div class="card">
                                         <div class="card-body">
                                             @foreach($nhanVien as $key => $employee)
-                                            <form id="signupForm" enctype="multipart/form-data" method="post" action="{{URL::to('/admin/update-employees/'.$employee->ma_nhan_vien)}}">
+                                            <form id="signupForm" enctype="multipart/form-data" method="post" action="{{URL::to('/admin/update-employees/'.$employee->id)}}">
                                                 {{csrf_field()}}
                                                 <h4 class="form-header text-uppercase">
                                                     <i class="fa fa-envelope-o"></i>
@@ -105,28 +105,28 @@ use Illuminate\Support\Facades\Session;
                                                 <div class="form-group row">
                                                     <label for="input-14" class="col-sm-3 col-form-label">Tên nhân viên <span class="focus">*</span></label>
                                                     <div class="col-sm-9">
-                                                        <input type="text" class="form-control" value="{{$employee->ten_nhan_vien}}" name="ten_nhan_vien">
+                                                        <input type="text" class="form-control" value="{{$employee->name}}" name="name">
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <label for="input-14" class="col-sm-3 col-form-label">Số điện thoại <span class="focus">*</span></label>
                                                     <div class="col-sm-4">
-                                                        <input type="text" class="form-control" value="{{$employee->so_dien_thoai_nhan_vien}}" name="so_dien_thoai_nhan_vien">
+                                                        <input type="text" class="form-control" value="{{$employee->phone}}" name="phone">
                                                     </div>
                                                     <label for="input-14" class="col-sm-2 col-form-label">Ngày sinh <span class="focus">*</span></label>
                                                     <div class="col-sm-3">
-                                                        <input type="text" id="autoclose-datepicker" value="<?php echo date('m/d/Y', strtotime($employee->ngay_sinh_nhan_vien)); ?>" name="ngay_sinh_nhan_vien" class="form-control">
+                                                        <input type="text" id="autoclose-datepicker" value="<?php echo date('m/d/Y', strtotime($employee->date_of_birth)); ?>" name="date_of_birth" class="form-control">
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <label for="input-14" class="col-sm-3 col-form-label">Email <span class="focus">*</span></label>
                                                     <div class="col-sm-4">
-                                                        <input type="text" class="form-control" value="{{$employee->email_nhan_vien}}" name="email_nhan_vien">
+                                                        <input type="text" class="form-control" value="{{$employee->email}}" name="email">
                                                     </div>
                                                     <label for="input-14" class="col-sm-2 col-form-label">Giới tính <span class="focus">*</span></label>
                                                     <div class="col-sm-3">
-                                                        <select name="gioi_tinh_nhan_vien" class="form-control" id="basic-select">
-                                                            @if($employee->gioi_tinh_nhan_vien == 1)
+                                                        <select name="gender" class="form-control" id="basic-select">
+                                                            @if($employee->gender == 1)
                                                                 <option selected value="1">Nam</option>
                                                             @else
                                                                 <option value="0">Nữ</option>
@@ -137,30 +137,30 @@ use Illuminate\Support\Facades\Session;
                                                 <div class="form-group row">
                                                     <label for="input-14" class="col-sm-3 col-form-label">Địa chỉ hiện tại <span class="focus">*</span></label>
                                                     <div class="col-sm-9">
-                                                        <input type="text" class="form-control" value="{{$employee->dia_chi_hien_tai}}" name="dia_chi_hien_tai">
+                                                        <input type="text" class="form-control" value="{{$employee->current_address}}" name="current_address">
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <label for="input-14" class="col-sm-3 col-form-label">Thứ tự hiển thị </label>
                                                     <div class="col-sm-4">
-                                                        <input class="form-control" type="number" min="0" max="50" value="{{$employee->thu_tu_hien_thi_nv}}" name="thu_tu_hien_thi_nv" id="example-number-input">
+                                                        <input class="form-control" type="number" min="0" max="50" value="{{$employee->display_order}}" name="display_order" id="example-number-input">
                                                     </div>
                                                 </div>
                                                 <hr>
                                                 <div class="form-group row">
                                                     <label for="input-14" class="col-sm-3 col-form-label">Số CMND <span class="focus">*</span></label>
                                                     <div class="col-sm-3">
-                                                        <input type="text" class="form-control" value="{{$employee->so_cmnd}}" id="so_cmnd" name="so_cmnd">
+                                                        <input type="text" class="form-control" value="{{$employee->identity_card}}" id="identity_card" name="identity_card">
                                                     </div>
                                                     <label for="input-14" class="col-sm-3 col-form-label">Ngày cấp <span class="focus">*</span></label>
                                                     <div class="col-sm-3">
-                                                        <input type="text" id="default-datepicker" value="<?php echo date('m/d/Y', strtotime($employee->ngay_cap_cmnd)); ?>" name="ngay_cap_cmnd" class="form-control">
+                                                        <input type="text" id="default-datepicker" value="<?php echo date('m/d/Y', strtotime($employee->date_release_id)); ?>" name="date_release_id" class="form-control">
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <label for="input-14" class="col-sm-3 col-form-label">Nơi cấp <span class="focus">*</span></label>
                                                     <div class="col-sm-9">
-                                                        <input type="text" class="form-control" value="{{$employee->noi_cap_cmnd}}" id="noi_cap_cmnd" name="noi_cap_cmnd">
+                                                        <input type="text" class="form-control" value="{{$employee->located_release_id}}" id="located_release_id" name="located_release_id">
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
@@ -170,21 +170,21 @@ use Illuminate\Support\Facades\Session;
                                                     <div class="form-group row">
                                                         <label for="input-14" class="col-sm-3 col-form-label">Số hộ chiếu </label>
                                                         <div class="col-sm-3">
-                                                            <input type="text" class="form-control" value="{{$employee->so_ho_chieu}}" id="ten_phong_ban" name="so_ho_chieu">
+                                                            <input type="text" class="form-control" value="{{$employee->passport}}" id="passport" name="passport">
                                                         </div>
                                                         <label for="input-14" class="col-sm-3 col-form-label">Nơi cấp </label>
                                                         <div class="col-sm-3">
-                                                            <input type="text" class="form-control" value="{{$employee->noi_cap_ho_chieu}}" id="ten_phong_ban" name="noi_cap_ho_chieu">
+                                                            <input type="text" class="form-control" value="{{$employee->located_release_passport}}" id="located_release_passport" name="located_release_passport">
                                                         </div>
                                                     </div>
                                                     <div class="form-group row">
                                                         <label for="input-14" class="col-sm-3 col-form-label">Ngày cấp </label>
                                                         <div class="col-sm-3">
-                                                            <input type="text" name="ngay_cap_ho_chieu" value="<?php echo date('m/d/Y', strtotime($employee->ngay_cap_ho_chieu)); ?>" id="default-datepicker" class="form-control">
+                                                            <input type="text" name="date_release_passport" value="<?php echo date('m/d/Y', strtotime($employee->date_release_passport)); ?>" id="default-datepicker" class="form-control">
                                                         </div>
                                                         <label for="input-14" class="col-sm-3 col-form-label">Ngày hết hạn </label>
                                                         <div class="col-sm-3">
-                                                            <input type="text" name="ngay_het_han_ho_chieu" value="<?php echo date('m/d/Y', strtotime($employee->ngay_het_han_ho_chieu)); ?>" id="default-datepicker" class="form-control">
+                                                            <input type="text" name="date_release_passport" value="<?php echo date('m/d/Y', strtotime($employee->date_release_passport)); ?>" id="default-datepicker" class="form-control">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -209,10 +209,10 @@ use Illuminate\Support\Facades\Session;
                                                     <div class="col-sm-3">
                                                         <select name="ma_vung" class="form-control single-select">
                                                             @foreach($vung as $key => $areas)
-                                                            @if($areas->ma_vung == $employee->ma_vung)
-                                                            <option selected value="{{$areas->ma_vung}}">{{$areas->ten_vung}}</option>
+                                                            @if($areas->id == $employee->area_id)
+                                                            <option selected value="{{$areas->id}}">{{$areas->name}}</option>
                                                             @else
-                                                            <option value="{{$areas->ma_vung}}">{{$areas->ten_vung}}</option>
+                                                            <option value="{{$areas->id}}">{{$areas->name}}</option>
                                                             @endif
                                                             @endforeach
                                                         </select>
@@ -221,10 +221,10 @@ use Illuminate\Support\Facades\Session;
                                                     <div class="col-sm-4">
                                                         <select name="ma_chi_nhanh" class="form-control single-select">
                                                             @foreach($chiNhanh as $key => $branch)
-                                                            @if($branch->ma_chi_nhanh == $employee->ma_chi_nhanh)
-                                                            <option selected value="{{$branch->ma_chi_nhanh}}">{{$branch->ten_chi_nhanh}}</option>
+                                                            @if($branch->id == $employee->branch_id)
+                                                            <option selected value="{{$branch->id}}">{{$branch->name}}</option>
                                                             @else
-                                                            <option value="{{$branch->ma_chi_nhanh}}">{{$branch->ten_chi_nhanh}}</option>
+                                                            <option value="{{$branch->id}}">{{$branch->name}}</option>
                                                             @endif
                                                             @endforeach
                                                         </select>
@@ -235,11 +235,11 @@ use Illuminate\Support\Facades\Session;
                                                     <div class="col-sm-3">
                                                         <select name="ma_chuc_danh" class="form-control single-select">
                                                             @foreach($chucDanh as $key => $position)
-                                                            @if($position->ma_chuc_danh == $employee->ma_chuc_danh)
-                                                            <option selected value="{{$position->ma_chuc_danh}}">{{$position->ten_chuc_danh}}</option>
+                                                            @if($position->id == $employee->position_id)
+                                                            <option selected value="{{$position->id}}">{{$position->name}}</option>
                                                             @else
                                                             @endif
-                                                            <option value="{{$position->ma_chuc_danh}}">{{$position->ten_chuc_danh}}</option>
+                                                            <option value="{{$position->id}}">{{$position->name}}</option>
                                                             @endforeach
                                                         </select>
                                                     </div>
@@ -247,10 +247,10 @@ use Illuminate\Support\Facades\Session;
                                                     <div class="col-sm-4">
                                                         <select name="ma_phong_ban" class="form-control single-select">
                                                             @foreach($phongBan as $key => $department)
-                                                            @if($department->ma_phong_ban == $employee->ma_phong_ban)
-                                                            <option selected value="{{$department->ma_phong_ban}}">{{$department->ten_phong_ban}}</option>
+                                                            @if($department->id == $employee->department_id)
+                                                            <option selected value="{{$department->id}}">{{$department->name}}</option>
                                                             @else
-                                                            <option value="{{$department->ma_phong_ban}}">{{$department->ten_phong_ban}}</option>
+                                                            <option value="{{$department->id}}">{{$department->name}}</option>
                                                             @endif
                                                             @endforeach
                                                         </select>
@@ -261,10 +261,10 @@ use Illuminate\Support\Facades\Session;
                                                     <div class="col-sm-3">
                                                         <select name="province_id" class="form-control single-select">
                                                             @foreach($tinhThanh as $key => $province)
-                                                            @if($province->province_id == $employee->province_id)
-                                                            <option selected value="{{$province->province_id}}">{{$province->province_name}}</option>
+                                                            @if($province->id == $employee->province_id)
+                                                            <option selected value="{{$province->id}}">{{$province->name}}</option>
                                                             @else
-                                                            <option value="{{$province->province_id}}">{{$province->province_name}}</option>
+                                                            <option value="{{$province->id}}">{{$province->name}}</option>
                                                             @endif
                                                             @endforeach
                                                         </select>
@@ -273,10 +273,10 @@ use Illuminate\Support\Facades\Session;
                                                     <div class="col-sm-3">
                                                         <select name="district_id" class="form-control single-select">
                                                             @foreach($quanHuyen as $key => $district)
-                                                            @if($district->district_id == $employee->district_id)
-                                                            <option selected value="{{$district->district_id}}">{{$district->district_name}}</option>
+                                                            @if($district->id == $employee->district_id)
+                                                            <option selected value="{{$district->id}}">{{$district->name}}</option>
                                                             @else
-                                                            <option value="{{$district->district_id}}">{{$district->district_name}}</option>
+                                                            <option value="{{$district->id}}">{{$district->name}}</option>
                                                             @endif
                                                             @endforeach
                                                         </select>
@@ -287,10 +287,10 @@ use Illuminate\Support\Facades\Session;
                                                     <div class="col-sm-9">
                                                         <select name="ma_nhom_truy_cap" class="form-control single-select">
                                                             @foreach($nhomTruyCap as $key => $access)
-                                                            @if($access->ma_nhom_truy_cap == $employee->ma_nhom_truy_cap)
-                                                            <option selected value="{{$access->ma_nhom_truy_cap}}">{{$access->ten_nhom_truy_cap}}</option>
+                                                            @if($access->id == $employee->accessgroup_id)
+                                                            <option selected value="{{$access->id}}">{{$access->name}}</option>
                                                             @else
-                                                            <option value="{{$access->ma_nhom_truy_cap}}">{{$access->ten_nhom_truy_cap}}</option>
+                                                            <option value="{{$access->id}}">{{$access->name}}</option>
                                                             @endif
                                                             @endforeach
                                                         </select>
@@ -301,42 +301,42 @@ use Illuminate\Support\Facades\Session;
                                                 <div class="form-group row">
                                                     <label for="input-14" class="col-sm-3 col-form-label">Chủ tài khoản <span class="focus">*</span></label>
                                                     <div class="col-sm-3">
-                                                        <input type="text" class="form-control" id="chu_tai_khoan_ngan_hang" value="{{$employee->chu_tai_khoan_ngan_hang}}" name="chu_tai_khoan_ngan_hang">
+                                                        <input type="text" class="form-control" id="bank_name" value="{{$employee->bank_name}}" name="bank_name">
 
                                                     </div>
                                                     <label for="input-14" class="col-sm-3 col-form-label">Số tài khoản <span class="focus">*</span></label>
                                                     <div class="col-sm-3">
-                                                        <input type="text" class="form-control" id="so_tai_khoan_ngan_hang" value="{{$employee->so_tai_khoan_ngan_hang}}" name="so_tai_khoan_ngan_hang">
+                                                        <input type="text" class="form-control" id="bank_number" value="{{$employee->bank_number}}" name="bank_number">
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <label for="input-14" class="col-sm-3 col-form-label">Tên ngân hàng </label>
                                                     <div class="col-sm-3">
 
-                                                        <input type="text" class="form-control" id="ten_phong_ban" value="{{$employee->ten_ngan_hang}}" name="ten_ngan_hang">
+                                                        <input type="text" class="form-control" id="name_of_bank" value="{{$employee->name_of_bank}}" name="name_of_bank">
                                                     </div>
                                                     <label for="input-14" class="col-sm-3 col-form-label">Chi nhánh <span class="focus">*</span></label>
                                                     <div class="col-sm-3">
-                                                        <input type="text" class="form-control" id="ten_phong_ban" value="{{$employee->chi_nhanh_ngan_hang}}" name="chi_nhanh_ngan_hang">
+                                                        <input type="text" class="form-control" id="branch_of_bank" value="{{$employee->branch_of_bank}}" name="branch_of_bank">
                                                     </div>
                                                 </div>
                                                 <hr>
                                                 <div class="form-group row">
                                                     <label class="col-sm-3 control-label">Hình ảnh nhân viên</label>
                                                     <div class="col-sm-9">
-                                                    <input name="hinh_anh_nhan_vien" value="{{$employee->hinh_anh_nhan_vien}}" type="file" multiple="multiple">
+                                                    <input name="hinh_anh_nhan_vien" value="{{$employee->image}}" type="file" multiple="multiple">
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <label class="col-sm-3 control-label"></label>
                                                     <div class="col-sm-6">
-                                                    <img src="{{ URL::to('public/uploads/employees/'.$employee->hinh_anh_nhan_vien )}}" alt="" width="100" height="100" />
+                                                    <img src="{{ URL::to('public/uploads/employees/'.$employee->image )}}" alt="" width="100" height="100" />
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <label for="input-17" class="col-sm-3 col-form-label">Ghi chú</label>
                                                     <div class="col-sm-9">
-                                                        <textarea class="form-control" rows="4" id="input-17" name="ghi_chu_nhan_vien">{{$employee->ghi_chu_nhan_vien}}</textarea>
+                                                        <textarea class="form-control" rows="4" id="input-17" name="ghi_chu_nhan_vien">{{$employee->note}}</textarea>
                                                     </div>
 
                                                 </div>

@@ -68,8 +68,8 @@ use Illuminate\Support\Facades\Session;
                                     <td>{{ $takeleavetypes->note }}</td>
                                     <td>
                                         <div class="btn-group group-round m-1">
-                                            <a type="button" href="{{URL::to('/admin/restore-take-leave-types/'.$takeleavetypes->id)}}" class="btn btn-success waves-effect waves-light">Restore</a>
-                                            <a type="button" href="{{URL::to('/admin/delete-take-leave-types/'.$takeleavetypes->id)}}" onclick="return confirm('Bạn có chắc chắn muốn xóa lý do này?')" class="btn btn-danger waves-effect waves-light">Xóa</a>
+                                            <a type="button" href="{{URL::to('/admin/restore-take-leave-reasons/'.$takeleavetypes->id)}}" class="btn btn-success waves-effect waves-light">Restore</a>
+                                            <a type="button" href="{{URL::to('/admin/delete-take-leave-reasons/'.$takeleavetypes->id)}}" onclick="return confirm('Bạn có chắc chắn muốn xóa lý do này?')" class="btn btn-danger waves-effect waves-light">Xóa</a>
                                         </div>
                                     </td>
                                 </tr>

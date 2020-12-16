@@ -35,10 +35,8 @@ class BeLateReasonController extends Controller
     public function list_be_late_reasons() { //done
         $this->AuthLogin();
         $idCompany = Session::get('maCongTy');
-        $beLateReason = Belatereason::where('status', '1')
-        ->orWhere('status', '0')->where('ma_cong_ty',$idCompany)->get();
-        return view('admin.belatereasons.list-be-late-reasons')
-        ->with('list_be_late_reasons', $beLateReason);
+        $beLateReason = Belatereason::where('status', '1')->orWhere('status', '0')->where('company_id',$idCompany)->get();
+        return view('admin.belatereasons.list-be-late-reasons')->with('list_be_late_reasons', $beLateReason);
     }
 
     /**
@@ -49,9 +47,8 @@ class BeLateReasonController extends Controller
     public function list_be_late_reasons_trash() { //done
         $this->AuthLogin();
         $idCompany = Session::get('maCongTy');
-        $beLateReason = Belatereason::where('status', '2')->where('ma_cong_ty',$idCompany)->get();
-        return view('admin.belatereasons.list-be-late-reasons-trash')
-        ->with('list_be_late_reasons', $beLateReason);
+        $beLateReason = Belatereason::where('status', '2')->where('company_id',$idCompany)->get();
+        return view('admin.belatereasons.list-be-late-reasons-trash')->with('list_be_late_reasons', $beLateReason);
     }
 
     /**
@@ -75,24 +72,28 @@ class BeLateReasonController extends Controller
         $name = $request->name;
         $status = $request->status;
         $note = $request->note;
-        $maCongTy = Session::get('maCongTy');
+        $idCompany = Session::get('maCongTy');
         if($name == "" || $status == "") {
-            Session::flash("failure", "Các trường không được để trống.");
+            Session::flash("message", "Các trường không được để trống.");
+            Session::flash("alert-type", "warning");
             return Redirect::to('/admin/list-be-late-reasons');
         } else if(strlen($name) > 100) {
-            Session::flash("failure", "Bạn đã nhập quá ký tự cho phép.");
+            Session::flash("message", "Bạn đã nhập quá ký tự cho phép.");
+            Session::flash("alert-type", "warning");
             return Redirect::to('/admin/list-be-late-reasons');
         } else if(strlen($name) < 5) {
-            Session::flash("failure", "Bạn nhập không đủ ký tự.");
+            Session::flash("message", "Bạn nhập không đủ ký tự.");
+            Session::flash("alert-type", "warning");
             return Redirect::to('/admin/list-be-late-reasons');
         } else {
             $data['name'] = $name;
             $data['status'] = $status;
             $data['note'] = $note;
-            $data['ma_cong_ty'] = $maCongTy;
+            $data['company_id'] = $idCompany;
             $data['created_at'] = Carbon::now();
             Belatereason::insert($data);
             Session::flash("message", "Thêm lý do thành công.");
+            Session::flash("alert-type", "success");
             return Redirect::to('/admin/list-be-late-reasons');
         }
     }
@@ -105,7 +106,8 @@ class BeLateReasonController extends Controller
     public function hide_be_late_reasons($id) { //done
         $this->AuthLogin();
         Belatereason::where('id', $id)->update(['status' => 1]);
-        Session::put('message', 'Ẩn lý do thành công.');
+        Session::flash('message', 'Ẩn lý do thành công.');
+        Session::flash("alert-type", "success");
         return Redirect::to('/admin/list-be-late-reasons');
     }
 
@@ -117,7 +119,8 @@ class BeLateReasonController extends Controller
     public function show_be_late_reasons($id) { //done
         $this->AuthLogin();
         Belatereason::where('id', $id)->update(['status' => 0]);
-        Session::put('message', 'Hiển thị lý do thành công.');
+        Session::flash('message', 'Hiển thị lý do thành công.');
+        Session::flash("alert-type", "success");
         return Redirect::to('/admin/list-be-late-reasons');
     }
 
@@ -129,7 +132,8 @@ class BeLateReasonController extends Controller
     public function trash_be_late_reasons($id) { //done
         $this->AuthLogin();
         Belatereason::where('id', $id)->update(['status' => 2]);
-        Session::put('message', 'Xóa lý do thành công.');
+        Session::flash('message', 'Xóa lý do thành công.');
+        Session::flash("alert-type", "success");
         return Redirect::to('/admin/list-be-late-reasons');
     }
 
@@ -141,7 +145,8 @@ class BeLateReasonController extends Controller
     public function restore_be_late_reasons($id) { //done
         $this->AuthLogin();
         Belatereason::where('id', $id)->update(['status' => 0]);
-        Session::put('message', 'Restore lý do thành công.');
+        Session::flash('message', 'Restore lý do thành công.');
+        Session::flash("alert-type", "success");
         return Redirect::to('/admin/list-be-late-reasons');
     }
     
@@ -168,20 +173,24 @@ class BeLateReasonController extends Controller
         $name = $request->name;
         $note = $request->note;
         if($name == "") {
-            Session::push("failure", "Các trường không được để rỗng.");
+            Session::flash("message", "Các trường không được để rỗng.");
+            Session::flash("alert-type", "success");
             return Redirect::to('/admin/edit-be-late-reasons/'.$id);
         } else if(strlen($name) > 100) {
-            Session::push("failure", "Bạn đã nhập quá ký tự cho phép.");
+            Session::flash("message", "Bạn đã nhập quá ký tự cho phép.");
+            Session::flash("alert-type", "success");
             return Redirect::to('/admin/edit-be-late-reasons/'.$id);
         } else if(strlen($name) < 5) {
-            Session::push("failure", "Bạn nhập không đủ ký tự.");
+            Session::flash("message", "Bạn nhập không đủ ký tự.");
+            Session::flash("alert-type", "warning");
             return Redirect::to('/admin/edit-be-late-reasons/'.$id);
         } else {
             $data['name'] = $name;
             $data['note'] = $note;
             $data['updated_at'] = Carbon::now();
             Belatereason::where('id', $id)->update($data);
-            Session::put('message', 'Cập nhật lý do thành công.');
+            Session::flash('message', 'Cập nhật lý do thành công.');
+            Session::flash("alert-type", "success");
             return Redirect::to('/admin/list-be-late-reasons');
         }
     }
@@ -194,7 +203,8 @@ class BeLateReasonController extends Controller
     public function delete_be_late_reasons($id) { //done
         $this->AuthLogin();
         Belatereason::where('id', $id)->delete();
-        Session::put('message', 'Xóa lý do thành công.');
+        Session::flash('message', 'Xóa lý do thành công.');
+        Session::flash("alert-type", "success");
         return Redirect::to('/admin/list-be-late-reasons');
     }
 }

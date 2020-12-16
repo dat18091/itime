@@ -8,6 +8,9 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Carbon\Carbon;
+use App\Employee;
+use App\Area;
+use App\Branch;
 
 class EmployeeController extends Controller
 {
@@ -34,35 +37,32 @@ class EmployeeController extends Controller
     public function list_employees() {
         $this->AuthLogin();
         $maCongTy = Session::get('maCongTy');
-        $danhSach = DB::table('employees')
-        ->where('hoat_dong', '0')
-        ->orWhere('hoat_dong', '1')
-        ->where('ma_cong_ty', $maCongTy)->get();
-        $vung = DB::table('areas')->get();
-        $chiNhanh = DB::table('branches')->get();
-        $phongBan = DB::table('departments')->get();
-        $chucDanh = DB::table('positions')->get();
-        $nhomTruyCap = DB::table('accessgroups')->get();
-        return view('admin.employees.list-employees')->with('nhanVien', $danhSach)->with('vung', $vung)
-        ->with('chiNhanh', $chiNhanh)->with('phongBan', $phongBan)->with('chucDanh', $chucDanh)->with('nhomTruyCap', $nhomTruyCap);
+        $dataEmployee = Employee::where('active', '0')->orWhere('active', '1')->where('company_id', $maCongTy)->get();
+        $dataArea = Area::get();
+        $dataBranch = Branch::get();
+        $dataDepartment = DB::table('departments')->get();
+        $dataPosition = DB::table('positions')->get();
+        $dataAccessGroup = DB::table('accessgroups')->get();
+        return view('admin.employees.list-employees')->with('dataEmployee', $dataEmployee)->with('dataArea', $dataArea)
+        ->with('dataBranch', $dataBranch)->with('dataDepartment', $dataDepartment)->with('dataPosition', $dataPosition)->with('dataAccessGroup', $dataAccessGroup);
         // $this->AuthLogin();
-        // $maCongTy = Session::get('maCongTy');
-        // $danhSach = DB::table('employees')
-        // ->join('areas', 'areas.ma_vung' , '=', 'employees.ma_vung')
-        // ->join('branches', 'branches.ma_chi_nhanh', '=', 'employees.ma_chi_nhanh')
-        // ->join('departments', 'departments.ma_phong_ban', '=', 'employees.ma_phong_ban')
-        // ->join('positions', 'positions.ma_chuc_danh', '=', 'employees.ma_chuc_danh')
-        // ->join('accessgroups', 'accessgroups.ma_nhom_truy_cap', '=', 'employees.ma_nhom_truy_cap')
-        // ->where('employees.ma_cong_ty', $maCongTy)
-        // ->where('employees.hoat_dong', '0')
-        // ->orWhere('employees.hoat_dong', '1')->get();
-        // $vung = DB::table('areas')->get();
-        // $chiNhanh = DB::table('branches')->get();
-        // $phongBan = DB::table('departments')->get();
-        // $chucDanh = DB::table('positions')->get();
-        // $nhomTruyCap = DB::table('accessgroups')->get();
-        // return view('admin.employees.list-employees')->with('nhanVien', $danhSach)->with('vung', $vung)
-        // ->with('chiNhanh', $chiNhanh)->with('phongBan', $phongBan)->with('chucDanh', $chucDanh)->with('nhomTruyCap', $nhomTruyCap);
+        // $idCompany = Session::get('maCongTy');
+        // $dataEmployee = Employee::join('areas', 'employees.area_id' , '=', 'areas.id')
+        // ->join('branches', 'employees.branch_id' , '=', 'branches.id')
+        // ->join('departments', 'employees.department_id' , '=', 'departments.id')
+        // ->join('positions', 'employees.position_id', '=', 'positions.id')
+        // ->join('accessgroups', 'employees.accessgroup_id', '=', 'accessgroups.id')
+        // ->join('companies', 'employees.company_id', '=', 'companies.id')
+        // ->select(['employees.*', 'areas.id as idArea', 'branches.id AS idBranch', 'departments.id AS idDepartment', 
+        // 'companies.id AS idCompany', 'positions.id AS idPosition', 'accessgroups.id as idAccessGroup'])
+        // ->where('employees.active', '1')->orWhere('employees.active', '0')->where('employees.company_id', $idCompany)->get();
+        // $dataArea = DB::table('areas')->get();
+        // $dataBranch = DB::table('branches')->get();
+        // $dataDepartment = DB::table('departments')->get();
+        // $dataPosition = DB::table('positions')->get();
+        // $dataAccessGroup = DB::table('accessgroups')->get();
+        // return view('admin.employees.list-employees')->with('dataEmployee', $dataEmployee)->with('dataArea', $dataArea)
+        // ->with('dataBranch', $dataBranch)->with('dataDepartment', $dataDepartment)->with('dataPosition', $dataPosition)->with('dataAccessGroup', $dataAccessGroup);
     }
 
     /**
@@ -201,15 +201,15 @@ class EmployeeController extends Controller
      */
     public function edit_employees($id) {
         $this->AuthLogin();
-        $maCongTy = Session::get('maCongTy');
-        $vung = DB::table('areas')->where('trang_thai_vung', 0)->where('ma_cong_ty', $maCongTy)->orderby('ma_vung', 'DESC')->get();
-        $chiNhanh = DB::table('branches')->where('trang_thai_chi_nhanh', 0)->where('ma_cong_ty', $maCongTy)->orderby('ma_chi_nhanh', 'DESC')->get();
-        $phongBan = DB::table('departments')->where('trang_thai_phong_ban', 0)->where('ma_cong_ty', $maCongTy)->orderby('ma_phong_ban', 'DESC')->get();
-        $nhomTruyCap = DB::table('accessgroups')->where('trang_thai_nhom_truy_cap', 0)->where('ma_cong_ty', $maCongTy)->orderby('ma_nhom_truy_cap', 'DESC')->get();
-        $chucDanh = DB::table('positions')->where('trang_thai_chuc_danh', 0)->where('ma_cong_ty', $maCongTy)->orderby('ma_chuc_Danh', 'DESC')->get();
+        $idCompany = Session::get('maCongTy');
+        $vung = DB::table('areas')->where('status', 0)->where('company_id', $idCompany)->orderby('id', 'DESC')->get();
+        $chiNhanh = DB::table('branches')->where('status', 0)->where('company_id', $idCompany)->orderby('id', 'DESC')->get();
+        $phongBan = DB::table('departments')->where('status', 0)->where('company_id', $idCompany)->orderby('id', 'DESC')->get();
+        $nhomTruyCap = DB::table('accessgroups')->where('status', 0)->where('company_id', $idCompany)->orderby('id', 'DESC')->get();
+        $chucDanh = DB::table('positions')->where('status', 0)->where('company_id', $idCompany)->orderby('id', 'DESC')->get();
         $tinhThanh = DB::table('provinces')->get();
         $quanHuyen = DB::table('districts')->get();
-        $nhanVien = DB::table('employees')->where('ma_nhan_vien', $id)->get();
+        $nhanVien = DB::table('employees')->where('id', $id)->get();
         return view('admin.employees.edit-employees')->with('vung', $vung)->with('chiNhanh', $chiNhanh)
         ->with('phongBan', $phongBan)->with('nhomTruyCap', $nhomTruyCap)->with('chucDanh', $chucDanh)
         ->with('tinhThanh', $tinhThanh)->with('quanHuyen', $quanHuyen)->with('nhanVien', $nhanVien);

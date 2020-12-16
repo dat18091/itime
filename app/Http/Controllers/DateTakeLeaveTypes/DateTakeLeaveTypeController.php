@@ -35,10 +35,8 @@ class DateTakeLeaveTypeController extends Controller
     public function list_date_take_leave_types() { 
         $this->AuthLogin();
         $idCompany = Session::get('maCongTy');
-        $dateTakeLeaveType = Datetakeleavetype::where('status', '1')
-        ->orWhere('status', '0')->where('ma_cong_ty',$idCompany)->get();
-        return view('admin.datetakeleavetypes.list-date-take-leave-types')
-        ->with('list_date_take_leave_types', $dateTakeLeaveType);
+        $dateTakeLeaveType = Datetakeleavetype::where('status', '1')->orWhere('status', '0')->where('company_id',$idCompany)->get();
+        return view('admin.datetakeleavetypes.list-date-take-leave-types')->with('list_date_take_leave_types', $dateTakeLeaveType);
     }
 
     /**
@@ -49,9 +47,8 @@ class DateTakeLeaveTypeController extends Controller
     public function list_date_take_leave_types_trash() { 
         $this->AuthLogin();
         $idCompany = Session::get('maCongTy');
-        $dateTakeLeaveType = Datetakeleavetype::where('status', '2')->where('ma_cong_ty',$idCompany)->get();
-        return view('admin.datetakeleavetypes.list-date-take-leave-types-trash')
-        ->with('list_date_take_leave_types', $dateTakeLeaveType);
+        $dateTakeLeaveType = Datetakeleavetype::where('status', '2')->where('company_id',$idCompany)->get();
+        return view('admin.datetakeleavetypes.list-date-take-leave-types-trash')->with('list_date_take_leave_types', $dateTakeLeaveType);
     }
 
     /**
@@ -75,24 +72,28 @@ class DateTakeLeaveTypeController extends Controller
         $name = $request->name;
         $status = $request->status;
         $note = $request->note;
-        $maCongTy = Session::get('maCongTy');
+        $idCompany = Session::get('maCongTy');
         if($name == "" || $status == "") {
             Session::flash("failure", "Các trường không được để trống.");
+            Session::flash("alert-type", "warning");
             return Redirect::to('/admin/list-date-take-leave-types');
         } else if(strlen($name) > 100) {
             Session::flash("failure", "Bạn đã nhập quá ký tự cho phép.");
+            Session::flash("alert-type", "warning");
             return Redirect::to('/admin/list-date-take-leave-types');
         } else if(strlen($name) < 5) {
             Session::flash("failure", "Bạn nhập không đủ ký tự.");
+            Session::flash("alert-type", "warning");
             return Redirect::to('/admin/list-date-take-leave-types');
         } else {
             $data['name'] = $name;
             $data['status'] = $status;
             $data['note'] = $note;
-            $data['ma_cong_ty'] = $maCongTy;
+            $data['company_id'] = $idCompany;
             $data['created_at'] = Carbon::now();
             Datetakeleavetype::insert($data);
             Session::flash("message", "Thêm lý do thành công.");
+            Session::flash("alert-type", "success");
             return Redirect::to('/admin/list-date-take-leave-types');
         }
     }
@@ -106,6 +107,7 @@ class DateTakeLeaveTypeController extends Controller
         $this->AuthLogin();
         Datetakeleavetype::where('id', $id)->update(['status' => 1]);
         Session::put('message', 'Ẩn loại ngày nghỉ thành công.');
+        Session::flash("alert-type", "success");
         return Redirect::to('/admin/list-date-take-leave-types');
     }
 
@@ -118,6 +120,7 @@ class DateTakeLeaveTypeController extends Controller
         $this->AuthLogin();
         Datetakeleavetype::where('id', $id)->update(['status' => 0]);
         Session::put('message', 'Hiển thị loại ngày nghỉ thành công.');
+        Session::flash("alert-type", "success");
         return Redirect::to('/admin/list-date-take-leave-types');
     }
 
@@ -142,6 +145,7 @@ class DateTakeLeaveTypeController extends Controller
         $this->AuthLogin();
         Datetakeleavetype::where('id', $id)->update(['status' => 0]);
         Session::put('message', 'Restore lý do thành công.');
+        Session::flash("alert-type", "success");
         return Redirect::to('/admin/list-date-take-leave-types');
     }
     
@@ -169,12 +173,15 @@ class DateTakeLeaveTypeController extends Controller
         $note = $request->note;
         if($name == "") {
             Session::push("failure", "Các trường không được để rỗng.");
+            Session::flash("alert-type", "warning");
             return Redirect::to('/admin/edit-date-take-leave-types/'.$id);
         } else if(strlen($name) > 100) {
             Session::push("failure", "Bạn đã nhập quá ký tự cho phép.");
+            Session::flash("alert-type", "warning");
             return Redirect::to('/admin/edit-date-take-leave-types/'.$id);
         } else if(strlen($name) < 5) {
             Session::push("failure", "Bạn nhập không đủ ký tự.");
+            Session::flash("alert-type", "warning");
             return Redirect::to('/admin/edit-date-take-leave-types/'.$id);
         } else {
             $data['name'] = $name;
@@ -182,6 +189,7 @@ class DateTakeLeaveTypeController extends Controller
             $data['updated_at'] = Carbon::now();
             Datetakeleavetype::where('id', $id)->update($data);
             Session::put('message', 'Cập nhật lý do thành công.');
+            Session::flash("alert-type", "success");
             return Redirect::to('/admin/list-date-take-leave-types');
         }
     }
@@ -195,6 +203,7 @@ class DateTakeLeaveTypeController extends Controller
         $this->AuthLogin();
         Datetakeleavetype::where('id', $id)->delete();
         Session::put('message', 'Xóa lý do thành công.');
+        Session::flash("alert-type", "success");
         return Redirect::to('/admin/list-date-take-leave-types');
     }
 

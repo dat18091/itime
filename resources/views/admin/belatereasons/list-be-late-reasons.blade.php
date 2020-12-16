@@ -48,7 +48,7 @@ use Illuminate\Support\Facades\Session;
                 <div class="card-header">
                     <div class="action-button" style="display:flex;">
                         <div><a href="" data-toggle="modal" data-target="#addBeLateReason" data-whatever="@mdo" class="btn btn-success space">Tạo mới</a></div>
-                        <div><a href="{{URL::to('/admin/list-branches-trash')}}" class="btn btn-primary space">Thùng rác</a></div>
+                        <div><a href="{{URL::to('/admin/list-be-late-reasons-trash')}}" class="btn btn-primary space">Thùng rác</a></div>
                     </div>
                 </div>
                 <div class="card-body">

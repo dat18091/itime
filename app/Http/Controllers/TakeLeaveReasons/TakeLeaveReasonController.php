@@ -36,7 +36,7 @@ class TakeLeaveReasonController extends Controller
         $this->AuthLogin();
         $idCompany = Session::get('maCongTy');
         $takeLeaveReason = TakeLeaveReason::where('status', '1')
-        ->orWhere('status', '0')->where('ma_cong_ty',$idCompany)->get();
+        ->orWhere('status', '0')->where('company_id',$idCompany)->get();
         return view('admin.takeleavereasons.list-take-leave-reasons')
         ->with('list_take_leave_reasons', $takeLeaveReason);
     }
@@ -50,7 +50,7 @@ class TakeLeaveReasonController extends Controller
         $this->AuthLogin();
         $idCompany = Session::get('maCongTy');
         $takeLeaveReason = TakeLeaveReason::where('status', '2')
-        ->where('ma_cong_ty',$idCompany)->get();
+        ->where('company_id',$idCompany)->get();
         return view('admin.takeleavereasons.list-take-leave-reasons-trash')
         ->with('list_take_leave_reasons', $takeLeaveReason);
     }
@@ -76,24 +76,28 @@ class TakeLeaveReasonController extends Controller
         $name = $request->name;
         $status = $request->status;
         $note = $request->note;
-        $maCongTy = Session::get('maCongTy');
+        $idCompany = Session::get('maCongTy');
         if($name == "" || $status == "") {
             Session::flash("failure", "Các trường không được để trống.");
+            Session::flash("alert-type", "warning");
             return Redirect::to('/admin/list-take-leave-reasons');
         } else if(strlen($name) > 100) {
             Session::flash("failure", "Bạn đã nhập quá ký tự cho phép.");
+            Session::flash("alert-type", "warning");
             return Redirect::to('/admin/list-take-leave-reasons');
         } else if(strlen($name) < 5) {
             Session::flash("failure", "Bạn nhập không đủ ký tự.");
+            Session::flash("alert-type", "warning");
             return Redirect::to('/admin/list-take-leave-reasons');
         } else {
             $data['name'] = $name;
             $data['status'] = $status;
             $data['note'] = $note;
-            $data['ma_cong_ty'] = $maCongTy;
+            $data['company_id'] = $idCompany;
             $data['created_at'] = Carbon::now();
             TakeLeaveReason::insert($data);
             Session::flash("message", "Thêm lý do thành công.");
+            Session::flash("alert-type", "success");
             return Redirect::to('/admin/list-take-leave-reasons');
         }
     }
@@ -106,7 +110,8 @@ class TakeLeaveReasonController extends Controller
     public function hide_take_leave_reasons($id) { //done
         $this->AuthLogin();
         TakeLeaveReason::where('id', $id)->update(['status' => 1]);
-        Session::put('message', 'Ẩn lý do thành công.');
+        Session::flash('message', 'Ẩn lý do thành công.');
+        Session::flash("alert-type", "success");
         return Redirect::to('/admin/list-take-leave-reasons');
     }
 
@@ -118,7 +123,8 @@ class TakeLeaveReasonController extends Controller
     public function show_take_leave_reasons($id) { //done
         $this->AuthLogin();
         TakeLeaveReason::where('id', $id)->update(['status' => 0]);
-        Session::put('message', 'Hiển thị lý do thành công.');
+        Session::flash('message', 'Hiển thị lý do thành công.');
+        Session::flash("alert-type", "success");
         return Redirect::to('/admin/list-take-leave-reasons');
     }
 
@@ -130,7 +136,8 @@ class TakeLeaveReasonController extends Controller
     public function trash_take_leave_reasons($id) { //done
         $this->AuthLogin();
         TakeLeaveReason::where('id', $id)->update(['status' => 2]);
-        Session::put('message', 'Xóa lý do thành công.');
+        Session::flash('message', 'Xóa lý do thành công.');
+        Session::flash("alert-type", "success");
         return Redirect::to('/admin/list-take-leave-reasons');
     }
 
@@ -142,7 +149,8 @@ class TakeLeaveReasonController extends Controller
     public function restore_take_leave_reasons($id) { //done
         $this->AuthLogin();
         TakeLeaveReason::where('id', $id)->update(['status' => 0]);
-        Session::put('message', 'Restore lý do thành công.');
+        Session::flash('message', 'Restore lý do thành công.');
+        Session::flash("alert-type", "success");
         return Redirect::to('/admin/list-take-leave-reasons');
     }
     
@@ -169,20 +177,24 @@ class TakeLeaveReasonController extends Controller
         $name = $request->name;
         $note = $request->note;
         if($name == "") {
-            Session::push("failure", "Các trường không được để rỗng.");
+            Session::flash("failure", "Các trường không được để rỗng.");
+            Session::flash("alert-type", "warning");
             return Redirect::to('/admin/edit-take-leave-reasons/'.$id);
         } else if(strlen($name) > 100) {
-            Session::push("failure", "Bạn đã nhập quá ký tự cho phép.");
+            Session::flash("failure", "Bạn đã nhập quá ký tự cho phép.");
+            Session::flash("alert-type", "warning");
             return Redirect::to('/admin/edit-take-leave-reasons/'.$id);
         } else if(strlen($name) < 5) {
-            Session::push("failure", "Bạn nhập không đủ ký tự.");
+            Session::flash("failure", "Bạn nhập không đủ ký tự.");
+            Session::flash("alert-type", "warning");
             return Redirect::to('/admin/edit-take-leave-reasons/'.$id);
         } else {
             $data['name'] = $name;
             $data['note'] = $note;
             $data['updated_at'] = Carbon::now();
             TakeLeaveReason::where('id', $id)->update($data);
-            Session::put('message', 'Cập nhật lý do thành công.');
+            Session::flash('message', 'Cập nhật lý do thành công.');
+            Session::flash("alert-type", "success");
             return Redirect::to('/admin/list-take-leave-reasons');
         }
     }
@@ -195,7 +207,8 @@ class TakeLeaveReasonController extends Controller
     public function delete_take_leave_reasons($id) { //done
         $this->AuthLogin();
         TakeLeaveReason::where('id', $id)->delete();
-        Session::put('message', 'Xóa lý do thành công.');
+        Session::flash('message', 'Xóa lý do thành công.');
+        Session::flash("alert-type", "success");
         return Redirect::to('/admin/list-take-leave-reasons');
     }
 }

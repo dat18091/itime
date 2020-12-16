@@ -47,7 +47,6 @@ use Illuminate\Support\Facades\Session;
             <div class="card">
                 <div class="card-header">
                     <div class="action-button" style="display:flex;">
-                        <div class="space"><a href="" data-toggle="modal" data-target="#addTakeLeaveReason" data-whatever="@mdo" class="btn btn-success ">Tạo mới</a></div>
                         <div class="space"><a href="{{URL::to('/admin/list-take-leave-reasons-trash')}}" class="btn btn-primary ">Thùng rác </a></div>
                         <div class="space"><a href="{{URL::to('/admin/list-take-leave-reasons')}}" class="btn btn-danger ">Danh sách </a></div>
                     </div>
@@ -90,50 +89,6 @@ use Illuminate\Support\Facades\Session;
             </div>
         </div>
     </div><!-- End Row-->
-    <div class="modal fade bd-example-modal-lg" id="addTakeLeaveReason" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content animated fadeInUp">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Thêm Lý Do Nghỉ Phép</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-
-                    <div class="modal-body">
-                        <form method="post" action="{{URL::to('/admin/save-take-leave-reasons')}}">
-                            {{csrf_field()}}
-                            <div class="form-group row">
-                                <label for="input-14" class="col-sm-2 col-form-label">Lý do <span class="focus">*</span></label>
-                                <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="name" name="name" onkeyup="changeToKeyword();">
-                                </div>
-                            </div>
-
-                            <div class="form-group row">
-                                <label for="input-15" class="col-sm-2 col-form-label">Trạng thái <span class="focus">*</span></label>
-                                <div class="col-sm-10">
-                                    <select name="status" class="form-control" id="basic-select">
-                                        <option value="1">Ẩn</option>
-                                        <option value="0">Hiển thị</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label for="input-17" class="col-sm-2 col-form-label">Ghi chú</label>
-                                <div class="col-sm-10">
-                                    <textarea class="form-control" style="resize:none;" rows="4" id="input-17" name="note"></textarea>
-                                </div>
-                            </div>
-                            <div class="form-footer">
-                                <a type="button" name="danh_sach_vung" class="btn btn-danger"><i class="fa fa-times"></i> Hủy Bỏ</a>
-                                <button name="add_areas" class="btn btn-primary" type="submit"><i class="fa fa-add"></i> Thêm Lý Do</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
     <!--start overlay-->
     <div class="overlay toggle-menu"></div>
     <!--end overlay-->
