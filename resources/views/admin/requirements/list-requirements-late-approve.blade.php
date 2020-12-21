@@ -49,11 +49,11 @@ use Illuminate\Support\Facades\Session;
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header">
-                    <div class="action-button" style="display:flex;">
-                        <div class="space"><a href="" data-toggle="modal" data-target="#themChucDanh" data-whatever="@mdo" class="btn btn-success ">Tạo mới</a></div>
+                <div class="action-button" style="display:flex;">
                         <div class="space"><a href="{{URL::to('/admin/list-requirements-late-approve')}}" class="btn btn-primary ">Chấp nhận <span class="badge badge-warning badge-pill">{{$countApprove}}</span></a></div>
                         <div class="space"><a href="{{URL::to('/admin/list-requirements-late-denied')}}" class="btn btn-warning ">Từ chối <span class="badge badge-success badge-pill">{{$countDenied}}</span></a></div>
-                        <div class="space"><a href="{{URL::to('/admin/list-requirements-late-trash')}}" class="btn btn-danger ">Thùng rác <span class="badge badge-primary badge-pill">{{$countDelete}}</span></a></div>
+                        <div class="space"><a href="{{URL::to('/admin/list-requirements-late')}}" class="btn btn-danger ">Danh sách <span class="badge badge-primary badge-pill">{{$countList}}</span></a></div>
+                        <div class="space"><a href="{{URL::to('/admin/list-requirements-late-trash')}}" class="btn btn-light ">Thùng rác <span class="badge badge-secondary badge-pill">{{$countDelete}}</span></a></div>
                     </div>
                 </div>
                 <div class="card-body">
@@ -139,9 +139,9 @@ use Illuminate\Support\Facades\Session;
                                     <td>{{$belate->content}}</td>
                                     <td>
                                         <div class="btn-group group-round m-1">
-                                            <a type="button" href="{{URL::to('/admin/approve-late/'.$belate->id)}}" class="btn btn-primary waves-effect waves-light">Chấp nhận</a>
-                                            <a type="button" href="{{URL::to('/admin/denied-late/'.$belate->id)}}" class="btn btn-warning custom waves-effect waves-light">Từ chối</a>
-                                            <a type="button" href="{{URL::to('/admin/trash-late/'.$belate->id)}}" onclick="return confirm('Bạn có chắc chắn muốn xóa yêu cầu này?')" class="btn btn-danger waves-effect waves-light">Xóa</a>
+                                            <a type="button" href="" class="btn btn-primary waves-effect waves-light">Chấp nhận</a>
+                                            <a type="button" href="" class="btn btn-warning custom waves-effect waves-light">Từ chối</a>
+                                            <a type="button" href="" onclick="return confirm('Bạn có chắc chắn muốn xóa yêu cầu này?')" class="btn btn-danger waves-effect waves-light">Xóa</a>
                                         </div>
                                     </td>
                                 </tr>
@@ -174,10 +174,10 @@ use Illuminate\Support\Facades\Session;
     <div class="overlay toggle-menu"></div>
     <!--end overlay-->
     <?php
-    $message = Session::get('message');
-    $alert_type = Session::get('alert-type');
-    if ($message && $alert_type == 'warning') {
-        echo '<script>
+            $message = Session::get('message');
+            $alert_type = Session::get('alert-type');
+            if ($message && $alert_type == 'warning') {
+                echo '<script>
             setTimeout(function() {
                 swal({
                     title: "Thông báo",
@@ -187,9 +187,9 @@ use Illuminate\Support\Facades\Session;
                 },);
             }, 1000);
             </script>';
-        Session::put('message', null);
-    } else if ($message && $alert_type == 'success') {
-        echo '<script>
+                Session::put('message', null);
+            } else if ($message && $alert_type == 'success') {
+                echo '<script>
             setTimeout(function() {
                 swal({
                     title: "Thông báo",
@@ -199,9 +199,9 @@ use Illuminate\Support\Facades\Session;
                 },);
             }, 1000);
             </script>';
-        Session::put('message', null);
-    } else if ($message && $alert_type == 'danger') {
-        echo '<script>
+                Session::put('message', null);
+            } else if ($message && $alert_type == 'danger') {
+                echo '<script>
             function success_noti() {
                 Lobibox.notify(' . $alert_type . ', {
                     pauseDelayOnHover: true,
@@ -212,9 +212,9 @@ use Illuminate\Support\Facades\Session;
                 });
             }
             </script>';
-        Session::put('message', null);
-    }
-    ?>
+                Session::put('message', null);
+            }
+            ?>
 </div>
 <!-- End container-fluid-->
 @stop

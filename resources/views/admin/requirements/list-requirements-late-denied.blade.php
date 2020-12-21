@@ -49,11 +49,11 @@ use Illuminate\Support\Facades\Session;
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header">
-                    <div class="action-button" style="display:flex;">
-                        <div class="space"><a href="" data-toggle="modal" data-target="#themChucDanh" data-whatever="@mdo" class="btn btn-success ">Tạo mới</a></div>
+                <div class="action-button" style="display:flex;">
                         <div class="space"><a href="{{URL::to('/admin/list-requirements-late-approve')}}" class="btn btn-primary ">Chấp nhận <span class="badge badge-warning badge-pill">{{$countApprove}}</span></a></div>
                         <div class="space"><a href="{{URL::to('/admin/list-requirements-late-denied')}}" class="btn btn-warning ">Từ chối <span class="badge badge-success badge-pill">{{$countDenied}}</span></a></div>
-                        <div class="space"><a href="{{URL::to('/admin/list-requirements-late-trash')}}" class="btn btn-danger ">Thùng rác <span class="badge badge-primary badge-pill">{{$countDelete}}</span></a></div>
+                        <div class="space"><a href="{{URL::to('/admin/list-requirements-late')}}" class="btn btn-danger ">Danh sách <span class="badge badge-primary badge-pill">{{$countList}}</span></a></div>
+                        <div class="space"><a href="{{URL::to('/admin/list-requirements-late-trash')}}" class="btn btn-light ">Thùng rác <span class="badge badge-secondary badge-pill">{{$countDelete}}</span></a></div>
                     </div>
                 </div>
                 <div class="card-body">

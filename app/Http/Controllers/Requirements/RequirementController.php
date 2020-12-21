@@ -362,7 +362,8 @@ class RequirementController extends Controller
         ->join('departments', 'departments.id', '=', 'belates.department_id')
         ->join('positions', 'positions.id', '=', 'belates.position_id')
         ->select(['belates.*','employees.id as idEmployee', 'companies.id as idCompany', 'areas.id as idArea',
-        'branches.id as idBranch', 'departments.id as idDepartment', 'positions.id as idPosition'])->get();
+        'branches.id as idBranch', 'departments.id as idDepartment', 'positions.id as idPosition'])
+        ->where('belates.status', '=', '0')->get();
         $dataEmployee = Employee::get();
         $dataArea = Area::get();
         $dataEmployee = Employee::get();
@@ -372,9 +373,135 @@ class RequirementController extends Controller
         $dataCompany = Company::get();
         $dataShift = DB::table('shifts')->get();
         $dataBeLateReason = DB::table('belatereasons')->get();
+        $countList = Belate::where('status', '0')->count();
+        $countApprove = Belate::where('status', '1')->count();
+        $countDenied = Belate::where('status', '2')->count();
+        $countDelete = Belate::where('status', '3')->count();
         return view('admin.requirements.list-requirements-late')->with('data', $data)
         ->with('dataEmployee', $dataEmployee)->with('dataArea', $dataArea)->with('dataBranch', $dataBranch)
         ->with('dataDepartment', $dataDepartment)->with('dataPosition', $dataPosition)->with('dataCompany', $dataCompany)
-        ->with('dataShift', $dataShift)->with('dataBeLateReason', $dataBeLateReason);
+        ->with('dataShift', $dataShift)->with('dataBeLateReason', $dataBeLateReason)
+        ->with('countList', $countList)->with('countApprove', $countApprove)->with('countDenied', $countDenied)
+        ->with('countDelete', $countDelete);
+    }
+
+    public function approve_late($id) {
+        $this->AuthLogin();
+        Belate::where('id', $id)->update(['status' => 1]);
+        Session::flash('message', 'Duyệt yêu cầu thành công.');
+        Session::flash("alert-type", "success");
+        return Redirect::to('/admin/list-requirements-late');
+    }
+
+    public function list_requirements_late_approve() {
+        $this->AuthLogin();
+        $data = Belate::join('employees', 'employees.id', '=', 'belates.employee_id')
+        ->join('companies', 'companies.id', '=', 'belates.company_id')
+        ->join('areas', 'areas.id', '=', 'belates.area_id')
+        ->join('branches', 'branches.id', '=', 'belates.branch_id')
+        ->join('departments', 'departments.id', '=', 'belates.department_id')
+        ->join('positions', 'positions.id', '=', 'belates.position_id')
+        ->select(['belates.*','employees.id as idEmployee', 'companies.id as idCompany', 'areas.id as idArea',
+        'branches.id as idBranch', 'departments.id as idDepartment', 'positions.id as idPosition'])
+        ->where('belates.status', '=', '1')->get();
+        $dataEmployee = Employee::get();
+        $dataArea = Area::get();
+        $dataEmployee = Employee::get();
+        $dataBranch = Branch::get();
+        $dataDepartment = Department::get();
+        $dataPosition = Position::get();
+        $dataCompany = Company::get();
+        $dataShift = DB::table('shifts')->get();
+        $dataBeLateReason = DB::table('belatereasons')->get();
+        $countList = Belate::where('status', '0')->count();
+        $countApprove = Belate::where('status', '1')->count();
+        $countDenied = Belate::where('status', '2')->count();
+        $countDelete = Belate::where('status', '3')->count();
+        return view('admin.requirements.list-requirements-late-approve')->with('data', $data)
+        ->with('dataEmployee', $dataEmployee)->with('dataArea', $dataArea)->with('dataBranch', $dataBranch)
+        ->with('dataDepartment', $dataDepartment)->with('dataPosition', $dataPosition)->with('dataCompany', $dataCompany)
+        ->with('dataShift', $dataShift)->with('dataBeLateReason', $dataBeLateReason)
+        ->with('countList', $countList)->with('countApprove', $countApprove)->with('countDenied', $countDenied)
+        ->with('countDelete', $countDelete);
+    }
+
+    public function denied_late($id) {
+        $this->AuthLogin();
+        Belate::where('id', $id)->update(['status' => 2]);
+        Session::flash('message', 'Duyệt yêu cầu thành công.');
+        Session::flash("alert-type", "success");
+        return Redirect::to('/admin/list-requirements-late');
+    }
+
+    public function list_requirements_late_denied() {
+        $this->AuthLogin();
+        $data = Belate::join('employees', 'employees.id', '=', 'belates.employee_id')
+        ->join('companies', 'companies.id', '=', 'belates.company_id')
+        ->join('areas', 'areas.id', '=', 'belates.area_id')
+        ->join('branches', 'branches.id', '=', 'belates.branch_id')
+        ->join('departments', 'departments.id', '=', 'belates.department_id')
+        ->join('positions', 'positions.id', '=', 'belates.position_id')
+        ->select(['belates.*','employees.id as idEmployee', 'companies.id as idCompany', 'areas.id as idArea',
+        'branches.id as idBranch', 'departments.id as idDepartment', 'positions.id as idPosition'])
+        ->where('belates.status', '=', '2')->get();
+        $dataEmployee = Employee::get();
+        $dataArea = Area::get();
+        $dataEmployee = Employee::get();
+        $dataBranch = Branch::get();
+        $dataDepartment = Department::get();
+        $dataPosition = Position::get();
+        $dataCompany = Company::get();
+        $dataShift = DB::table('shifts')->get();
+        $dataBeLateReason = DB::table('belatereasons')->get();
+        $countList = Belate::where('status', '0')->count();
+        $countApprove = Belate::where('status', '1')->count();
+        $countDenied = Belate::where('status', '2')->count();
+        $countDelete = Belate::where('status', '3')->count();
+        return view('admin.requirements.list-requirements-late-denied')->with('data', $data)
+        ->with('dataEmployee', $dataEmployee)->with('dataArea', $dataArea)->with('dataBranch', $dataBranch)
+        ->with('dataDepartment', $dataDepartment)->with('dataPosition', $dataPosition)->with('dataCompany', $dataCompany)
+        ->with('dataShift', $dataShift)->with('dataBeLateReason', $dataBeLateReason)
+        ->with('countList', $countList)->with('countApprove', $countApprove)->with('countDenied', $countDenied)
+        ->with('countDelete', $countDelete);
+    }
+
+    public function trash_late($id) {
+        $this->AuthLogin();
+        Belate::where('id', $id)->update(['status' => 3]);
+        Session::flash('message', 'Xóa yêu cầu thành công.');
+        Session::flash("alert-type", "success");
+        return Redirect::to('/admin/list-requirements-late');
+    }
+
+    public function list_requirements_late_trash() {
+        $this->AuthLogin();
+        $data = Belate::join('employees', 'employees.id', '=', 'belates.employee_id')
+        ->join('companies', 'companies.id', '=', 'belates.company_id')
+        ->join('areas', 'areas.id', '=', 'belates.area_id')
+        ->join('branches', 'branches.id', '=', 'belates.branch_id')
+        ->join('departments', 'departments.id', '=', 'belates.department_id')
+        ->join('positions', 'positions.id', '=', 'belates.position_id')
+        ->select(['belates.*','employees.id as idEmployee', 'companies.id as idCompany', 'areas.id as idArea',
+        'branches.id as idBranch', 'departments.id as idDepartment', 'positions.id as idPosition'])
+        ->where('belates.status', '=', '2')->get();
+        $dataEmployee = Employee::get();
+        $dataArea = Area::get();
+        $dataEmployee = Employee::get();
+        $dataBranch = Branch::get();
+        $dataDepartment = Department::get();
+        $dataPosition = Position::get();
+        $dataCompany = Company::get();
+        $dataShift = DB::table('shifts')->get();
+        $dataBeLateReason = DB::table('belatereasons')->get();
+        $countList = Belate::where('status', '0')->count();
+        $countApprove = Belate::where('status', '1')->count();
+        $countDenied = Belate::where('status', '2')->count();
+        $countDelete = Belate::where('status', '3')->count();
+        return view('admin.requirements.list-requirements-late-trash')->with('data', $data)
+        ->with('dataEmployee', $dataEmployee)->with('dataArea', $dataArea)->with('dataBranch', $dataBranch)
+        ->with('dataDepartment', $dataDepartment)->with('dataPosition', $dataPosition)->with('dataCompany', $dataCompany)
+        ->with('dataShift', $dataShift)->with('dataBeLateReason', $dataBeLateReason)
+        ->with('countList', $countList)->with('countApprove', $countApprove)->with('countDenied', $countDenied)
+        ->with('countDelete', $countDelete);
     }
 }
