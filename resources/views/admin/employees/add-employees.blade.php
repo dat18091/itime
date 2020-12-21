@@ -104,27 +104,27 @@ use Illuminate\Support\Facades\Session;
                                                 <div class="form-group row">
                                                     <label for="input-14" class="col-sm-3 col-form-label">Tên nhân viên <span class="focus">*</span></label>
                                                     <div class="col-sm-9">
-                                                        <input type="text" class="form-control" name="ten_nhan_vien">
+                                                        <input type="text" class="form-control" name="name">
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <label for="input-14" class="col-sm-3 col-form-label">Số điện thoại <span class="focus">*</span></label>
                                                     <div class="col-sm-4">
-                                                        <input type="text" class="form-control" name="so_dien_thoai_nhan_vien">
+                                                        <input type="text" class="form-control" name="phone">
                                                     </div>
                                                     <label for="input-14" class="col-sm-2 col-form-label">Ngày sinh <span class="focus">*</span></label>
                                                     <div class="col-sm-3">
-                                                        <input type="text" id="autoclose-datepicker" name="ngay_sinh_nhan_vien" class="form-control">
+                                                        <input type="text" id="autoclose-datepicker" name="date_of_birth" class="form-control">
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <label for="input-14" class="col-sm-3 col-form-label">Email <span class="focus">*</span></label>
                                                     <div class="col-sm-4">
-                                                        <input type="text" class="form-control" name="email_nhan_vien">
+                                                        <input type="text" class="form-control" name="email">
                                                     </div>
                                                     <label for="input-14" class="col-sm-2 col-form-label">Giới tính <span class="focus">*</span></label>
                                                     <div class="col-sm-3">
-                                                        <select name="gioi_tinh_nhan_vien" class="form-control" id="basic-select">
+                                                        <select name="gender" class="form-control" id="basic-select">
                                                             <option value="1">Nam</option>
                                                             <option value="0">Nữ</option>
                                                         </select>
@@ -133,30 +133,30 @@ use Illuminate\Support\Facades\Session;
                                                 <div class="form-group row">
                                                     <label for="input-14" class="col-sm-3 col-form-label">Địa chỉ hiện tại <span class="focus">*</span></label>
                                                     <div class="col-sm-9">
-                                                        <input type="text" class="form-control" name="dia_chi_hien_tai">
+                                                        <input type="text" class="form-control" name="current_address">
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <label for="input-14" class="col-sm-3 col-form-label">Thứ tự hiển thị </label>
                                                     <div class="col-sm-4">
-                                                        <input class="form-control" type="number" min="0" max="50" value="0" name="thu_tu_hien_thi_nv" id="example-number-input">
+                                                        <input class="form-control" type="number" min="0" max="50" value="0" name="display_order" id="example-number-input">
                                                     </div>
                                                 </div>
                                                 <hr>
                                                 <div class="form-group row">
                                                     <label for="input-14" class="col-sm-3 col-form-label">Số CMND <span class="focus">*</span></label>
                                                     <div class="col-sm-3">
-                                                        <input type="text" class="form-control" id="so_cmnd" name="so_cmnd">
+                                                        <input type="text" class="form-control" id="identity_card" name="identity_card">
                                                     </div>
                                                     <label for="input-14" class="col-sm-3 col-form-label">Ngày cấp <span class="focus">*</span></label>
                                                     <div class="col-sm-3">
-                                                        <input type="text" id="default-datepicker" name="ngay_cap_cmnd" class="form-control">
+                                                        <input type="text" id="default-datepicker" name="date_release_id" class="form-control">
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <label for="input-14" class="col-sm-3 col-form-label">Nơi cấp <span class="focus">*</span></label>
                                                     <div class="col-sm-9">
-                                                        <input type="text" class="form-control" id="noi_cap_cmnd" name="noi_cap_cmnd">
+                                                        <input type="text" class="form-control" id="located_release_id" name="noi_cap_cmnd">
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
@@ -166,21 +166,21 @@ use Illuminate\Support\Facades\Session;
                                                     <div class="form-group row">
                                                         <label for="input-14" class="col-sm-3 col-form-label">Số hộ chiếu </label>
                                                         <div class="col-sm-3">
-                                                            <input type="text" class="form-control" id="ten_phong_ban" name="so_ho_chieu">
+                                                            <input type="text" class="form-control" id="passport" name="passport">
                                                         </div>
                                                         <label for="input-14" class="col-sm-3 col-form-label">Nơi cấp </label>
                                                         <div class="col-sm-3">
-                                                            <input type="text" class="form-control" id="ten_phong_ban" name="noi_cap_ho_chieu">
+                                                            <input type="text" class="form-control" id="located_release_passport" name="located_release_passport">
                                                         </div>
                                                     </div>
                                                     <div class="form-group row">
                                                         <label for="input-14" class="col-sm-3 col-form-label">Ngày cấp </label>
                                                         <div class="col-sm-3">
-                                                            <input type="text" name="ngay_cap_ho_chieu" id="default-datepicker" class="form-control">
+                                                            <input type="text" name="date_release_passport" id="default-datepicker" class="form-control">
                                                         </div>
                                                         <label for="input-14" class="col-sm-3 col-form-label">Ngày hết hạn </label>
                                                         <div class="col-sm-3">
-                                                            <input type="text" name="ngay_het_han_ho_chieu" id="default-datepicker" class="form-control">
+                                                            <input type="text" name="date_expired_passport" id="default-datepicker" class="form-control">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -203,17 +203,17 @@ use Illuminate\Support\Facades\Session;
                                                 <div class="form-group row">
                                                     <label for="input-15" class="col-sm-3 col-form-label">Vùng <span class="focus">*</span></label>
                                                     <div class="col-sm-3">
-                                                        <select name="ma_vung" class="form-control single-select">
-                                                            @foreach($vung as $key => $areas)
-                                                            <option value="{{$areas->ma_vung}}">{{$areas->ten_vung}}</option>
+                                                        <select name="area_id" class="form-control single-select">
+                                                            @foreach($dataArea as $key => $areas)
+                                                            <option value="{{$areas->id}}">{{$areas->name}}</option>
                                                             @endforeach
                                                         </select>
                                                     </div>
                                                     <label for="input-15" class="col-sm-2 col-form-label">Chi nhánh <span class="focus">*</span></label>
                                                     <div class="col-sm-4">
-                                                        <select name="ma_chi_nhanh" class="form-control single-select">
-                                                            @foreach($chiNhanh as $key => $branch)
-                                                            <option value="{{$branch->ma_chi_nhanh}}">{{$branch->ten_chi_nhanh}}</option>
+                                                        <select name="branch_id" class="form-control single-select">
+                                                            @foreach($dataBranch as $key => $branch)
+                                                            <option value="{{$branch->id}}">{{$branch->name}}</option>
                                                             @endforeach
                                                         </select>
                                                     </div>
@@ -221,17 +221,17 @@ use Illuminate\Support\Facades\Session;
                                                 <div class="form-group row">
                                                     <label for="input-15" class="col-sm-3 col-form-label">Chức danh <span class="focus">*</span></label>
                                                     <div class="col-sm-3">
-                                                        <select name="ma_chuc_danh" class="form-control single-select">
-                                                            @foreach($chucDanh as $key => $position)
-                                                            <option value="{{$position->ma_chuc_danh}}">{{$position->ten_chuc_danh}}</option>
+                                                        <select name="position_id" class="form-control single-select">
+                                                            @foreach($dataPosition as $key => $position)
+                                                            <option value="{{$position->id}}">{{$position->name}}</option>
                                                             @endforeach
                                                         </select>
                                                     </div>
                                                     <label for="input-15" class="col-sm-2 col-form-label">Phòng ban </label>
                                                     <div class="col-sm-4">
-                                                        <select name="ma_phong_ban" class="form-control single-select">
-                                                            @foreach($phongBan as $key => $department)
-                                                            <option value="{{$department->ma_phong_ban}}">{{$department->ten_phong_ban}}</option>
+                                                        <select name="department_id" class="form-control single-select">
+                                                            @foreach($dataDepartment as $key => $department)
+                                                            <option value="{{$department->id}}">{{$department->name}}</option>
                                                             @endforeach
                                                         </select>
                                                     </div>
@@ -240,16 +240,16 @@ use Illuminate\Support\Facades\Session;
                                                     <label for="input-15" class="col-sm-3 col-form-label">Tỉnh/Thành <span class="focus">*</span></label>
                                                     <div class="col-sm-3">
                                                         <select name="province_id" class="form-control single-select">
-                                                            @foreach($tinhThanh as $key => $province)
-                                                            <option value="{{$province->province_id}}">{{$province->province_name}}</option>
+                                                            @foreach($provinces as $key => $province)
+                                                            <option value="{{$province->id}}">{{$province->name}}</option>
                                                             @endforeach
                                                         </select>
                                                     </div>
                                                     <label for="input-15" class="col-sm-3 col-form-label">Quận/Huyện <span class="focus">*</span></label>
                                                     <div class="col-sm-3">
                                                         <select name="district_id" class="form-control single-select">
-                                                            @foreach($quanHuyen as $key => $district)
-                                                            <option value="{{$district->district_id}}">{{$district->district_name}}</option>
+                                                            @foreach($districts as $key => $district)
+                                                            <option value="{{$district->id}}">{{$district->name}}</option>
                                                             @endforeach
                                                         </select>
                                                     </div>
@@ -257,9 +257,9 @@ use Illuminate\Support\Facades\Session;
                                                 <div class="form-group row">
                                                     <label for="input-15" class="col-sm-3 col-form-label">Nhóm truy cập <span class="focus">*</span></label>
                                                     <div class="col-sm-9">
-                                                        <select name="ma_nhom_truy_cap" class="form-control single-select">
-                                                            @foreach($nhomTruyCap as $key => $access)
-                                                            <option value="{{$access->ma_nhom_truy_cap}}">{{$access->ten_nhom_truy_cap}}</option>
+                                                        <select name="accessgroup_id" class="form-control single-select">
+                                                            @foreach($dataAccessGroup as $key => $access)
+                                                            <option value="{{$access->id}}">{{$access->name}}</option>
                                                             @endforeach
                                                         </select>
                                                     </div>
@@ -267,14 +267,14 @@ use Illuminate\Support\Facades\Session;
                                                 <div class="form-group row">
                                                     <label for="input-14" class="col-sm-3 col-form-label">Hoạt động <span class="focus">*</span></label>
                                                     <div class="col-sm-3">
-                                                        <select name="hoat_dong" class="form-control" id="basic-select">
+                                                        <select name="active" class="form-control" id="basic-select">
                                                             <option value="1">Đang hoạt động</option>
                                                             <option value="0">Đã nghỉ</option>
                                                         </select>
                                                     </div>
                                                     <label for="input-14" class="col-sm-4 col-form-label">Quyền trưởng phòng <span class="focus">*</span></label>
                                                     <div class="col-sm-2">
-                                                        <select name="quyen_truong_phong" class="form-control" id="basic-select">
+                                                        <select name="acting_chief" class="form-control" id="basic-select">
                                                             <option value="1">Không</option>
                                                             <option value="0">Có</option>
                                                         </select>
@@ -284,37 +284,37 @@ use Illuminate\Support\Facades\Session;
                                                 <div class="form-group row">
                                                     <label for="input-14" class="col-sm-3 col-form-label">Chủ tài khoản <span class="focus">*</span></label>
                                                     <div class="col-sm-3">
-                                                        <input type="text" class="form-control" id="ten_phong_ban" name="chu_tai_khoan_ngan_hang">
+                                                        <input type="text" class="form-control" id="bank_name" name="bank_name">
 
                                                     </div>
                                                     <label for="input-14" class="col-sm-3 col-form-label">Số tài khoản <span class="focus">*</span></label>
                                                     <div class="col-sm-3">
-                                                        <input type="text" class="form-control" id="ten_phong_ban" name="so_tai_khoan_ngan_hang">
+                                                        <input type="text" class="form-control" id="bank_number" name="bank_number">
 
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <label for="input-14" class="col-sm-3 col-form-label">Tên ngân hàng </label>
                                                     <div class="col-sm-3">
-                                                        <input type="text" class="form-control" id="ten_phong_ban" name="ten_ngan_hang">
+                                                        <input type="text" class="form-control" id="name_of_bank" name="name_of_bank">
                                                     </div>
                                                     <label for="input-14" class="col-sm-3 col-form-label">Chi nhánh <span class="focus">*</span></label>
                                                     <div class="col-sm-3">
-                                                        <input type="text" class="form-control" id="ten_phong_ban" name="chi_nhanh_ngan_hang">
+                                                        <input type="text" class="form-control" id="branch_of_bank" name="branch_of_bank">
                                                     </div>
                                                 </div>
                                                 <hr>
                                                 <div class="form-group row">
                                                     <label for="input-17" class="col-sm-3 col-form-label">Hình ảnh</label>
                                                     <div class="col-sm-9">
-                                                        <input name="hinh_anh_nhan_vien" type="file" multiple="multiple">
+                                                        <input name="image" type="file" multiple="multiple">
 
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <label for="input-17" class="col-sm-3 col-form-label">Ghi chú</label>
                                                     <div class="col-sm-9">
-                                                        <textarea class="form-control" rows="4" id="input-17" name="ghi_chu_nhan_vien"></textarea>
+                                                        <textarea class="form-control" rows="4" id="input-17" name="note"></textarea>
                                                     </div>
                                                 </div>
                                                 </div>

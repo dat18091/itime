@@ -9,7 +9,11 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Carbon\Carbon;
 use App\Attendance;
-
+use App\Employee;
+use App\Area;
+use App\Branch;
+use App\Department;
+use App\Position;
 class AttendanceController extends Controller
 {
     /**
@@ -35,22 +39,30 @@ class AttendanceController extends Controller
      */
     public function list_attendances() {
         $this->AuthLogin();
-        $maCongTy = Session::get('maCongTy');
-        $listAttendances = 
-        // Attendance::select('a.*','b.*', 'c.*')
-        // ->from('attendances as b')
-        // ->join('employees as a', 'b.ma_nhan_vien', '=', 'a.ma_nhan_vien')
-        // ->join('companies as c', 'b.ma_cong_ty', '=', 'c.ma_cong_ty')
-		// ->get();
-        Attendance::
-        join('employees', 'employees.ma_nhan_vien', '=', 'attendances.ma_nhan_vien')->
-        join('areas', 'areas.ma_vung', '=', 'attendances.ma_vung')->
-        join('branches', 'branches.ma_chi_nhanh', '=', 'attendances.ma_chi_nhanh')->
-        join('departments', 'departments.ma_phong_ban', '=', 'attendances.ma_phong_ban')->
-        join('positions', 'positions.ma_chuc_danh', '=', 'attendances.ma_chuc_danh')
-        ->whereDate('attendances.check_in_time', '=',Carbon::now()->toDateString())
-        ->where('employees.ma_cong_ty', $maCongTy)->get();
-        return view('admin.attendances.list-attendances')->with('attendances', $listAttendances);
+        $idCompany = Session::get('maCongTy');
+        $listAttendances = DB::table('attendances')->join('areas', 'areas.id', '=', 'attendances.area_id')
+        ->join('employees', 'employees.id', '=', 'attendances.employee_id')
+        ->join('companies', 'companies.id', '=', 'attendances.company_id')
+        ->select(['attendances.*', 'areas.id as idArea', 'employees.id as idEmployee', 'companies.id as idCompany'])->whereDate('attendances.check_in_time', '=',Carbon::now()->toDateString())
+        ->where('attendances.company_id', $idCompany)
+        ->whereDate('attendances.check_in_time', '=',Carbon::now()->toDateString())->orderBy('id', 'DESC')->get();
+        $dataArea = Area::get();
+        $dataEmployee = Employee::get();
+        $dataBranch = Branch::get();
+        $dataDepartment = Department::get();
+        $dataPosition = Position::get();
+        return view('admin.attendances.list-attendances')->with('attendances', $listAttendances)
+        ->with('dataArea', $dataArea)->with('dataEmployee', $dataEmployee)->with('dataBranch', $dataBranch)
+        ->with('dataDepartment', $dataDepartment)->with('dataPosition', $dataPosition);
+        // Attendance::
+        // join('employees', 'employees.id', '=', 'attendances.employee_id')->
+        // join('areas', 'areas.id', '=', 'attendances.ma_vung')->
+        // join('branches', 'branches.id', '=', 'attendances.ma_chi_nhanh')->
+        // join('departments', 'departments.ma_phong_ban', '=', 'attendances.ma_phong_ban')->
+        // join('positions', 'positions.ma_chuc_danh', '=', 'attendances.ma_chuc_danh')
+        // ->whereDate('attendances.check_in_time', '=',Carbon::now()->toDateString())
+        // ->where('employees.ma_cong_ty', $maCongTy)->get();
+        // return view('admin.attendances.list-attendances')->with('attendances', $listAttendances);
     }
 
     public function delete_attendances($id) {
@@ -61,20 +73,15 @@ class AttendanceController extends Controller
 
     public function list_attendances_history() {
         $this->AuthLogin();
-        $maCongTy = Session::get('maCongTy');
-        $listAttendances = 
-        // Attendance::select('a.*','b.*', 'c.*')
-        // ->from('attendances as b')
-        // ->join('employees as a', 'b.ma_nhan_vien', '=', 'a.ma_nhan_vien')
-        // ->join('companies as c', 'b.ma_cong_ty', '=', 'c.ma_cong_ty')
-		// ->get();
-        Attendance::
-        join('employees', 'employees.ma_nhan_vien', '=', 'attendances.ma_nhan_vien')->
-        join('areas', 'areas.ma_vung', '=', 'attendances.ma_vung')->
-        join('branches', 'branches.ma_chi_nhanh', '=', 'attendances.ma_chi_nhanh')->
-        join('departments', 'departments.ma_phong_ban', '=', 'attendances.ma_phong_ban')->
-        join('positions', 'positions.ma_chuc_danh', '=', 'attendances.ma_chuc_danh')
-        ->where('employees.ma_cong_ty', $maCongTy)->get();
-        return view('admin.attendances.list-attendances-history')->with('attendances', $listAttendances);
+        $idCompany = Session::get('maCongTy');
+        $listAttendances = DB::table('attendances')->where('company_id', $idCompany)->get();
+        $dataArea = Area::get();
+        $dataEmployee = Employee::get();
+        $dataBranch = Branch::get();
+        $dataDepartment = Department::get();
+        $dataPosition = Position::get();
+        return view('admin.attendances.list-attendances-history')->with('attendances', $listAttendances)
+        ->with('dataArea', $dataArea)->with('dataEmployee', $dataEmployee)->with('dataBranch', $dataBranch)
+        ->with('dataDepartment', $dataDepartment)->with('dataPosition', $dataPosition);
     }
 }

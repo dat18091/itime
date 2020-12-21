@@ -40,7 +40,6 @@ use Illuminate\Support\Facades\Session;
                     <div class="container tab-pane active" id="nhanvien">
                         <div class="card-header">
                             <div class="action-button" style="display:flex;">
-                                <div class="space"><a href="{{URL::to('/admin/add-employees')}}" class="btn btn-success">Tạo mới</a></div>
                                 <div class="space"><a href="{{URL::to('/admin/list-employees-trash')}}" class="btn btn-primary ">Thùng rác</a></div>
                                 <div class="space"><a href="{{URL::to('/admin/list-employees')}}" class="btn btn-danger ">Danh sách</a></div>
                             </div>
@@ -58,94 +57,66 @@ use Illuminate\Support\Facades\Session;
                                             <th>Phòng ban</th>
                                             <th>Chức danh</th>
                                             <th>Nhóm truy cập</th>
-                                            <th>Trạng thái</th>
-                                            <th>Quyền trưởng phòng</th>
                                             <th>Thao tác</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach($nhanVien as $key => $employee)
+                                        @foreach($dataEmployee as $key => $employee)
                                         <tr>
-                                            <td>{{$employee->ten_nhan_vien}}</td>
-                                            <td>{{$employee->so_dien_thoai_nhan_vien}}</td>
+                                            <td>{{$employee->name}}</td>
+                                            <td>{{$employee->phone}}</td>
                                             <td>
                                                 <?php
-                                                if ($employee->hinh_anh_nhan_vien == '') {
+                                                if ($employee->image == '') {
                                                 ?>
                                                     <img src="{{asset('public/backend/assets/images/avatars/avatar-1.png')}}" width="50" height="50">
                                                 <?php
                                                 } else {
                                                 ?>
-                                                    <img src="../public/uploads/employees/{{$employee->hinh_anh_nhan_vien}}" width="50" height="50">
+                                                    <img src="../public/uploads/employees/{{$employee->image}}" width="50" height="50">
                                                 <?php
                                                 }
                                                 ?>
                                             </td>
                                             <td>
-                                                @foreach($vung as $key => $area)
-                                                @if($employee->ma_vung == $area->ma_vung)
-                                                {{$area->ten_vung}}
+                                                @foreach($dataArea as $key => $area)
+                                                @if($employee->area_id == $area->id)
+                                                {{$area->name}}
                                                 @endif
                                                 @endforeach
                                             </td>
                                             <td>
-                                                @foreach($chiNhanh as $key => $branch)
-                                                @if($employee->ma_chi_nhanh == $branch->ma_chi_nhanh)
-                                                {{$branch->ten_chi_nhanh}}
+                                                @foreach($dataBranch as $key => $branch)
+                                                @if($employee->branch_id == $branch->id)
+                                                {{$branch->name}}
                                                 @endif
                                                 @endforeach
                                             </td>
                                             <td>
-                                                @foreach($phongBan as $key => $department)
-                                                @if($employee->ma_phong_ban == $department->ma_phong_ban)
-                                                {{$department->ten_phong_ban}}
+                                                @foreach($dataDepartment as $key => $department)
+                                                @if($employee->department_id == $department->id)
+                                                {{$department->name}}
                                                 @endif
                                                 @endforeach
                                             </td>
                                             <td>
-                                                @foreach($chucDanh as $key => $position)
-                                                @if($employee->ma_chuc_danh == $position->ma_chuc_danh)
-                                                {{$position->ten_chuc_danh}}
+                                                @foreach($dataPosition as $key => $position)
+                                                @if($employee->position_id == $position->id)
+                                                {{$position->name}}
                                                 @endif
                                                 @endforeach
                                             </td>
                                             <td>
-                                                @foreach($nhomTruyCap as $key => $access)
-                                                @if($employee->ma_nhom_truy_cap == $access->ma_nhom_truy_cap)
-                                                {{$access->ten_nhom_truy_cap}}
+                                                @foreach($dataAccessGroup as $key => $access)
+                                                @if($employee->accessgroup_id == $access->id)
+                                                {{$access->name}}
                                                 @endif
                                                 @endforeach
-                                            </td>
-                                            <td>
-                                                <?php
-                                                if ($employee->hoat_dong == 1) {
-                                                ?>
-                                                    <a href="{{URL::to('/admin/hide-employees/'.$employee->ma_nhan_vien)}}"><span class="fa-styling fa fa-thumbs-up"></span></a>
-                                                <?php
-                                                } else {
-                                                ?>
-                                                    <a href="{{URL::to('/admin/show-employees/'.$employee->ma_nhan_vien)}}"><span class="fa-styling fa fa-thumbs-down"></span></a>
-                                                <?php
-                                                }
-                                                ?>
-                                            </td>
-                                            <td>
-                                                <?php
-                                                if ($employee->quyen_truong_phong == 0) {
-                                                ?>
-                                                    <a href="{{URL::to('/admin/renew-permit/'.$employee->ma_nhan_vien)}}"><span class="fa-styling fa fa-thumbs-up"></span></a>
-                                                <?php
-                                                } else {
-                                                ?>
-                                                    <a href="{{ URL::to('/admin/terminate-permit/'.$employee->ma_nhan_vien )}}"><span class="fa-styling fa fa-thumbs-down"></span></a>
-                                                <?php
-                                                }
-                                                ?>
                                             </td>
                                             <td>
                                                 <div class="btn-group group-round m-1">
-                                                    <a type="button" href="{{URL::to('/admin/restore-employees/'.$employee->ma_nhan_vien)}}" class="btn btn-success waves-effect waves-light">Restore</a>
-                                                    <a type="button" href="{{URL::to('/admin/delete-employees/'.$employee->ma_nhan_vien)}}" onclick="return confirm('Bạn có chắc chắn muốn xóa nhân viên này vĩnh viễn?')" class="btn btn-danger waves-effect waves-light">Xóa</a>
+                                                    <a type="button" href="{{URL::to('/admin/restore-employees/'.$employee->id)}}" class="btn btn-success waves-effect waves-light">Restore</a>
+                                                    <a type="button" href="{{URL::to('/admin/delete-employees/'.$employee->id)}}" onclick="return confirm('Bạn có chắc chắn muốn xóa nhân viên này vĩnh viễn?')" class="btn btn-danger waves-effect waves-light">Xóa</a>
                                                 </div>
                                             </td>
                                         </tr>
@@ -161,8 +132,6 @@ use Illuminate\Support\Facades\Session;
                                             <th>Phòng ban</th>
                                             <th>Chức danh</th>
                                             <th>Nhóm truy cập</th>
-                                            <th>Trạng thái</th>
-                                            <th>Quyền trưởng phòng</th>
                                             <th>Thao tác</th>
                                         </tr>
                                     </tfoot>
@@ -190,6 +159,48 @@ use Illuminate\Support\Facades\Session;
             <!--start overlay-->
             <div class="overlay toggle-menu"></div>
             <!--end overlay-->
+            <?php
+            $message = Session::get('message');
+            $alert_type = Session::get('alert-type');
+            if ($message && $alert_type == 'warning') {
+                echo '<script>
+            setTimeout(function() {
+                swal({
+                    title: "Thông báo",
+                    text: "' . $message . '",
+                    type: "' . $alert_type . '",
+                    showConfirmButton: true
+                },);
+            }, 1000);
+            </script>';
+                Session::put('message', null);
+            } else if ($message && $alert_type == 'success') {
+                echo '<script>
+            setTimeout(function() {
+                swal({
+                    title: "Thông báo",
+                    text: "' . $message . '",
+                    type: "' . $alert_type . '",
+                    showConfirmButton: true
+                },);
+            }, 1000);
+            </script>';
+                Session::put('message', null);
+            } else if ($message && $alert_type == 'danger') {
+                echo '<script>
+            function success_noti() {
+                Lobibox.notify(' . $alert_type . ', {
+                    pauseDelayOnHover: true,
+                    continueDelayOnInactiveTab: false,
+                    position: "top right",
+                    icon: "",
+                    msg: ' . $message . '
+                });
+            }
+            </script>';
+                Session::put('message', null);
+            }
+            ?>
         </div>
         <!-- End container-fluid-->
         @stop

@@ -39,10 +39,10 @@ use Illuminate\Support\Facades\Session;
                 <div class="tab-content p-6">
                     <div class="container tab-pane active" id="nhanvien">
                         <div class="card-header">
-                        <div class="action-button" style="display:flex;">
-                        <div><a href="{{URL::to('/admin/add-employees')}}" class="btn btn-success space">Tạo mới</a></div>
-                        <div><a href="{{URL::to('/admin/list-employees-trash')}}" class="btn btn-primary space">Thùng rác</a></div>
-                    </div>
+                            <div class="action-button" style="display:flex;">
+                                <div><a href="{{URL::to('/admin/add-employees')}}" class="btn btn-success space">Tạo mới</a></div>
+                                <div><a href="{{URL::to('/admin/list-employees-trash')}}" class="btn btn-primary space">Thùng rác</a></div>
+                            </div>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
@@ -93,7 +93,7 @@ use Illuminate\Support\Facades\Session;
                                                 {{$branch->name}}
                                                 @endif
                                                 @endforeach
-                                            </>
+                                                </>
                                             <td>
                                                 @foreach($dataDepartment as $key => $department)
                                                 @if($employee->department_id == $department->id)
@@ -189,6 +189,48 @@ use Illuminate\Support\Facades\Session;
             <!--start overlay-->
             <div class="overlay toggle-menu"></div>
             <!--end overlay-->
+            <?php
+            $message = Session::get('message');
+            $alert_type = Session::get('alert-type');
+            if ($message && $alert_type == 'warning') {
+                echo '<script>
+            setTimeout(function() {
+                swal({
+                    title: "Thông báo",
+                    text: "' . $message . '",
+                    type: "' . $alert_type . '",
+                    showConfirmButton: true
+                },);
+            }, 1000);
+            </script>';
+                Session::put('message', null);
+            } else if ($message && $alert_type == 'success') {
+                echo '<script>
+            setTimeout(function() {
+                swal({
+                    title: "Thông báo",
+                    text: "' . $message . '",
+                    type: "' . $alert_type . '",
+                    showConfirmButton: true
+                },);
+            }, 1000);
+            </script>';
+                Session::put('message', null);
+            } else if ($message && $alert_type == 'danger') {
+                echo '<script>
+            function success_noti() {
+                Lobibox.notify(' . $alert_type . ', {
+                    pauseDelayOnHover: true,
+                    continueDelayOnInactiveTab: false,
+                    position: "top right",
+                    icon: "",
+                    msg: ' . $message . '
+                });
+            }
+            </script>';
+                Session::put('message', null);
+            }
+            ?>
         </div>
         <!-- End container-fluid-->
         @stop

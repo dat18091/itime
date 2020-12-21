@@ -49,7 +49,13 @@ use Illuminate\Support\Facades\Session;
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header">
-                    <div><a href="{{URL::to('/admin/add-access-groups')}}" class="btn btn-success">Tạo mới</a></div>
+                    <div class="action-button" style="display:flex;">
+                        <div class="space"><a href="" data-toggle="modal" data-target="#themChucDanh" data-whatever="@mdo" class="btn btn-success ">Tạo mới</a></div>
+                        <div class="space"><a href="{{URL::to('/admin/list-positions-trash')}}" class="btn btn-primary ">Chấp nhận <span class="badge badge-warning badge-pill">12</span></a></div>
+                        <div class="space"><a href="{{URL::to('/admin/list-positions')}}" class="btn btn-warning ">Từ chối <span class="badge badge-success badge-pill">12</span></a></div>
+                        <div class="space"><a href="{{URL::to('/admin/list-positions')}}" class="btn btn-danger ">Xóa <span class="badge badge-primary badge-pill">12</span></a></div>
+                        <div class="space"><a href="{{URL::to('/admin/list-positions')}}" class="btn btn-light ">Thùng rác <span class="badge badge-secondary badge-pill">12</span></a></div>
+                    </div>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -58,11 +64,12 @@ use Illuminate\Support\Facades\Session;
                                 <tr>
                                     <th>Tên nhân viên</th>
                                     <th>Công ty</th>
-                                    <th>Loại ngày nghỉ</th>
-                                    <th>Ngày bắt đầu</th>
-                                    <th>Ngày kết thúc</th>
-                                    <th>Ngày nghỉ</th>
-                                    <th>Loại nghỉ phép</th>
+                                    <th>Vùng</th>
+                                    <th>Chi nhánh</th>
+                                    <th>Phòng ban</th>
+                                    <th>Chức danh</th>
+                                    <th>Ngày xin</th>
+                                    <th>Giờ vào</th>
                                     <th>Ca làm</th>
                                     <th>Lý do</th>
                                     <th>Nội dung</th>
@@ -70,35 +77,87 @@ use Illuminate\Support\Facades\Session;
                                 </tr>
                             </thead>
                             <tbody>
+                                @foreach($data as $key => $belate)
                                 <tr>
-                                    <td>Nguyễn Quang Đạt</td>
-                                    <td>Izisoft</td>
-                                    <td>Nghỉ một ngày</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>14/11/2020</td>
-                                    <td>Nghỉ nguyên ngày</td>
-                                    <td>0</td>
-                                    <th>Nghỉ sinh lý</th>
-                                    <th>Nội dung</th>
+                                    <td>
+                                        @foreach($dataEmployee as $key => $employee)
+                                        @if($belate->employee_id == $employee->id)
+                                        {{$employee->name}}
+                                        @endif
+                                        @endforeach
+                                    </td>
+                                    <td>
+                                        @foreach($dataCompany as $key => $company)
+                                        @if($belate->company_id == $company->id)
+                                        {{$company->name}}
+                                        @endif
+                                        @endforeach
+                                    </td>
+                                    <td>
+                                        @foreach($dataArea as $key => $area)
+                                        @if($belate->area_id == $area->id)
+                                        {{$area->name}}
+                                        @endif
+                                        @endforeach
+                                    </td>
+                                    <td>
+                                        @foreach($dataBranch as $key => $branch)
+                                        @if($belate->branch_id == $branch->id)
+                                        {{$branch->name}}
+                                        @endif
+                                        @endforeach
+                                    </td>
+                                    <td>
+                                        @foreach($dataDepartment as $key => $department)
+                                        @if($belate->department_id == $department->id)
+                                        {{$department->name}}
+                                        @endif
+                                        @endforeach
+                                    </td>
+                                    <td>
+                                        @foreach($dataPosition as $key => $position)
+                                        @if($belate->position_id == $position->id)
+                                        {{$position->name}}
+                                        @endif
+                                        @endforeach
+                                    </td>
+                                    <td>{{ date('d-m-Y', strtotime($belate->date)) }}</td>
+                                    <td>{{$belate->hour_on}}</td>
+                                    <td>
+                                        @foreach($dataShift as $key => $shift)
+                                        @if($belate->shift_id == $shift->id)
+                                        {{$shift->name}}
+                                        @endif
+                                        @endforeach
+                                    </td>
+                                    <td>
+                                        @foreach($dataBeLateReason as $key => $belatereason)
+                                        @if($belate->belatereason_id == $belatereason->id)
+                                        {{$belatereason->name}}
+                                        @endif
+                                        @endforeach
+                                    </td>
+                                    <td>{{$belate->content}}</td>
                                     <td>
                                         <div class="btn-group group-round m-1">
-                                            <a type="button" href="" class="btn btn-success waves-effect waves-light">Xác nhận</a>
-                                            <a type="button" href="" class="btn btn-primary custom waves-effect waves-light">Hủy bỏ</a>
+                                            <a type="button" href="" class="btn btn-primary waves-effect waves-light">Chấp nhận</a>
+                                            <a type="button" href="" class="btn btn-warning custom waves-effect waves-light">Từ chối</a>
                                             <a type="button" href="" onclick="return confirm('Bạn có chắc chắn muốn xóa yêu cầu này?')" class="btn btn-danger waves-effect waves-light">Xóa</a>
                                         </div>
                                     </td>
                                 </tr>
+                                @endforeach
                             </tbody>
                             <tfoot>
                                 <tr>
                                     <th>Tên nhân viên</th>
                                     <th>Công ty</th>
-                                    <th>Loại ngày nghỉ</th>
-                                    <th>Ngày bắt đầu</th>
-                                    <th>Ngày kết thúc</th>
-                                    <th>Ngày nghỉ</th>
-                                    <th>Loại nghỉ phép</th>
+                                    <th>Vùng</th>
+                                    <th>Chi nhánh</th>
+                                    <th>Phòng ban</th>
+                                    <th>Chức danh</th>
+                                    <th>Ngày xin</th>
+                                    <th>Giờ vào</th>
                                     <th>Ca làm</th>
                                     <th>Lý do</th>
                                     <th>Nội dung</th>
@@ -115,7 +174,48 @@ use Illuminate\Support\Facades\Session;
     <!--start overlay-->
     <div class="overlay toggle-menu"></div>
     <!--end overlay-->
-
+    <?php
+            $message = Session::get('message');
+            $alert_type = Session::get('alert-type');
+            if ($message && $alert_type == 'warning') {
+                echo '<script>
+            setTimeout(function() {
+                swal({
+                    title: "Thông báo",
+                    text: "' . $message . '",
+                    type: "' . $alert_type . '",
+                    showConfirmButton: true
+                },);
+            }, 1000);
+            </script>';
+                Session::put('message', null);
+            } else if ($message && $alert_type == 'success') {
+                echo '<script>
+            setTimeout(function() {
+                swal({
+                    title: "Thông báo",
+                    text: "' . $message . '",
+                    type: "' . $alert_type . '",
+                    showConfirmButton: true
+                },);
+            }, 1000);
+            </script>';
+                Session::put('message', null);
+            } else if ($message && $alert_type == 'danger') {
+                echo '<script>
+            function success_noti() {
+                Lobibox.notify(' . $alert_type . ', {
+                    pauseDelayOnHover: true,
+                    continueDelayOnInactiveTab: false,
+                    position: "top right",
+                    icon: "",
+                    msg: ' . $message . '
+                });
+            }
+            </script>';
+                Session::put('message', null);
+            }
+            ?>
 </div>
 <!-- End container-fluid-->
 @stop

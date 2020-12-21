@@ -69,12 +69,12 @@ use Illuminate\Support\Facades\Session;
                             <tbody>
                                 @foreach($caLam as $key => $shift)
                                 <tr>
-                                    <td>{{ $shift->ten_ca_lam }}</td>
-                                    <td>{{ $shift->ghi_chu_ca_lam }}</td>
+                                    <td>{{ $shift->name }}</td>
+                                    <td>{{ $shift->note }}</td>
                                     <td>
                                         <div class="btn-group group-round m-1">
-                                            <a type="button" href="{{URL::to('/admin/restore-shifts/'.$shift->ma_ca_lam)}}" class="btn btn-success waves-effect waves-light">Restore</a>
-                                            <a type="button" href="{{URL::to('/admin/delete-shifts/'.$shift->ma_ca_lam)}}" onclick="return confirm('Bạn có chắc chắn muốn xóa vùng này vĩnh viễn?')" class="btn btn-danger waves-effect waves-light">Xóa</a>
+                                            <a type="button" href="{{URL::to('/admin/restore-shifts/'.$shift->id)}}" class="btn btn-success waves-effect waves-light">Restore</a>
+                                            <a type="button" href="{{URL::to('/admin/delete-shifts/'.$shift->id)}}" onclick="return confirm('Bạn có chắc chắn muốn xóa vùng này vĩnh viễn?')" class="btn btn-danger waves-effect waves-light">Xóa</a>
                                         </div>
                                     </td>
 

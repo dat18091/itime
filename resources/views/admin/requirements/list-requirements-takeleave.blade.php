@@ -51,10 +51,9 @@ use Illuminate\Support\Facades\Session;
                 <div class="card-header">
                     <div class="action-button" style="display:flex;">
                         <div class="space"><a href="" data-toggle="modal" data-target="#themChucDanh" data-whatever="@mdo" class="btn btn-success ">Tạo mới</a></div>
-                        <div class="space"><a href="{{URL::to('/admin/list-positions-trash')}}" class="btn btn-primary ">Chấp nhận <span class="badge badge-warning badge-pill">12</span></a></div>
-                        <div class="space"><a href="{{URL::to('/admin/list-positions')}}" class="btn btn-warning ">Từ chối <span class="badge badge-success badge-pill">12</span></a></div>
-                        <div class="space"><a href="{{URL::to('/admin/list-positions')}}" class="btn btn-danger ">Xóa <span class="badge badge-primary badge-pill">12</span></a></div>
-                        <div class="space"><a href="{{URL::to('/admin/list-positions')}}" class="btn btn-light ">Thùng rác <span class="badge badge-secondary badge-pill">12</span></a></div>
+                        <div class="space"><a href="{{URL::to('/admin/list-requirements-takeleave-approve')}}" class="btn btn-primary ">Chấp nhận <span class="badge badge-warning badge-pill">{{$countApprove}}</span></a></div>
+                        <div class="space"><a href="{{URL::to('/admin/list-requirements-takeleave-denied')}}" class="btn btn-warning ">Từ chối <span class="badge badge-success badge-pill">{{$countDenied}}</span></a></div>
+                        <div class="space"><a href="{{URL::to('/admin/list-requirements-takeleave-trash')}}" class="btn btn-danger ">Thùng rác <span class="badge badge-primary badge-pill">{{$countDelete}}</span></a></div>
                     </div>
                 </div>
                 <div class="card-body">
@@ -64,6 +63,10 @@ use Illuminate\Support\Facades\Session;
                                 <tr>
                                     <th>Tên nhân viên</th>
                                     <th>Công ty</th>
+                                    <th>Vùng</th>
+                                    <th>Chi nhánh</th>
+                                    <th>Phòng ban</th>
+                                    <th>Chức danh</th>
                                     <th>Loại ngày nghỉ</th>
                                     <th>Ngày bắt đầu</th>
                                     <th>Ngày kết thúc</th>
@@ -78,21 +81,85 @@ use Illuminate\Support\Facades\Session;
                             <tbody>
                                 @foreach($data as $key => $takeleave)
                                 <tr>
-                                    <td>{{$takeleave->ten_nhan_vien}}</td>
-                                    <td>{{$takeleave->ten_cong_ty}}</td>
-                                    <td>Nghỉ một ngày</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>14/11/2020</td>
-                                    <td>Nghỉ nguyên ngày</td>
-                                    <td>0</td>
-                                    <td>Nghỉ sinh lý</td>
-                                    <td>Nội dung</td>
+                                    <td>
+                                        @foreach($dataEmployee as $key => $employee)
+                                        @if($takeleave->employee_id == $employee->id)
+                                        {{$employee->name}}
+                                        @endif
+                                        @endforeach
+                                    </td>
+                                    <td>
+                                        @foreach($dataCompany as $key => $company)
+                                        @if($takeleave->company_id == $company->id)
+                                        {{$company->name}}
+                                        @endif
+                                        @endforeach
+                                    </td>
+                                    <td>
+                                        @foreach($dataArea as $key => $area)
+                                        @if($takeleave->area_id == $area->id)
+                                        {{$area->name}}
+                                        @endif
+                                        @endforeach
+                                    </td>
+                                    <td>
+                                        @foreach($dataBranch as $key => $branch)
+                                        @if($takeleave->branch_id == $branch->id)
+                                        {{$branch->name}}
+                                        @endif
+                                        @endforeach
+                                    </td>
+                                    <td>
+                                        @foreach($dataDepartment as $key => $department)
+                                        @if($takeleave->department_id == $department->id)
+                                        {{$department->name}}
+                                        @endif
+                                        @endforeach
+                                    </td>
+                                    <td>
+                                        @foreach($dataPosition as $key => $position)
+                                        @if($takeleave->position_id == $position->id)
+                                        {{$position->name}}
+                                        @endif
+                                        @endforeach
+                                    </td>
+                                    <td>
+                                        @foreach($dateTakeLeaveType as $key => $dateTakeLeaveTypes)
+                                        @if($takeleave->date_take_leave_type_id == $dateTakeLeaveTypes->id)
+                                        {{$dateTakeLeaveTypes->name}}
+                                        @endif
+                                        @endforeach
+                                    </td>
+                                    <td>{{$takeleave->start_date}}</td>
+                                    <td>{{$takeleave->end_date}}</td>
+                                    <td>{{$takeleave->date_take_leave}}</td>
+                                    <td>
+                                        @foreach($dataTakeLeaveType as $key => $dataTakeLeaveTypes)
+                                        @if($takeleave->take_leave_type_id == $dataTakeLeaveTypes->id)
+                                        {{$dataTakeLeaveTypes->name}}
+                                        @endif
+                                        @endforeach
+                                    </td>
+                                    <td>
+                                        @foreach($dataShift as $key => $shift)
+                                        @if($takeleave->shift_id == $shift->id)
+                                        {{$shift->name}}
+                                        @endif
+                                        @endforeach
+                                    </td>
+                                    <td>
+                                        @foreach($dataTakeLeaveReason as $key => $takeleavereasons)
+                                        @if($takeleave->take_leave_reason_id == $takeleavereasons->id)
+                                        {{$takeleavereasons->name}}
+                                        @endif
+                                        @endforeach
+                                    </td>
+                                    <td>{{$takeleave->content}}</td>
                                     <td>
                                         <div class="btn-group group-round m-1">
-                                            <a type="button" href="" class="btn btn-primary waves-effect waves-light">Chấp nhận</a>
-                                            <a type="button" href="" class="btn btn-warning custom waves-effect waves-light">Từ chối</a>
-                                            <a type="button" href="" onclick="return confirm('Bạn có chắc chắn muốn xóa yêu cầu này?')" class="btn btn-danger waves-effect waves-light">Xóa</a>
+                                            <a type="button" href="{{URL::to('/admin/approve-takeleave/'.$takeleave->id)}}" class="btn btn-primary waves-effect waves-light">Chấp nhận</a>
+                                            <a type="button" href="{{URL::to('/admin/denied-takeleave/'.$takeleave->id)}}" class="btn btn-warning custom waves-effect waves-light">Từ chối</a>
+                                            <a type="button" href="{{URL::to('/admin/trash-takeleave/'.$takeleave->id)}}" onclick="return confirm('Bạn có chắc chắn muốn xóa yêu cầu này?')" class="btn btn-danger waves-effect waves-light">Xóa</a>
                                         </div>
                                     </td>
                                 </tr>
@@ -102,6 +169,10 @@ use Illuminate\Support\Facades\Session;
                                 <tr>
                                     <th>Tên nhân viên</th>
                                     <th>Công ty</th>
+                                    <th>Vùng</th>
+                                    <th>Chi nhánh</th>
+                                    <th>Phòng ban</th>
+                                    <th>Chức danh</th>
                                     <th>Loại ngày nghỉ</th>
                                     <th>Ngày bắt đầu</th>
                                     <th>Ngày kết thúc</th>
@@ -123,7 +194,48 @@ use Illuminate\Support\Facades\Session;
     <!--start overlay-->
     <div class="overlay toggle-menu"></div>
     <!--end overlay-->
-
+    <?php
+    $message = Session::get('message');
+    $alert_type = Session::get('alert-type');
+    if ($message && $alert_type == 'warning') {
+        echo '<script>
+            setTimeout(function() {
+                swal({
+                    title: "Thông báo",
+                    text: "' . $message . '",
+                    type: "' . $alert_type . '",
+                    showConfirmButton: true
+                },);
+            }, 1000);
+            </script>';
+        Session::put('message', null);
+    } else if ($message && $alert_type == 'success') {
+        echo '<script>
+            setTimeout(function() {
+                swal({
+                    title: "Thông báo",
+                    text: "' . $message . '",
+                    type: "' . $alert_type . '",
+                    showConfirmButton: true
+                },);
+            }, 1000);
+            </script>';
+        Session::put('message', null);
+    } else if ($message && $alert_type == 'danger') {
+        echo '<script>
+            function success_noti() {
+                Lobibox.notify(' . $alert_type . ', {
+                    pauseDelayOnHover: true,
+                    continueDelayOnInactiveTab: false,
+                    position: "top right",
+                    icon: "",
+                    msg: ' . $message . '
+                });
+            }
+            </script>';
+        Session::put('message', null);
+    }
+    ?>
 </div>
 <!-- End container-fluid-->
 @stop

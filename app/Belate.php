@@ -7,5 +7,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class Belate extends Model
 {
-    
+    protected $table = 'belates';
 }

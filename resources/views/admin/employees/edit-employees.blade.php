@@ -207,7 +207,7 @@ use Illuminate\Support\Facades\Session;
                                                 <div class="form-group row">
                                                     <label for="input-15" class="col-sm-3 col-form-label">Vùng <span class="focus">*</span></label>
                                                     <div class="col-sm-3">
-                                                        <select name="ma_vung" class="form-control single-select">
+                                                        <select name="area_id" class="form-control single-select">
                                                             @foreach($vung as $key => $areas)
                                                             @if($areas->id == $employee->area_id)
                                                             <option selected value="{{$areas->id}}">{{$areas->name}}</option>
@@ -219,7 +219,7 @@ use Illuminate\Support\Facades\Session;
                                                     </div>
                                                     <label for="input-15" class="col-sm-2 col-form-label">Chi nhánh <span class="focus">*</span></label>
                                                     <div class="col-sm-4">
-                                                        <select name="ma_chi_nhanh" class="form-control single-select">
+                                                        <select name="branch_id" class="form-control single-select">
                                                             @foreach($chiNhanh as $key => $branch)
                                                             @if($branch->id == $employee->branch_id)
                                                             <option selected value="{{$branch->id}}">{{$branch->name}}</option>
@@ -233,7 +233,7 @@ use Illuminate\Support\Facades\Session;
                                                 <div class="form-group row">
                                                     <label for="input-15" class="col-sm-3 col-form-label">Chức danh <span class="focus">*</span></label>
                                                     <div class="col-sm-3">
-                                                        <select name="ma_chuc_danh" class="form-control single-select">
+                                                        <select name="position_id" class="form-control single-select">
                                                             @foreach($chucDanh as $key => $position)
                                                             @if($position->id == $employee->position_id)
                                                             <option selected value="{{$position->id}}">{{$position->name}}</option>
@@ -245,7 +245,7 @@ use Illuminate\Support\Facades\Session;
                                                     </div>
                                                     <label for="input-15" class="col-sm-2 col-form-label">Phòng ban </label>
                                                     <div class="col-sm-4">
-                                                        <select name="ma_phong_ban" class="form-control single-select">
+                                                        <select name="department_id" class="form-control single-select">
                                                             @foreach($phongBan as $key => $department)
                                                             @if($department->id == $employee->department_id)
                                                             <option selected value="{{$department->id}}">{{$department->name}}</option>
@@ -285,7 +285,7 @@ use Illuminate\Support\Facades\Session;
                                                 <div class="form-group row">
                                                     <label for="input-15" class="col-sm-3 col-form-label">Nhóm truy cập <span class="focus">*</span></label>
                                                     <div class="col-sm-9">
-                                                        <select name="ma_nhom_truy_cap" class="form-control single-select">
+                                                        <select name="accessgroup_id" class="form-control single-select">
                                                             @foreach($nhomTruyCap as $key => $access)
                                                             @if($access->id == $employee->accessgroup_id)
                                                             <option selected value="{{$access->id}}">{{$access->name}}</option>
@@ -336,7 +336,7 @@ use Illuminate\Support\Facades\Session;
                                                 <div class="form-group row">
                                                     <label for="input-17" class="col-sm-3 col-form-label">Ghi chú</label>
                                                     <div class="col-sm-9">
-                                                        <textarea class="form-control" rows="4" id="input-17" name="ghi_chu_nhan_vien">{{$employee->note}}</textarea>
+                                                        <textarea class="form-control" rows="4" id="input-17" name="note">{{$employee->note}}</textarea>
                                                     </div>
 
                                                 </div>
@@ -373,7 +373,48 @@ use Illuminate\Support\Facades\Session;
     <!--start overlay-->
     <div class="overlay toggle-menu"></div>
     <!--end overlay-->
-
+    <?php
+            $message = Session::get('message');
+            $alert_type = Session::get('alert-type');
+            if ($message && $alert_type == 'warning') {
+                echo '<script>
+            setTimeout(function() {
+                swal({
+                    title: "Thông báo",
+                    text: "' . $message . '",
+                    type: "' . $alert_type . '",
+                    showConfirmButton: true
+                },);
+            }, 1000);
+            </script>';
+                Session::put('message', null);
+            } else if ($message && $alert_type == 'success') {
+                echo '<script>
+            setTimeout(function() {
+                swal({
+                    title: "Thông báo",
+                    text: "' . $message . '",
+                    type: "' . $alert_type . '",
+                    showConfirmButton: true
+                },);
+            }, 1000);
+            </script>';
+                Session::put('message', null);
+            } else if ($message && $alert_type == 'danger') {
+                echo '<script>
+            function success_noti() {
+                Lobibox.notify(' . $alert_type . ', {
+                    pauseDelayOnHover: true,
+                    continueDelayOnInactiveTab: false,
+                    position: "top right",
+                    icon: "",
+                    msg: ' . $message . '
+                });
+            }
+            </script>';
+                Session::put('message', null);
+            }
+            ?>
 </div>
 <!-- End container-fluid-->
 

@@ -56,9 +56,9 @@ use Illuminate\Support\Facades\Session;
                         <table id="example" class="table table-bordered">
                             <thead>
                                 <tr>
-                                    <th>Mã nhân viên</th>
+                                    <th>Nhân viên</th>
                                     <!-- <th>Mã công ty</th> -->
-                                    <th>Mã vùng</th>
+                                    <th>Vùng</th>
                                     <th>Mã chi nhánh</th>
                                     <th>Mã phòng ban</th>
                                     <th>Mã chức danh</th>
@@ -72,12 +72,41 @@ use Illuminate\Support\Facades\Session;
                             <tbody>
                                 @foreach($attendances as $key => $attendance)
                                 <tr>
-                                    <td>{{ $attendance->ten_nhan_vien }}</td>
-                                    <!-- <td>{{ $attendance->ma_cong_ty }}</td> -->
-                                    <td>{{ $attendance->ten_vung }}</td>
-                                    <td>{{ $attendance->ten_chi_nhanh }}</td>
-                                    <td>{{ $attendance->ten_phong_ban }}</td>
-                                    <td>{{ $attendance->ten_chuc_danh }}</td>
+                                <td>
+                                        @foreach($dataEmployee as $key => $employee)
+                                        @if($attendance->employee_id == $employee->id)
+                                        {{$employee->name}}
+                                        @endif
+                                        @endforeach
+                                    </td>
+                                    <td>
+                                        @foreach($dataArea as $key => $area)
+                                        @if($attendance->area_id == $area->id)
+                                        {{$area->name}}
+                                        @endif
+                                        @endforeach
+                                    </td>
+                                    <td>
+                                        @foreach($dataBranch as $key => $branch)
+                                        @if($attendance->branch_id == $branch->id)
+                                        {{$branch->name}}
+                                        @endif
+                                        @endforeach
+                                    </td>
+                                    <td>
+                                        @foreach($dataDepartment as $key => $department)
+                                        @if($attendance->department_id == $department->id)
+                                        {{$department->name}}
+                                        @endif
+                                        @endforeach
+                                    </td>
+                                    <td>
+                                        @foreach($dataPosition as $key => $position)
+                                        @if($attendance->position_id == $position->id)
+                                        {{$position->name}}
+                                        @endif
+                                        @endforeach
+                                    </td>
                                     <td>{{ date('d-m-Y h:m:s', strtotime($attendance->check_in_time)) }}</td>
                                     <td>{{ $attendance->check_in_local }}</td>
                                     <td>{{ $attendance->check_out_time }}</td>
@@ -88,15 +117,14 @@ use Illuminate\Support\Facades\Session;
                                             <a type="button" href="{{URL::to('/admin/delete-attendances/'.$attendance->id)}}" onclick="return confirm('Bạn có chắc chắn muốn xóa vùng này?')" class="btn btn-danger waves-effect waves-light">Xóa</a>
                                         </div>
                                     </td>
-
                                 </tr>
                                 @endforeach
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <th>Mã nhân viên</th>
+                                    <th>Nhân viên</th>
                                     <!-- <th>Mã công ty</th> -->
-                                    <th>Mã vùng</th>
+                                    <th>Vùng</th>
                                     <th>Mã chi nhánh</th>
                                     <th>Mã phòng ban</th>
                                     <th>Mã chức danh</th>

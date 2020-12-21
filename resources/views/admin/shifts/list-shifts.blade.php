@@ -69,25 +69,25 @@ use Illuminate\Support\Facades\Session;
                             <tbody>
                                 @foreach($caLam as $key => $shift)
                                 <tr>
-                                    <td>{{ $shift->ten_ca_lam }}</td>
-                                    <td>{{ $shift->ghi_chu_ca_lam }}</td>
+                                    <td>{{ $shift->name }}</td>
+                                    <td>{{ $shift->note }}</td>
                                     <td>
                                         <?php
-                                        if ($shift->trang_thai_ca_lam == 0) {
+                                        if ($shift->status == 0) {
                                         ?>
-                                            <a href="{{URL::to('/admin/hide-shifts/'.$shift->ma_ca_lam)}}"><span class="fa-styling fa fa-thumbs-up"></span></a>
+                                            <a href="{{URL::to('/admin/hide-shifts/'.$shift->id)}}"><span class="fa-styling fa fa-thumbs-up"></span></a>
                                         <?php
                                         } else {
                                         ?>
-                                            <a href="{{URL::to('/admin/show-shifts/'.$shift->ma_ca_lam)}}"><span class="fa-styling fa fa-thumbs-down"></span></a>
+                                            <a href="{{URL::to('/admin/show-shifts/'.$shift->id)}}"><span class="fa-styling fa fa-thumbs-down"></span></a>
                                         <?php
                                         }
                                         ?>
                                     </td>
                                     <td>
                                         <div class="btn-group group-round m-1">
-                                            <a type="button" href="{{URL::to('/admin/edit-shifts/'.$shift->ma_ca_lam)}}" class="btn btn-success waves-effect waves-light">Sửa</a>
-                                            <a type="button" href="{{URL::to('/admin/trash-shifts/'.$shift->ma_ca_lam)}}" onclick="return confirm('Bạn có chắc chắn muốn xóa vùng này?')" class="btn btn-danger waves-effect waves-light">Xóa</a>
+                                            <a type="button" href="{{URL::to('/admin/edit-shifts/'.$shift->id)}}" class="btn btn-success waves-effect waves-light">Sửa</a>
+                                            <a type="button" href="{{URL::to('/admin/trash-shifts/'.$shift->id)}}" onclick="return confirm('Bạn có chắc chắn muốn xóa vùng này?')" class="btn btn-danger waves-effect waves-light">Xóa</a>
                                         </div>
                                     </td>
 
@@ -199,7 +199,48 @@ use Illuminate\Support\Facades\Session;
     <!--start overlay-->
     <div class="overlay toggle-menu"></div>
     <!--end overlay-->
-
+    <?php
+    $message = Session::get('message');
+    $alert_type = Session::get('alert-type');
+    if ($message && $alert_type == 'warning') {
+        echo '<script>
+            setTimeout(function() {
+                swal({
+                    title: "Thông báo",
+                    text: "' . $message . '",
+                    type: "' . $alert_type . '",
+                    showConfirmButton: true
+                },);
+            }, 1000);
+            </script>';
+        Session::put('message', null);
+    } else if ($message && $alert_type == 'success') {
+        echo '<script>
+            setTimeout(function() {
+                swal({
+                    title: "Thông báo",
+                    text: "' . $message . '",
+                    type: "' . $alert_type . '",
+                    showConfirmButton: true
+                },);
+            }, 1000);
+            </script>';
+        Session::put('message', null);
+    } else if ($message && $alert_type == 'danger') {
+        echo '<script>
+            function success_noti() {
+                Lobibox.notify(' . $alert_type . ', {
+                    pauseDelayOnHover: true,
+                    continueDelayOnInactiveTab: false,
+                    position: "top right",
+                    icon: "",
+                    msg: ' . $message . '
+                });
+            }
+            </script>';
+        Session::put('message', null);
+    }
+    ?>
 </div>
 <!-- End container-fluid-->
 @stop

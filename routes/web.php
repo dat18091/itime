@@ -269,14 +269,35 @@ Route::post("/admin/update-date-take-leave-types/{id}", "DateTakeLeaveTypes\Date
 
 Route::get("/admin/delete-date-take-leave-types/{id}", "DateTakeLeaveTypes\DateTakeLeaveTypeController@delete_date_take_leave_types");
 
-## Take leave manager app and web (Pending)
+## Take leave manager app and web
+Route::get("/admin/approve-takeleave/{id}", "Requirements\RequirementController@approve_takeleave");
+Route::get("/admin/denied-takeleave/{id}", "Requirements\RequirementController@denied_takeleave");
+Route::get("/admin/trash-takeleave/{id}", "Requirements\RequirementController@trash_takeleave");
+
 Route::get("/admin/list-requirements-takeleave", "Requirements\RequirementController@list_requirements_takeleave");
+Route::get("/admin/list-requirements-takeleave-approve", "Requirements\RequirementController@list_requirements_takeleave_approve");
+Route::get("/admin/list-requirements-takeleave-denied", "Requirements\RequirementController@list_requirements_takeleave_denied");
+Route::get("/admin/list-requirements-takeleave-trash", "Requirements\RequirementController@list_requirements_takeleave_trash");
 
-## Be late manager app and web (Pending)
+## Be late manager app and web
+Route::get("/admin/approve-late/{id}", "Requirements\RequirementController@approve_late");
+Route::get("/admin/denied-late/{id}", "Requirements\RequirementController@denied_late");
+Route::get("/admin/trash-late/{id}", "Requirements\RequirementController@trash_late");
+
 Route::get("/admin/list-requirements-late", "Requirements\RequirementController@list_requirements_late");
+Route::get("/admin/list-requirements-late-approve", "Requirements\RequirementController@list_requirements_late_approve");
+Route::get("/admin/list-requirements-late-denied", "Requirements\RequirementController@list_requirements_late_denied");
+Route::get("/admin/list-requirements-late-remove", "Requirements\RequirementController@list_requirements_late_remove");
 
-## Leave soon manager app and web (Pending)
+## Leave soon manager app and web
+Route::get("/admin/approve-soon/{id}", "Requirements\RequirementController@approve_soon");
+Route::get("/admin/denied-soon/{id}", "Requirements\RequirementController@denied_soon");
+Route::get("/admin/trash-soon/{id}", "Requirements\RequirementController@trash_soon");
+
 Route::get("/admin/list-requirements-soon", "Requirements\RequirementController@list_requirements_soon");
+Route::get("/admin/list-requirements-soon-approve", "Requirements\RequirementController@list_requirements_soon_approve");
+Route::get("/admin/list-requirements-soon-denied", "Requirements\RequirementController@list_requirements_soon_denied");
+Route::get("/admin/list-requirements-soon-remove", "Requirements\RequirementController@list_requirements_soon_remove");
 
 ## Attendance
 Route::get("/admin/list-attendances", "Attendances\AttendanceController@list_attendances");
