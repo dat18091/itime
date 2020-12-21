@@ -50,10 +50,10 @@ use Illuminate\Support\Facades\Session;
             <div class="card">
                 <div class="card-header">
                     <div class="action-button" style="display:flex;">
-                        <div class="space"><a href="" data-toggle="modal" data-target="#themChucDanh" data-whatever="@mdo" class="btn btn-success ">Tạo mới</a></div>
                         <div class="space"><a href="{{URL::to('/admin/list-requirements-soon-approve')}}" class="btn btn-primary ">Chấp nhận <span class="badge badge-warning badge-pill">{{$countApprove}}</span></a></div>
                         <div class="space"><a href="{{URL::to('/admin/list-requirements-soon-denied')}}" class="btn btn-warning ">Từ chối <span class="badge badge-success badge-pill">{{$countDenied}}</span></a></div>
-                        <div class="space"><a href="{{URL::to('/admin/list-requirements-soon-trash')}}" class="btn btn-danger ">Thùng rác <span class="badge badge-primary badge-pill">{{$countDelete}}</span></a></div>
+                        <div class="space"><a href="{{URL::to('/admin/list-requirements-soon')}}" class="btn btn-danger ">Danh sách <span class="badge badge-primary badge-pill">{{$countList}}</span></a></div>
+                        <div class="space"><a href="{{URL::to('/admin/list-requirements-soon-trash')}}" class="btn btn-light ">Thùng rác <span class="badge badge-secondary badge-pill">{{$countDelete}}</span></a></div>
                     </div>
                 </div>
                 <div class="card-body">
@@ -72,7 +72,6 @@ use Illuminate\Support\Facades\Session;
                                     <th>Ca làm</th>
                                     <th>Lý do</th>
                                     <th>Nội dung</th>
-                                    <th>Thao tác</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -137,13 +136,6 @@ use Illuminate\Support\Facades\Session;
                                         @endforeach
                                     </td>
                                     <td>{{$leavesoon->content}}</td>
-                                    <td>
-                                        <div class="btn-group group-round m-1">
-                                            <a type="button" href="{{URL::to('/admin/approve-soon/'.$leavesoon->id)}}" class="btn btn-primary waves-effect waves-light">Chấp nhận</a>
-                                            <a type="button" href="{{URL::to('/admin/denied-soon/'.$leavesoon->id)}}" class="btn btn-warning custom waves-effect waves-light">Từ chối</a>
-                                            <a type="button" href="{{URL::to('/admin/trash-soon/'.$leavesoon->id)}}" onclick="return confirm('Bạn có chắc chắn muốn xóa yêu cầu này?')" class="btn btn-danger waves-effect waves-light">Xóa</a>
-                                        </div>
-                                    </td>
                                 </tr>
                                 @endforeach
                             </tbody>
@@ -160,7 +152,6 @@ use Illuminate\Support\Facades\Session;
                                     <th>Ca làm</th>
                                     <th>Lý do</th>
                                     <th>Nội dung</th>
-                                    <th>Thao tác</th>
                                 </tr>
                             </tfoot>
                         </table>

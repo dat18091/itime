@@ -234,10 +234,122 @@ class RequirementController extends Controller
 
     public function approve_soon($id) {
         $this->AuthLogin();
-        Takeleave::where('id', $id)->update(['status' => 1]);
+        Leavesoon::where('id', $id)->update(['status' => 1]);
         Session::flash('message', 'Duyệt yêu cầu thành công.');
         Session::flash("alert-type", "success");
         return Redirect::to('/admin/list-requirements-soon');
+    }
+
+    public function list_requirements_soon_approve() {
+        $this->AuthLogin();
+        $data = Leavesoon::join('employees', 'employees.id', '=', 'leavesoons.employee_id')
+        ->join('companies', 'companies.id', '=', 'leavesoons.company_id')
+        ->join('areas', 'areas.id', '=', 'leavesoons.area_id')
+        ->join('branches', 'branches.id', '=', 'leavesoons.branch_id')
+        ->join('departments', 'departments.id', '=', 'leavesoons.department_id')
+        ->join('positions', 'positions.id', '=', 'leavesoons.position_id')
+        ->select(['leavesoons.*','employees.id as idEmployee', 'companies.id as idCompany', 'areas.id as idArea',
+        'branches.id as idBranch', 'departments.id as idDepartment', 'positions.id as idPosition'])
+        ->where('leavesoons.status', '=', '1')->get();
+        $dataEmployee = Employee::get();
+        $dataArea = Area::get();
+        $dataEmployee = Employee::get();
+        $dataBranch = Branch::get();
+        $dataDepartment = Department::get();
+        $dataPosition = Position::get();
+        $dataCompany = Company::get();
+        $dataShift = DB::table('shifts')->get();
+        $dataLeaveSoonReason = DB::table('leavesoonreasons')->get();
+        $countList = Leavesoon::where('status', '0')->count();
+        $countApprove = Leavesoon::where('status', '1')->count();
+        $countDenied = Leavesoon::where('status', '2')->count();
+        $countDelete = Leavesoon::where('status', '3')->count();
+        return view('admin.requirements.list-requirements-soon-approve')->with('data', $data)
+        ->with('dataEmployee', $dataEmployee)->with('dataArea', $dataArea)->with('dataBranch', $dataBranch)
+        ->with('dataDepartment', $dataDepartment)->with('dataPosition', $dataPosition)->with('dataCompany', $dataCompany)
+        ->with('dataShift', $dataShift)->with('dataLeaveSoonReason', $dataLeaveSoonReason)
+        ->with('countList', $countList)->with('countApprove', $countApprove)->with('countDenied', $countDenied)
+        ->with('countDelete', $countDelete);
+    }
+
+    public function denied_soon($id) {
+        $this->AuthLogin();
+        Leavesoon::where('id', $id)->update(['status' => 2]);
+        Session::flash('message', 'Từ chối yêu cầu thành công.');
+        Session::flash("alert-type", "success");
+        return Redirect::to('/admin/list-requirements-soon');
+    }
+
+    public function list_requirements_soon_denied() {
+        $this->AuthLogin();
+        $data = Leavesoon::join('employees', 'employees.id', '=', 'leavesoons.employee_id')
+        ->join('companies', 'companies.id', '=', 'leavesoons.company_id')
+        ->join('areas', 'areas.id', '=', 'leavesoons.area_id')
+        ->join('branches', 'branches.id', '=', 'leavesoons.branch_id')
+        ->join('departments', 'departments.id', '=', 'leavesoons.department_id')
+        ->join('positions', 'positions.id', '=', 'leavesoons.position_id')
+        ->select(['leavesoons.*','employees.id as idEmployee', 'companies.id as idCompany', 'areas.id as idArea',
+        'branches.id as idBranch', 'departments.id as idDepartment', 'positions.id as idPosition'])
+        ->where('leavesoons.status', '=', '2')->get();
+        $dataEmployee = Employee::get();
+        $dataArea = Area::get();
+        $dataEmployee = Employee::get();
+        $dataBranch = Branch::get();
+        $dataDepartment = Department::get();
+        $dataPosition = Position::get();
+        $dataCompany = Company::get();
+        $dataShift = DB::table('shifts')->get();
+        $dataLeaveSoonReason = DB::table('leavesoonreasons')->get();
+        $countList = Leavesoon::where('status', '0')->count();
+        $countApprove = Leavesoon::where('status', '1')->count();
+        $countDenied = Leavesoon::where('status', '2')->count();
+        $countDelete = Leavesoon::where('status', '3')->count();
+        return view('admin.requirements.list-requirements-soon-denied')->with('data', $data)
+        ->with('dataEmployee', $dataEmployee)->with('dataArea', $dataArea)->with('dataBranch', $dataBranch)
+        ->with('dataDepartment', $dataDepartment)->with('dataPosition', $dataPosition)->with('dataCompany', $dataCompany)
+        ->with('dataShift', $dataShift)->with('dataLeaveSoonReason', $dataLeaveSoonReason)
+        ->with('countList', $countList)->with('countApprove', $countApprove)->with('countDenied', $countDenied)
+        ->with('countDelete', $countDelete);
+    }
+
+    public function trash_soon($id) {
+        $this->AuthLogin();
+        Leavesoon::where('id', $id)->update(['status' => 3]);
+        Session::flash('message', 'Xóa yêu cầu thành công.');
+        Session::flash("alert-type", "success");
+        return Redirect::to('/admin/list-requirements-soon');
+    }
+
+    public function list_requirements_soon_trash() {
+        $this->AuthLogin();
+        $data = Leavesoon::join('employees', 'employees.id', '=', 'leavesoons.employee_id')
+        ->join('companies', 'companies.id', '=', 'leavesoons.company_id')
+        ->join('areas', 'areas.id', '=', 'leavesoons.area_id')
+        ->join('branches', 'branches.id', '=', 'leavesoons.branch_id')
+        ->join('departments', 'departments.id', '=', 'leavesoons.department_id')
+        ->join('positions', 'positions.id', '=', 'leavesoons.position_id')
+        ->select(['leavesoons.*','employees.id as idEmployee', 'companies.id as idCompany', 'areas.id as idArea',
+        'branches.id as idBranch', 'departments.id as idDepartment', 'positions.id as idPosition'])
+        ->where('leavesoons.status', '=', '3')->get();
+        $dataEmployee = Employee::get();
+        $dataArea = Area::get();
+        $dataEmployee = Employee::get();
+        $dataBranch = Branch::get();
+        $dataDepartment = Department::get();
+        $dataPosition = Position::get();
+        $dataCompany = Company::get();
+        $dataShift = DB::table('shifts')->get();
+        $dataLeaveSoonReason = DB::table('leavesoonreasons')->get();
+        $countList = Leavesoon::where('status', '0')->count();
+        $countApprove = Leavesoon::where('status', '1')->count();
+        $countDenied = Leavesoon::where('status', '2')->count();
+        $countDelete = Leavesoon::where('status', '3')->count();
+        return view('admin.requirements.list-requirements-soon-trash')->with('data', $data)
+        ->with('dataEmployee', $dataEmployee)->with('dataArea', $dataArea)->with('dataBranch', $dataBranch)
+        ->with('dataDepartment', $dataDepartment)->with('dataPosition', $dataPosition)->with('dataCompany', $dataCompany)
+        ->with('dataShift', $dataShift)->with('dataLeaveSoonReason', $dataLeaveSoonReason)
+        ->with('countList', $countList)->with('countApprove', $countApprove)->with('countDenied', $countDenied)
+        ->with('countDelete', $countDelete);
     }
 
     #----------------------------------------------BE LATE

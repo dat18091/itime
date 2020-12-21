@@ -1,7 +1,7 @@
 @extends('admin_layout')
 @section('admin_content')
 @section('admin_title')
-<title>IZITIME - Danh sách yêu cầu về sớm</title>
+<title>IZITIME - Danh sách yêu cầu nghỉ phép</title>
 @stop
 @section('css')
 <!--Data Tables -->
@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Session;
     <!-- Breadcrumb-->
     <div class="row pt-2 pb-2">
         <div class="col-sm-9">
-            <h4 class="page-title">DANH SÁCH YÊU CẦU VỀ SỚM</h4>
+            <h4 class="page-title">DANH SÁCH YÊU CẦU NGHỈ PHÉP</h4>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="javaScript:void();">DANH MỤC QUẢN LÝ</a></li>
                 <li class="breadcrumb-item"><a href="javaScript:void();">Yêu Cầu</a></li>
@@ -50,10 +50,10 @@ use Illuminate\Support\Facades\Session;
             <div class="card">
                 <div class="card-header">
                     <div class="action-button" style="display:flex;">
-                        <div class="space"><a href="" data-toggle="modal" data-target="#themChucDanh" data-whatever="@mdo" class="btn btn-success ">Tạo mới</a></div>
                         <div class="space"><a href="{{URL::to('/admin/list-requirements-soon-approve')}}" class="btn btn-primary ">Chấp nhận <span class="badge badge-warning badge-pill">{{$countApprove}}</span></a></div>
                         <div class="space"><a href="{{URL::to('/admin/list-requirements-soon-denied')}}" class="btn btn-warning ">Từ chối <span class="badge badge-success badge-pill">{{$countDenied}}</span></a></div>
-                        <div class="space"><a href="{{URL::to('/admin/list-requirements-soon-trash')}}" class="btn btn-danger ">Thùng rác <span class="badge badge-primary badge-pill">{{$countDelete}}</span></a></div>
+                        <div class="space"><a href="{{URL::to('/admin/list-requirements-soon')}}" class="btn btn-danger ">Danh sách <span class="badge badge-primary badge-pill">{{$countList}}</span></a></div>
+                        <div class="space"><a href="{{URL::to('/admin/list-requirements-soon-trash')}}" class="btn btn-light ">Thùng rác <span class="badge badge-secondary badge-pill">{{$countDelete}}</span></a></div>
                     </div>
                 </div>
                 <div class="card-body">
@@ -67,83 +67,94 @@ use Illuminate\Support\Facades\Session;
                                     <th>Chi nhánh</th>
                                     <th>Phòng ban</th>
                                     <th>Chức danh</th>
-                                    <th>Ngày xin</th>
-                                    <th>Giờ vào</th>
+                                    <th>Loại ngày nghỉ</th>
+                                    <th>Ngày bắt đầu</th>
+                                    <th>Ngày kết thúc</th>
+                                    <th>Ngày nghỉ</th>
+                                    <th>Loại nghỉ phép</th>
                                     <th>Ca làm</th>
                                     <th>Lý do</th>
                                     <th>Nội dung</th>
-                                    <th>Thao tác</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($data as $key => $leavesoon)
+                                @foreach($data as $key => $takeleave)
                                 <tr>
                                     <td>
                                         @foreach($dataEmployee as $key => $employee)
-                                        @if($leavesoon->employee_id == $employee->id)
+                                        @if($takeleave->employee_id == $employee->id)
                                         {{$employee->name}}
                                         @endif
                                         @endforeach
                                     </td>
                                     <td>
                                         @foreach($dataCompany as $key => $company)
-                                        @if($leavesoon->company_id == $company->id)
+                                        @if($takeleave->company_id == $company->id)
                                         {{$company->name}}
                                         @endif
                                         @endforeach
                                     </td>
                                     <td>
                                         @foreach($dataArea as $key => $area)
-                                        @if($leavesoon->area_id == $area->id)
+                                        @if($takeleave->area_id == $area->id)
                                         {{$area->name}}
                                         @endif
                                         @endforeach
                                     </td>
                                     <td>
                                         @foreach($dataBranch as $key => $branch)
-                                        @if($leavesoon->branch_id == $branch->id)
+                                        @if($takeleave->branch_id == $branch->id)
                                         {{$branch->name}}
                                         @endif
                                         @endforeach
                                     </td>
                                     <td>
                                         @foreach($dataDepartment as $key => $department)
-                                        @if($leavesoon->department_id == $department->id)
+                                        @if($takeleave->department_id == $department->id)
                                         {{$department->name}}
                                         @endif
                                         @endforeach
                                     </td>
                                     <td>
                                         @foreach($dataPosition as $key => $position)
-                                        @if($leavesoon->position_id == $position->id)
+                                        @if($takeleave->position_id == $position->id)
                                         {{$position->name}}
                                         @endif
                                         @endforeach
                                     </td>
-                                    <td>{{ date('d-m-Y', strtotime($leavesoon->date)) }}</td>
-                                    <td>{{$leavesoon->hour_out}}</td>
+                                    <td>
+                                        @foreach($dateTakeLeaveType as $key => $dateTakeLeaveTypes)
+                                        @if($takeleave->date_take_leave_type_id == $dateTakeLeaveTypes->id)
+                                        {{$dateTakeLeaveTypes->name}}
+                                        @endif
+                                        @endforeach
+                                    </td>
+                                    <td>{{$takeleave->start_date}}</td>
+                                    <td>{{$takeleave->end_date}}</td>
+                                    <td>{{$takeleave->date_take_leave}}</td>
+                                    <td>
+                                        @foreach($dataTakeLeaveType as $key => $dataTakeLeaveTypes)
+                                        @if($takeleave->take_leave_type_id == $dataTakeLeaveTypes->id)
+                                        {{$dataTakeLeaveTypes->name}}
+                                        @endif
+                                        @endforeach
+                                    </td>
                                     <td>
                                         @foreach($dataShift as $key => $shift)
-                                        @if($leavesoon->shift_id == $shift->id)
+                                        @if($takeleave->shift_id == $shift->id)
                                         {{$shift->name}}
                                         @endif
                                         @endforeach
                                     </td>
                                     <td>
-                                        @foreach($dataLeaveSoonReason as $key => $leavesoonreason)
-                                        @if($leavesoon->leavesoonreason_id == $leavesoonreason->id)
-                                        {{$leavesoonreason->name}}
+                                        @foreach($dataTakeLeaveReason as $key => $takeleavereasons)
+                                        @if($takeleave->take_leave_reason_id == $takeleavereasons->id)
+                                        {{$takeleavereasons->name}}
                                         @endif
                                         @endforeach
                                     </td>
-                                    <td>{{$leavesoon->content}}</td>
-                                    <td>
-                                        <div class="btn-group group-round m-1">
-                                            <a type="button" href="{{URL::to('/admin/approve-soon/'.$leavesoon->id)}}" class="btn btn-primary waves-effect waves-light">Chấp nhận</a>
-                                            <a type="button" href="{{URL::to('/admin/denied-soon/'.$leavesoon->id)}}" class="btn btn-warning custom waves-effect waves-light">Từ chối</a>
-                                            <a type="button" href="{{URL::to('/admin/trash-soon/'.$leavesoon->id)}}" onclick="return confirm('Bạn có chắc chắn muốn xóa yêu cầu này?')" class="btn btn-danger waves-effect waves-light">Xóa</a>
-                                        </div>
-                                    </td>
+                                    <td>{{$takeleave->content}}</td>
+                                    
                                 </tr>
                                 @endforeach
                             </tbody>
@@ -155,12 +166,14 @@ use Illuminate\Support\Facades\Session;
                                     <th>Chi nhánh</th>
                                     <th>Phòng ban</th>
                                     <th>Chức danh</th>
-                                    <th>Ngày xin</th>
-                                    <th>Giờ vào</th>
+                                    <th>Loại ngày nghỉ</th>
+                                    <th>Ngày bắt đầu</th>
+                                    <th>Ngày kết thúc</th>
+                                    <th>Ngày nghỉ</th>
+                                    <th>Loại nghỉ phép</th>
                                     <th>Ca làm</th>
                                     <th>Lý do</th>
                                     <th>Nội dung</th>
-                                    <th>Thao tác</th>
                                 </tr>
                             </tfoot>
                         </table>

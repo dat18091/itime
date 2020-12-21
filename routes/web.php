@@ -287,7 +287,7 @@ Route::get("/admin/trash-late/{id}", "Requirements\RequirementController@trash_l
 Route::get("/admin/list-requirements-late", "Requirements\RequirementController@list_requirements_late");
 Route::get("/admin/list-requirements-late-approve", "Requirements\RequirementController@list_requirements_late_approve");
 Route::get("/admin/list-requirements-late-denied", "Requirements\RequirementController@list_requirements_late_denied");
-Route::get("/admin/list-requirements-late-remove", "Requirements\RequirementController@list_requirements_late_remove");
+Route::get("/admin/list-requirements-late-trash", "Requirements\RequirementController@list_requirements_late_trash");
 
 ## Leave soon manager app and web
 Route::get("/admin/approve-soon/{id}", "Requirements\RequirementController@approve_soon");
@@ -297,7 +297,7 @@ Route::get("/admin/trash-soon/{id}", "Requirements\RequirementController@trash_s
 Route::get("/admin/list-requirements-soon", "Requirements\RequirementController@list_requirements_soon");
 Route::get("/admin/list-requirements-soon-approve", "Requirements\RequirementController@list_requirements_soon_approve");
 Route::get("/admin/list-requirements-soon-denied", "Requirements\RequirementController@list_requirements_soon_denied");
-Route::get("/admin/list-requirements-soon-remove", "Requirements\RequirementController@list_requirements_soon_remove");
+Route::get("/admin/list-requirements-soon-trash", "Requirements\RequirementController@list_requirements_soon_trash");
 
 ## Attendance
 Route::get("/admin/list-attendances", "Attendances\AttendanceController@list_attendances");
